@@ -1,3 +1,4 @@
+import Commands.Fun.Ping;
 import Commands.HelpCommand;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -17,8 +18,11 @@ public class CommandHandler extends ListenerAdapter {
                 HelpCommand helpCommand = new HelpCommand(event);
                 break;
             case "ping":
-                event.getChannel().sendMessage("1ms").queue();
+                Ping ping = new Ping();
+                ping.ping(event);
                 break;
+            case "invite":
+
         }
     }
 }

@@ -1,5 +1,6 @@
 package Commands;
 
+import Commands.Fun.Ping;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -27,13 +28,14 @@ public class HelpCommand {
     }
 
     public void helpFun() {
-        Color orange = new Color(219, 65, 5);
+        EmbedBuilder eb = new EmbedBuilder();
         Color purple = new Color(148, 0, 211);
 
-        EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Help fun");
         eb.addField("!ping", "A totally real ping!", true);
+        eb.addField("!test", "A totally pointless test!", true);
         eb.setFooter("Made by Tijs");
+
         eb.setColor(purple);
         e.getChannel().sendMessage(eb.build()).queue();
     }

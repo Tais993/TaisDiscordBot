@@ -1,4 +1,5 @@
 
+import Commands.CommandEnum;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -13,6 +14,9 @@ import java.io.InputStreamReader;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
+        CommandEnum commandEnum = new CommandEnum();
+        commandEnum.getListsReady();
+
         System.out.println("Inside Tais's main");
 
         InputStream is = new FileInputStream(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\Discord bot\\token\\tais.token");

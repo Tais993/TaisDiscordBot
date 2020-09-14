@@ -4,6 +4,7 @@ import Commands.Fun.Mock;
 import Commands.Fun.Ping;
 import Commands.Fun.EightBall;
 import Commands.Fun.Quote;
+import Commands.Util.InviteCommand.InviteMain;
 import Commands.Util.Test;
 import Commands.Util.Ban;
 import Commands.Util.Rename;
@@ -19,6 +20,7 @@ public class CommandEnum {
         PING(new Ping()),
         HELP(new Help()),
         BAN(new Ban()),
+        INVITE(new InviteMain()),
         EIGHTBALL(new EightBall()),
         SERVERSTATS(new ServerStats()),
         RENAME(new Rename()),

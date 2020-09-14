@@ -1,20 +1,25 @@
 package Commands;
 
 import Commands.Fun.Ping;
-import Commands.Util.Invite;
+import Commands.Fun.EightBall;
+import Commands.Util.Ban;
+import Commands.Util.InviteCommand.InviteMain;
+import Commands.Util.Rename;
+import Commands.Util.ServerStats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 
 public class CommandEnum {
-    Color purple = new Color(148, 0, 211);
-    Color orange = new Color(219, 65, 5);
-
     enum AllMyCommands {
         PING(new Ping()),
-        INVITE(new Invite()),
-        HELP(new Help());
+        INVITE(new InviteMain()),
+        HELP(new Help()),
+        BAN(new Ban()),
+        EIGHTBALL(new EightBall()),
+        SERVERSTATS(new ServerStats()),
+        RENAME(new Rename());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -26,6 +31,8 @@ public class CommandEnum {
         }
     }
 
+    Colors colors = new Colors();
+
     static List commands = new List();
     static List funCategory = new List();
     static List utilCategory = new List();
@@ -34,10 +41,25 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (messageSentSplit[0].equals(c.getCommand())) {
+            if (messageSentSplit[0].equalsIgnoreCase(c.getCommand())) {
                 c.command(event, messageSentSplit);
             }
         }
+    }
+
+    public EmbedBuilder getHelpAll() {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(colors.getCurrentColor());
+
+        eb.setTitle("Help all");
+        eb.setFooter("Made by Tijs");
+
+        for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
+            ICommand c = value.getCommand();
+
+            eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
+        }
+        return eb;
     }
 
     public EmbedBuilder getFullHelpItem(String item) {
@@ -48,11 +70,10 @@ public class CommandEnum {
                 EmbedBuilder eb = new EmbedBuilder();
 
                 eb.setTitle("Help " + c.getCommand());
-//                eb.setDescription((c.getExampleCommand()) + "\n" + c.getFullCommandDescription());
                 eb.addField(c.getExampleCommand(),  c.getFullCommandDescription(), true);
                 eb.setFooter("Made by Tijs");
 
-                eb.setColor(orange);
+                eb.setColor(colors.getCurrentColor());
                 return eb;
             }
         }
@@ -72,7 +93,7 @@ public class CommandEnum {
 
     public EmbedBuilder getHelpCategory(String category) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(orange);
+        eb.setColor(colors.getCurrentColor());
 
         eb.setTitle("Help " + category);
         eb.setFooter("Made by Tijs");

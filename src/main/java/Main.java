@@ -24,8 +24,6 @@ public class Main extends ListenerAdapter {
         String token = br.readLine();
         br.close();
 
-        System.out.println("token: " + token);
-
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(token);
         JDA jda = builder.build();

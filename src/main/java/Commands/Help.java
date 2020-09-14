@@ -24,10 +24,12 @@ public class Help implements ICommand{
                     e.getChannel().sendMessage(commandEnum.getHelpCategory("util").build()).queue();
                     break;
                 default:
-                    e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();
+                    if (commandEnum.checkOrValidCommand(event, args)){
+                        e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();
+                    }
             }
         } else {
-            helpAll();
+            commandEnum.getHelpAllByCategory(e);
         }
     }
 

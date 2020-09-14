@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Rename implements ICommand {
     GuildMessageReceivedEvent e;
+    Member memberGiven;
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "rename";
@@ -21,25 +22,41 @@ public class Rename implements ICommand {
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
+        long idTijs = 257500867568205824L;
 
         if (e.getMessage().getMentionedMembers().size() > 0 && args.length > 2) {
-            Member memberToChange = e.getMessage().getMentionedMembers().get(0);
+            memberGiven = e.getMessage().getMentionedMembers().get(0);
+            System.err.println(e.getMember().getId() + memberGiven.getId());
 
-            if (hasNicknameManagePermission() && canInteractMember(memberToChange)) {
-                String nickname = arrayToString(args);
-
-                if (!(nickname.length() > 32)) {
-                    memberToChange.modifyNickname(nickname).complete();
-                } else {
-                    e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: nickname must be below 32 chars!").build()).queue();
-                }
-            } else if (!hasNicknameManagePermission()) {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: bot does not have manage nickname permission.").build()).queue();
-            } else if (!canInteractMember(memberToChange)) {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role or the same as the bot.").build()).queue();
+            if (e.getMember().getId().equals(memberGiven.getId())) {
+                runRenameCommand(args);
+            } else if (e.getMember().hasPermission(Permission.NICKNAME_MANAGE)) {
+                runRenameCommand(args);
+            } else if (e.getMember().getIdLong() == idTijs) {
+                runRenameCommand(args);
             } else {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role as the bot, and bot does not have manage nickname permission").build()).queue();
+                e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: Manage nicknames permission required to run this command..").build()).queue();
             }
+
+        }
+    }
+
+    public void runRenameCommand(String[] args) {
+        if (hasNicknameManagePermission() && canInteractMember(memberGiven)) {
+            String nickname = arrayToString(args);
+            e.getChannel().sendMessage(nickname).queue();
+
+            if (!(nickname.length() > 32)) {
+                memberGiven.modifyNickname(nickname).complete();
+            } else {
+                e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: nickname must be below 32 chars!").build()).queue();
+            }
+        } else if (!hasNicknameManagePermission()) {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: bot does not have manage nickname permission.").build()).queue();
+        } else if (!canInteractMember(memberGiven)) {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role or the same as the bot.").build()).queue();
+        } else {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role as the bot, and bot does not have manage nickname permission").build()).queue();
         }
     }
 

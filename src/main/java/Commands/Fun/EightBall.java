@@ -11,9 +11,9 @@ public class EightBall implements ICommand {
     Random r = new Random();
 
     GuildMessageReceivedEvent e;
-    String category = "fun";
     String command = "8ball";
     String commandAlias = "eightball";
+    String category = "fun";
     String exampleCommand = "`!8ball <question>?`";
     String shortCommandDescription = "Ask 8ball a question";
     String fullCommandDescription = "Ask 8ball a question, and get a totally real answer.\n" +

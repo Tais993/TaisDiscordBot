@@ -1,25 +1,30 @@
 package Commands;
 
+import Commands.Fun.Mock;
 import Commands.Fun.Ping;
 import Commands.Fun.EightBall;
+import Commands.Fun.Quote;
+import Commands.Util.Test;
 import Commands.Util.Ban;
-import Commands.Util.InviteCommand.InviteMain;
 import Commands.Util.Rename;
 import Commands.Util.ServerStats;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class CommandEnum {
     enum AllMyCommands {
         PING(new Ping()),
-        INVITE(new InviteMain()),
         HELP(new Help()),
         BAN(new Ban()),
         EIGHTBALL(new EightBall()),
         SERVERSTATS(new ServerStats()),
-        RENAME(new Rename());
+        RENAME(new Rename()),
+        MOCK(new Mock()),
+        TEST(new Test()),
+        QUOTE(new Quote());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -34,6 +39,7 @@ public class CommandEnum {
     Colors colors = new Colors();
 
     static List commands = new List();
+    static ArrayList categories = new ArrayList();
     static List funCategory = new List();
     static List utilCategory = new List();
 
@@ -41,10 +47,21 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (messageSentSplit[0].equalsIgnoreCase(c.getCommand())) {
+            if (messageSentSplit[0].equalsIgnoreCase(c.getCommand()) || messageSentSplit[0].equalsIgnoreCase(c.getCommandAlias())) {
                 c.command(event, messageSentSplit);
             }
         }
+    }
+
+    public boolean checkOrValidCommand(GuildMessageReceivedEvent event, String[] messageSentSplit) {
+        for (AllMyCommands value : AllMyCommands.values()) {
+            ICommand c = value.getCommand();
+
+            if (messageSentSplit[0].equalsIgnoreCase(c.getCommand())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public EmbedBuilder getHelpAll() {
@@ -60,6 +77,25 @@ public class CommandEnum {
             eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
         }
         return eb;
+    }
+
+    public void getHelpAllByCategory(GuildMessageReceivedEvent e) {
+
+        categories.forEach(category -> {
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(colors.getCurrentColor());
+            eb.setTitle("Help " + category);
+            eb.setFooter("Made by Tijs");
+
+            for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
+                ICommand c = value.getCommand();
+
+                if (c.getCategory().equals(category)) {
+                    eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
+                }
+            }
+            e.getChannel().sendMessage(eb.build()).queue();
+        });
     }
 
     public EmbedBuilder getFullHelpItem(String item) {
@@ -140,5 +176,7 @@ public class CommandEnum {
                     break;
             }
         }
+        categories.add("fun");
+        categories.add("util");
     }
 }

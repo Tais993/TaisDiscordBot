@@ -1,32 +1,42 @@
 package Commands.Util;
 
-import Commands.CommandEnum;
+import Commands.Colors;
 import Commands.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Invite implements ICommand {
+public class Test implements ICommand {
+    Colors colors = new Colors();
+
     GuildMessageReceivedEvent e;
+    String command = "test";
+    String commandAlias = "test";
     String category = "util";
-    String command = "invite";
-    String exampleCommand = "`!invite <time>`";
-    String shortCommandDescription = "Create server invites";
-    String fullCommandDescription = "Create server invites for a specified time: 1m/h/d or perm for a permanent.";
+    String exampleCommand = "`!test`";
+    String shortCommandDescription = "Don't try this!";
+    String fullCommandDescription = "";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
-        CommandEnum commandEnum = new CommandEnum();
+        EmbedBuilder eb = new EmbedBuilder();
 
-        if (args.length > 1) {
-            e.getChannel().sendMessage(e.getChannel().createInvite().setTemporary(true).setMaxAge(Integer.valueOf(args[1].replaceAll(" ", ""))).complete().getUrl() + "").queue();
-        } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
-        }
+        eb.setTitle("Help test");
+        eb.addField("!test", "yes yes don't try this", true);
+        eb.setFooter("Made by Tijs");
+
+        eb.setColor(colors.getCurrentColor());
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override
     public String getCommand() {
         return command;
+    }
+
+    @Override
+    public String getCommandAlias() {
+        return commandAlias;
     }
 
     @Override

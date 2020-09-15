@@ -4,12 +4,15 @@ import Commands.Fun.Mock;
 import Commands.Fun.Ping;
 import Commands.Fun.EightBall;
 import Commands.Fun.Quote;
+import Functions.Colors;
+import Functions.Time;
 import Commands.Util.InviteCommand.InviteMain;
 import Commands.Util.Test;
 import Commands.Util.Ban;
 import Commands.Util.Rename;
 import Commands.Util.ServerStats;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
@@ -37,8 +40,10 @@ public class CommandEnum {
             return c;
         }
     }
+    static public SelfUser bot;
 
     Colors colors = new Colors();
+    Time time = new Time();
 
     static List commands = new List();
     static ArrayList categories = new ArrayList();
@@ -71,7 +76,8 @@ public class CommandEnum {
         eb.setColor(colors.getCurrentColor());
 
         eb.setTitle("Help all");
-        eb.setFooter("Made by Tijs");
+        eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+        eb.setFooter("Made by Tijs | " + time.getFullDate());
 
         for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
             ICommand c = value.getCommand();
@@ -87,7 +93,9 @@ public class CommandEnum {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(colors.getCurrentColor());
             eb.setTitle("Help " + category);
-            eb.setFooter("Made by Tijs");
+
+            eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+            eb.setFooter("Made by Tijs | " + time.getFullDate());
 
             for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
                 ICommand c = value.getCommand();
@@ -106,10 +114,15 @@ public class CommandEnum {
 
             if (item.equals(c.getCommand())) {
                 EmbedBuilder eb = new EmbedBuilder();
+                Time time = new Time();
+
+                eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+                eb.setFooter("Made by Tijs | " + time.getFullDate());
 
                 eb.setTitle("Help " + c.getCommand());
+                eb.setDescription("(option) means optimal\n" +
+                        "<option> is required");
                 eb.addField(c.getExampleCommand(),  c.getFullCommandDescription(), true);
-                eb.setFooter("Made by Tijs");
 
                 eb.setColor(colors.getCurrentColor());
                 return eb;
@@ -134,7 +147,8 @@ public class CommandEnum {
         eb.setColor(colors.getCurrentColor());
 
         eb.setTitle("Help " + category);
-        eb.setFooter("Made by Tijs");
+        eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+        eb.setFooter("Made by Tijs | " + time.getFullDate());
 
         switch (category) {
             case "fun":

@@ -1,6 +1,6 @@
 package Commands.Util;
 
-import Commands.Colors;
+import Functions.Colors;
 import Commands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

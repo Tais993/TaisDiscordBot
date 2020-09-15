@@ -14,7 +14,7 @@ public class Rename implements ICommand {
     String command = "rename";
     String commandAlias = "rename";
     String category = "util";
-    String exampleCommand = "!rename <@user> nickname";
+    String exampleCommand = "`!rename <@user> nickname`";
     String shortCommandDescription = "Rename user to the nickname given";
     String fullCommandDescription = "Rename users to the nickname given, requires manage usernames permission.\n" +
             "Username should be below or the same as 32 chars.";

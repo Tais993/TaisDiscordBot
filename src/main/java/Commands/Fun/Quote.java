@@ -1,66 +1,100 @@
 package Commands.Fun;
 
-import Commands.Colors;
+import Functions.Colors;
+import Commands.CommandEnum;
 import Commands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
-import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 public class Quote implements ICommand {
     GuildMessageReceivedEvent e;
     Colors colors = new Colors();
+    CommandEnum commandEnum = new CommandEnum();
+
+    TextChannel textChannel;
+    boolean sunTzu;
+    String[] allArgs;
 
     String command = "quote";
     String commandAlias = "quote";
     String category = "fun";
-    String exampleCommand = "!quote <messageID>";
-    String shortCommandDescription = "Get the server stats";
-    String fullCommandDescription = "Get total member count, and total online/DND members.";
+    String exampleCommand = "`!quote message <messageID> (channel) (Sun Tzu)`\n`!quote message <messageID> (Sun Tzu)`\n`!quote text <input> (Sun Tzu)`";
+    String shortCommandDescription = "Create a message quote.";
+    String fullCommandDescription = "Create a message quote, channel and Sun Tzu are optimal.\n" +
+            "Channel should be like `#general`\n" +
+            "Sun Tzu should be `true` to be on\n" +
+            "If you use `!quote text <input>` \nchange input to the text you would like to quote.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
+        allArgs = args;
 
-        e.getMessage().getMentionedChannels().size()
+        if (isSunTzu()) sunTzu = true;
 
-        if (args.length == 2){
-            getMessage(args[1]);
-        } else if (args.length == 3){
-            getMessageSunTzu(args[1]);
-        }
-    }
-
-    public void getMessage(String id) {
-        e.getChannel().retrieveMessageById(id).queue(this::createEmbed, (failure) -> {
-            if (failure instanceof ErrorResponseException) {
-                ErrorResponseException ex = (ErrorResponseException) failure;
-                if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
-                    e.getChannel().sendMessage("Message doesn't exist!").queue();
-                }
+        if (args.length >= 3) {
+            switch (args[1]) {
+                case "message":
+                    if (mentionsTextChannel()){
+                        textChannel = e.getMessage().getMentionedChannels().get(0);
+                    } else {
+                        textChannel = e.getChannel();
+                    }
+                    getMessage(args[2]);
+                    break;
+                case "text":
+                    createPersonalEmbed();
+                    break;
+                default:
+                    e.getChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: second input should  either be `text` or `message`.").build()).queue();
             }
-            failure.printStackTrace();
-        });
+        } else {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: requires at least 3 arguments.").build()).queue();
+        }
     }
 
     public void createEmbed(Message message) {
         EmbedBuilder eb = new EmbedBuilder();
-
         eb.setColor(colors.getCurrentColor());
-        eb.setTitle("Quote from: " + message.getAuthor().getName());
-        eb.setThumbnail(message.getAuthor().getAvatarUrl());
-        eb.setDescription(message.getContentDisplay());
 
+        if (sunTzu) {
+            eb.setTitle("Quote from: Sun Tzu");
+            eb.setThumbnail("https://pbs.twimg.com/profile_images/1102567546/sun_tzu_general_400x400.jpg");
+            eb.setDescription(message.getContentDisplay());
+        } else {
+            eb.setTitle("Quote from: " + message.getAuthor().getName());
+            eb.setThumbnail(message.getAuthor().getAvatarUrl());
+            eb.setDescription(message.getContentDisplay());
+            eb.appendDescription("\n            [Link](" + message.getJumpUrl() + ")");
+        }
+        
         e.getChannel().sendMessage(eb.build()).queue();
     }
 
-    public void getMessageSunTzu(String id) {
-        e.getChannel().retrieveMessageById(id).queue(this::createEmbedSunTzu, (failure) -> {
+    public void createPersonalEmbed() {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(colors.getCurrentColor());
+
+        if (sunTzu) {
+            eb.setTitle("Quote from: Sun Tzu");
+            eb.setThumbnail("https://pbs.twimg.com/profile_images/1102567546/sun_tzu_general_400x400.jpg");
+        } else {
+            eb.setTitle("Quote from: " + e.getAuthor().getName());
+            eb.setThumbnail(e.getAuthor().getAvatarUrl());
+        }
+
+        eb.setDescription(getMessageToQuote());
+        e.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public void getMessage(String id) {
+        textChannel.retrieveMessageById(id).queue((messageFound) -> {
+            createEmbed(messageFound);
+        }, (failure) -> {
             if (failure instanceof ErrorResponseException) {
                 ErrorResponseException ex = (ErrorResponseException) failure;
                 if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
@@ -71,15 +105,36 @@ public class Quote implements ICommand {
         });
     }
 
-    public void createEmbedSunTzu(Message message) {
-        EmbedBuilder eb = new EmbedBuilder();
+    public boolean isSunTzu() {
+        return allArgs[allArgs.length - 1].equalsIgnoreCase("true");
+    }
 
-        eb.setColor(colors.getCurrentColor());
-        eb.setTitle("Quote from: Sun Tzu");
-        eb.setThumbnail("https://pbs.twimg.com/profile_images/1102567546/sun_tzu_general_400x400.jpg");
-        eb.setDescription(message.getContentDisplay());
+    public boolean mentionsTextChannel() {
+        return e.getMessage().getMentionedChannels().size() > 0;
+    }
 
-        e.getChannel().sendMessage(eb.build()).queue();
+    public String getMessageToQuote() {
+        StringBuilder messageToQuote = new StringBuilder();
+
+        if (isSunTzu()) {
+            for (int i = 2; i < allArgs.length - 1; i++) {
+                if (messageToQuote.toString().equals("")) {
+                    messageToQuote.append(allArgs[i]);
+                } else {
+                    messageToQuote.append(" ").append(allArgs[i]);
+                }
+            }
+        } else {
+            for (int i = 2; i < allArgs.length; i++) {
+                if (messageToQuote.toString().equals("")) {
+                    messageToQuote.append(allArgs[i]);
+                } else {
+                    messageToQuote.append(" ").append(allArgs[i]);
+                }
+            }
+        }
+
+        return messageToQuote.toString();
     }
 
     @Override

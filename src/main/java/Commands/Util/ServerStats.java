@@ -1,11 +1,10 @@
 package Commands.Util;
 
-import Commands.Colors;
+import Functions.Colors;
 import Commands.CommandEnum;
 import Commands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.OnlineStatus;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ServerStats implements ICommand {

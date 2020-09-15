@@ -1,16 +1,16 @@
 package Commands;
 
+import Commands.Fun.EightBall;
 import Commands.Fun.Mock;
 import Commands.Fun.Ping;
-import Commands.Fun.EightBall;
 import Commands.Fun.Quote;
-import Functions.Colors;
-import Functions.Time;
+import Commands.Util.Ban.TempBan;
 import Commands.Util.InviteCommand.InviteMain;
-import Commands.Util.Test;
-import Commands.Util.Ban;
 import Commands.Util.Rename;
 import Commands.Util.ServerStats;
+import Commands.Util.Test;
+import Functions.Colors;
+import Functions.Time;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -22,14 +22,14 @@ public class CommandEnum {
     enum AllMyCommands {
         PING(new Ping()),
         HELP(new Help()),
-        BAN(new Ban()),
         INVITE(new InviteMain()),
         EIGHTBALL(new EightBall()),
         SERVERSTATS(new ServerStats()),
         RENAME(new Rename()),
         MOCK(new Mock()),
         TEST(new Test()),
-        QUOTE(new Quote());
+        QUOTE(new Quote()),
+        TEMPBAN(new TempBan());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -40,7 +40,7 @@ public class CommandEnum {
             return c;
         }
     }
-    static public SelfUser bot;
+    static SelfUser bot;
 
     Colors colors = new Colors();
     Time time = new Time();
@@ -194,5 +194,13 @@ public class CommandEnum {
         }
         categories.add("fun");
         categories.add("util");
+    }
+
+    public SelfUser getBot() {
+        return bot;
+    }
+
+    public void setBot(SelfUser bot) {
+        CommandEnum.bot = bot;
     }
 }

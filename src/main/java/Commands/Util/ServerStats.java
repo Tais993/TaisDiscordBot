@@ -9,10 +9,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ServerStats implements ICommand {
     GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
     Colors colors = new Colors();
-
-    int onlineMemberCount;
 
     String command = "serverstats";
     String commandAlias = "stats";
@@ -26,28 +23,24 @@ public class ServerStats implements ICommand {
         e = event;
         EmbedBuilder eb = new EmbedBuilder();
 
-        getOnlineMembersGuild();
-
         eb.setTitle("Server stats of: " + e.getGuild().getName());
         eb.addField("Total members:", e.getGuild().getMembers().size() + "", false);
-        eb.addField("Total online/DND members:", onlineMemberCount + "", false);
+        eb.addField("Total online/DND members:", getOnlineMemberCount() + "", false);
+        eb.addField("Total emojis:", getTotalGuildEmojis() + "", false);
         eb.setThumbnail(e.getGuild().getIconUrl());
         eb.setFooter("Made by Tijs");
 
         eb.setColor(colors.getCurrentColor());
 
-        getOnlineMembersGuild();
-
         e.getChannel().sendMessage(eb.build()).queue();
     }
 
-    public void getOnlineMembersGuild() {
-        onlineMemberCount = 0;
-        e.getGuild().getMembers().forEach(value -> {
-            if (value.getOnlineStatus() == OnlineStatus.ONLINE || value.getOnlineStatus() == OnlineStatus.DO_NOT_DISTURB) {
-                onlineMemberCount++;
-            }
-        });
+    public int getOnlineMemberCount() {
+        return (int) e.getGuild().getMembers().stream().filter(value -> value.getOnlineStatus() == OnlineStatus.ONLINE || value.getOnlineStatus() == OnlineStatus.DO_NOT_DISTURB).count();
+    }
+
+    public int getTotalGuildEmojis() {
+        return e.getGuild().getEmotes().size();
     }
 
     @Override

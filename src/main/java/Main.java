@@ -29,7 +29,7 @@ public class Main extends ListenerAdapter {
         JDA jda = builder.build();
         jda.awaitReady();
 
-        commandEnum.bot = jda.getSelfUser();
+        commandEnum.setBot(jda.getSelfUser());
         jda.addEventListener(new CommandHandler());
     }
 }

@@ -2,6 +2,8 @@ package Commands.Fun;
 
 import Commands.CommandEnum;
 import Commands.ICommand;
+import Functions.Permissions;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Random;
@@ -9,6 +11,7 @@ import java.util.Random;
 public class Mock implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
     Random r = new Random();
+    Permissions permissions = new Permissions();
 
     GuildMessageReceivedEvent e;
     String command = "mock";
@@ -42,8 +45,13 @@ public class Mock implements ICommand {
                     output = output + " ";
                 }
             }
-            e.getMessage().delete().complete();
-            e.getChannel().sendMessage(output + "\n - By " + e.getMember().getEffectiveName()).queue();
+
+            if (permissions.botHasPermission(e.getGuild(), Permission.MESSAGE_MANAGE)){
+                e.getMessage().delete().complete();
+                e.getChannel().sendMessage(output).queue();
+            } else {
+                e.getChannel().sendMessage(output).queue();
+            }
         } else {
             event.getChannel().sendMessage(commandEnum.getFullHelpItem("mock").build()).queue();
         }

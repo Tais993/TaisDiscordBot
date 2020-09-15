@@ -2,6 +2,7 @@ package Commands.Util;
 
 import Commands.CommandEnum;
 import Commands.ICommand;
+import Functions.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -10,6 +11,7 @@ public class Rename implements ICommand {
     GuildMessageReceivedEvent e;
     Member memberGiven;
     CommandEnum commandEnum = new CommandEnum();
+    Permissions permissions = new Permissions();
 
     String command = "rename";
     String commandAlias = "rename";
@@ -42,7 +44,7 @@ public class Rename implements ICommand {
     }
 
     public void runRenameCommand(String[] args) {
-        if (hasNicknameManagePermission() && canInteractMember(memberGiven)) {
+        if (permissions.botHasPermission(e.getGuild(), Permission.NICKNAME_MANAGE) && permissions.botCanInteract(memberGiven, e.getGuild())) {
             String nickname = arrayToString(args);
             e.getChannel().sendMessage(nickname).queue();
 
@@ -51,21 +53,13 @@ public class Rename implements ICommand {
             } else {
                 e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: nickname must be below 32 chars!").build()).queue();
             }
-        } else if (!hasNicknameManagePermission()) {
+        } else if (!permissions.botHasPermission(e.getGuild(), Permission.NICKNAME_MANAGE)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: bot does not have manage nickname permission.").build()).queue();
-        } else if (!canInteractMember(memberGiven)) {
+        } else if (!permissions.botCanInteract(memberGiven, e.getGuild())) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role or the same as the bot.").build()).queue();
         } else {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role as the bot, and bot does not have manage nickname permission").build()).queue();
         }
-    }
-
-    public boolean hasNicknameManagePermission() {
-        return e.getGuild().getSelfMember().hasPermission(Permission.NICKNAME_MANAGE);
-    }
-
-    public boolean canInteractMember(Member memberGiven) {
-        return e.getGuild().getSelfMember().canInteract(memberGiven);
     }
 
     public String arrayToString(String[] args) {

@@ -9,6 +9,7 @@ import Commands.Util.InviteCommand.InviteMain;
 import Commands.Util.Rename;
 import Commands.Util.ServerStats;
 import Commands.Util.Test;
+import Commands.Util.WhoIs;
 import Functions.Colors;
 import Functions.Time;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -29,7 +30,8 @@ public class CommandEnum {
         MOCK(new Mock()),
         TEST(new Test()),
         QUOTE(new Quote()),
-        TEMPBAN(new TempBan());
+        TEMPBAN(new TempBan()),
+        WHOIS(new WhoIs());
         ICommand c;
 
         AllMyCommands(ICommand c) {

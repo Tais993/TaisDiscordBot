@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class TempBan implements ICommand {
-    Permissions permissions = new Permissions();
     CommandEnum commandEnum = new CommandEnum();
 
     Member memberToBan;
@@ -41,16 +40,18 @@ public class TempBan implements ICommand {
     }
 
     public boolean checkAllPerms() {
-        if (!(permissions.botHasPermission(e.getGuild(), Permission.BAN_MEMBERS))) {
+        Permissions permissions = new Permissions(e.getGuild());
+
+        if (!(permissions.botHasPermission(Permission.BAN_MEMBERS))) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: Bot requires the ban members permission.").build()).queue();
             return false;
-        } else if (!(permissions.userHasPermission(e.getAuthor(), e.getGuild(), Permission.BAN_MEMBERS))) {
+        } else if (!(permissions.userHasPermission(e.getAuthor(), Permission.BAN_MEMBERS))) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: User requires the ban members permission to run the command.").build()).queue();
             return false;
-        } else if (!(permissions.botCanInteract(memberToBan, e.getGuild()))) {
+        } else if (!(permissions.botCanInteract(memberToBan))) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: Bot is a lower or the same level as the user given.").build()).queue();
             return false;
-        } else if (!permissions.userCanInteract(e.getAuthor(), memberToBan, e.getGuild())) {
+        } else if (!permissions.userCanInteract(e.getAuthor(), memberToBan)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: User is a lower or the same level as the user given.").build()).queue();
             return false;
         }

@@ -1,46 +1,43 @@
 package Commands.Util;
 
-import Functions.Colors;
-import Commands.CommandEnum;
 import Commands.ICommand;
+import Functions.Colors;
+import Functions.GuildInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ServerStats implements ICommand {
     GuildMessageReceivedEvent e;
     Colors colors = new Colors();
 
-    String command = "serverstats";
-    String commandAlias = "stats";
+    String command = "serverinfo";
+    String commandAlias = "serverstats";
     String category = "util";
-    String exampleCommand = "!serverstats";
-    String shortCommandDescription = "Get the server stats";
-    String fullCommandDescription = "Get total member count, and total online/DND members.";
+    String exampleCommand = "!serverinfo / !serverstats";
+    String shortCommandDescription = "Get info about the server.";
+    String fullCommandDescription = "Get information about the server.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
+        GuildInfo guildInfo = new GuildInfo(e.getGuild());
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle("Server stats of: " + e.getGuild().getName());
         eb.addField("Total members:", e.getGuild().getMembers().size() + "", false);
-        eb.addField("Total online/DND members:", getOnlineMemberCount() + "", false);
-        eb.addField("Total emojis:", getTotalGuildEmojis() + "", false);
+        eb.addField("Total online/DND members:", guildInfo.getOnlineMemberCount() + "", false);
+        eb.addField("Total non animated emojis:", guildInfo.getTotalNonAnimatedEmojis() + "", true);
+        eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
+        eb.addBlankField(true);
+        eb.addField("Server has been created on:", guildInfo.getDateCreated(), true);
+        eb.addField("Server owner:", guildInfo.getOwnerName(), true);
+        eb.addBlankField(true);
         eb.setThumbnail(e.getGuild().getIconUrl());
         eb.setFooter("Made by Tijs");
 
         eb.setColor(colors.getCurrentColor());
 
         e.getChannel().sendMessage(eb.build()).queue();
-    }
-
-    public int getOnlineMemberCount() {
-        return (int) e.getGuild().getMembers().stream().filter(value -> value.getOnlineStatus() == OnlineStatus.ONLINE || value.getOnlineStatus() == OnlineStatus.DO_NOT_DISTURB).count();
-    }
-
-    public int getTotalGuildEmojis() {
-        return e.getGuild().getEmotes().size();
     }
 
     @Override

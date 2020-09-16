@@ -11,7 +11,6 @@ import java.util.Random;
 public class Mock implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
     Random r = new Random();
-    Permissions permissions = new Permissions();
 
     GuildMessageReceivedEvent e;
     String command = "mock";
@@ -26,46 +25,36 @@ public class Mock implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
         if (args.length > 1) {
+            Permissions permissions = new Permissions(e.getGuild());
             String toMock = e.getMessage().getContentRaw().replaceFirst("!mock ", "");
-            String output = "";
+            StringBuilder output = new StringBuilder();
 
-            int numberCount = r.nextInt(1);
+            int numberCount = r.nextInt(2);
 
             for (int i = 0; i < toMock.length(); i++) {
                 String currentChar = toMock.charAt(i) + "";
                 if (!(currentChar.equals(" "))) {
                     if (numberCount == 0) {
-                        output = output + currentChar.toLowerCase();
+                        output.append(currentChar.toLowerCase());
                         numberCount++;
                     } else {
-                        output = output + currentChar.toUpperCase();
+                        output.append(currentChar.toUpperCase());
                         numberCount = 0;
                     }
                 } else {
-                    output = output + " ";
+                    output.append(" ");
                 }
             }
 
-            if (permissions.botHasPermission(e.getGuild(), Permission.MESSAGE_MANAGE)){
+            if (permissions.botHasPermission(Permission.MESSAGE_MANAGE)){
                 e.getMessage().delete().complete();
-                e.getChannel().sendMessage(output).queue();
+                e.getChannel().sendMessage(output.toString()).queue();
             } else {
-                e.getChannel().sendMessage(output).queue();
+                e.getChannel().sendMessage(output.toString()).queue();
             }
         } else {
             event.getChannel().sendMessage(commandEnum.getFullHelpItem("mock").build()).queue();
         }
-    }
-
-    public String removeCommand() {
-        String input = e.getMessage().getContentRaw();
-        if (input.contains(getCommand())) {
-            input = input.replaceAll("!mock ", "");
-        } else {
-            input = input.replaceFirst("!m ", "");
-        }
-
-        return command;
     }
 
     @Override

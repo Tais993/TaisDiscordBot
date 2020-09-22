@@ -1,0 +1,72 @@
+package commands.music;
+
+import commands.CommandEnum;
+import commands.ICommand;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.managers.AudioManager;
+
+public class Leave implements ICommand {
+    GuildMessageReceivedEvent e;
+    CommandEnum commandEnum = new CommandEnum();
+
+    String command = "leave";
+    String commandAlias = "leave";
+    String category = "general";
+    String exampleCommand = "`!leave`";
+    String shortCommandDescription = "Leave the bot from a voice channel.";
+    String fullCommandDescription = "Leave the bot from a voice channel.";
+
+    @Override
+    public void command(GuildMessageReceivedEvent event, String[] args) {
+        e = event;
+
+        AudioManager audioManager = e.getGuild().getAudioManager();
+
+        if (!audioManager.isConnected()) {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("leave").setDescription("Error: I'm not connected to a voice channel.").build()).queue();
+            return;
+        }
+
+        VoiceChannel voiceChannel = audioManager.getConnectedChannel();
+
+        if (!voiceChannel.getMembers().contains(event.getMember())) {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("leavel").setDescription("Error: You've to be in the same voice channel as the bot to use this command.").build()).queue();
+            return;
+        }
+
+        audioManager.closeAudioConnection();
+        e.getChannel().sendMessage("Disconnected").queue();
+    }
+
+    @Override
+    public String getCommand() {
+        return command;
+    }
+
+    @Override
+    public String getCommandAlias() {
+        return commandAlias;
+    }
+
+    @Override
+    public String getCategory() {
+        return category;
+    }
+
+    @Override
+    public String getExampleCommand() {
+        return exampleCommand;
+    }
+
+    @Override
+    public String getShortCommandDescription() {
+        return shortCommandDescription;
+    }
+
+    @Override
+    public String getFullCommandDescription() {
+        return fullCommandDescription;
+    }
+}

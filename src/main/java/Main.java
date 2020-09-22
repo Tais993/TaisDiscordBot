@@ -1,5 +1,6 @@
-
-import Commands.CommandEnum;
+import commands.CommandEnum;
+import commands.CommandHandler;
+import functions.entities.BotInfo;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -11,13 +12,10 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         CommandEnum commandEnum = new CommandEnum();
         commandEnum.getListsReady();
-
-        System.out.println("Inside Tais's main");
 
         InputStream is = new FileInputStream(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\Discord bot\\token\\tais.token");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -29,7 +27,9 @@ public class Main extends ListenerAdapter {
         JDA jda = builder.build();
         jda.awaitReady();
 
-        commandEnum.setBot(jda.getSelfUser());
+        CommandEnum.bot = jda.getSelfUser();
+        BotInfo.bot = jda.getSelfUser();
+
         jda.addEventListener(new CommandHandler());
     }
 }

@@ -5,6 +5,7 @@ import commands.ICommand;
 import database.guild.DatabaseGuild;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +14,8 @@ public class Play implements ICommand {
     GuildMessageReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
     DatabaseGuild databaseGuild = new DatabaseGuild();
+
+    String url;
 
     String command = "play";
     String commandAlias = "p";
@@ -25,6 +28,13 @@ public class Play implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
+        AudioManager audioManager = e.getGuild().getAudioManager();
+
+        if (!audioManager.isConnected()) {
+            Join join = new Join();
+            join.joinChannel(e);
+        }
+
         if (!(args.length > 1)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: requires at least 1 argument").build()).queue();
             return;
@@ -34,12 +44,14 @@ public class Play implements ICommand {
 
         if (!isUrl(input)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: currently requires a valid URL").build()).queue();
-            return;
+            url = search(input);
+        } else {
+            url = input;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getChannel(), input);
+        manager.loadAndPlay(e.getChannel(), url);
 
         manager.getGuildMusicManager(e.getGuild()).player.setVolume(15);
     }
@@ -51,6 +63,10 @@ public class Play implements ICommand {
         } catch (MalformedURLException malformedURLException) {
             return false;
         }
+    }
+
+    private String search(String input) {
+        return input;
     }
 
     @Override

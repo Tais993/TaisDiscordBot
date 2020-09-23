@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 public class Join implements ICommand {
     GuildMessageReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
+    AudioManager audioManager;
 
     String command = "join";
     String commandAlias = "join";
@@ -25,30 +26,40 @@ public class Join implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        AudioManager audioManager = e.getGuild().getAudioManager();
+        audioManager = e.getGuild().getAudioManager();
 
         if (audioManager.isConnected()) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("join").setDescription("Error: Already connected to a channel.").build()).queue();
             return;
         }
 
-        GuildVoiceState memberVoiceState = event.getMember().getVoiceState();
+        if (joinChannel(e)) {
+            e.getChannel().sendMessage("Joining your voice channel").queue();
+        }
+    }
+
+
+    public boolean joinChannel(GuildMessageReceivedEvent e) {
+
+        audioManager = e.getGuild().getAudioManager();
+
+        GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()){
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: Join a voice channel before running this command.").build()).queue();
-            return;
+            return false;
         }
 
         VoiceChannel voiceChannel = memberVoiceState.getChannel();
-        Member selfMember = event.getGuild().getSelfMember();
+        Member selfMember = e.getGuild().getSelfMember();
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();
-            return;
+            return false;
         }
 
         audioManager.openAudioConnection(voiceChannel);
-        e.getChannel().sendMessage("Joining your voice channel").queue();
+        return true;
     }
 
     @Override

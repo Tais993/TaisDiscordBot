@@ -5,7 +5,6 @@ import commands.ICommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -17,7 +16,7 @@ public class Join implements ICommand {
 
     String command = "join";
     String commandAlias = "join";
-    String category = "general";
+    String category = "music";
     String exampleCommand = "`!join`";
     String shortCommandDescription = "Joins the bot in a voice channel.";
     String fullCommandDescription = "Joins the bot in a voice channel.";

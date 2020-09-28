@@ -4,6 +4,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import functions.Colors;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -52,5 +54,58 @@ public class TrackScheduler extends AudioEventAdapter {
         if (endReason.mayStartNext) {
             nextTrack();
         }
+    }
+
+    public EmbedBuilder getQueue(AudioTrack np) {
+        Colors colors = new Colors();
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(colors.getCurrentColor());
+
+
+        eb.setTitle("Queue");
+        eb.appendDescription("*Currently playing*\n");
+        eb.appendDescription("**" + np.getInfo().author + "**\n");
+        eb.appendDescription("[" + np.getInfo().title + "](" + np.getInfo().uri + ")\n");
+        eb.appendDescription(videoDurationToYoutube(np.getPosition()) + " / " + videoDurationToYoutube(np.getDuration()) + "\n");
+
+        for (AudioTrack value : queue) {
+            eb.appendDescription("\n");
+
+            eb.appendDescription("**" + value.getInfo().author + "**\n");
+            eb.appendDescription("[" + value.getInfo().title + "](" + value.getInfo().uri + ")\n");
+            eb.appendDescription(videoDurationToYoutube(value.getDuration()) + "\n");
+        }
+
+        return eb;
+    }
+
+    public static String videoDurationToYoutube(long value) {
+        long totalSeconds = value / 1000;
+
+        int minutes = 0;
+        int seconds;
+
+        while (totalSeconds >= 60) {
+            minutes++;
+            totalSeconds += - 60;
+        }
+
+        seconds = (int) totalSeconds;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(minutes);
+
+        if (sb.toString().length() == 1) {
+            sb.replace(0, 1, "0" + minutes + "");
+        }
+
+        sb.append(":");
+
+        sb.append(seconds);
+        if (sb.toString().length() == 4) {
+            sb.replace(3, 4, "0" + seconds + "");
+        }
+
+        return sb.toString();
     }
 }

@@ -1,4 +1,4 @@
-package commands.fun;
+package commands.general;
 
 import functions.Colors;
 import commands.CommandEnum;
@@ -16,12 +16,11 @@ public class Quote implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
 
     TextChannel textChannel;
-    boolean sunTzu;
     String[] allArgs;
 
     String command = "quote";
     String commandAlias = "quote";
-    String category = "fun";
+    String category = "general";
     String exampleCommand = "`!quote message <messageID> (channel) (Sun Tzu)`\n`!quote message <messageID> (Sun Tzu)`\n`!quote text <input> (Sun Tzu)`";
     String shortCommandDescription = "Create a message quote.";
     String fullCommandDescription = "Create a message quote, channel and Sun Tzu are optimal.\n" +
@@ -33,8 +32,6 @@ public class Quote implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
         allArgs = args;
-
-        if (isSunTzu()) sunTzu = true;
 
         if (args.length >= 3) {
             switch (args[1]) {
@@ -61,7 +58,7 @@ public class Quote implements ICommand {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(colors.getCurrentColor());
 
-        if (sunTzu) {
+        if (isSunTzu()) {
             eb.setTitle("Quote from: Sun Tzu");
             eb.setThumbnail("https://pbs.twimg.com/profile_images/1102567546/sun_tzu_general_400x400.jpg");
             eb.setDescription(message.getContentDisplay());
@@ -69,7 +66,7 @@ public class Quote implements ICommand {
             eb.setTitle("Quote from: " + message.getAuthor().getName());
             eb.setThumbnail(message.getAuthor().getAvatarUrl());
             eb.setDescription(message.getContentDisplay());
-            eb.appendDescription("\n            [Link](" + message.getJumpUrl() + ")");
+            eb.appendDescription("\n[Link](" + message.getJumpUrl() + ")");
         }
         
         e.getChannel().sendMessage(eb.build()).queue();
@@ -79,7 +76,7 @@ public class Quote implements ICommand {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(colors.getCurrentColor());
 
-        if (sunTzu) {
+        if (isSunTzu()) {
             eb.setTitle("Quote from: Sun Tzu");
             eb.setThumbnail("https://pbs.twimg.com/profile_images/1102567546/sun_tzu_general_400x400.jpg");
         } else {
@@ -92,9 +89,7 @@ public class Quote implements ICommand {
     }
 
     public void getMessage(String id) {
-        textChannel.retrieveMessageById(id).queue((messageFound) -> {
-            createEmbed(messageFound);
-        }, (failure) -> {
+        textChannel.retrieveMessageById(id).queue(this::createEmbed, (failure) -> {
             if (failure instanceof ErrorResponseException) {
                 ErrorResponseException ex = (ErrorResponseException) failure;
                 if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {

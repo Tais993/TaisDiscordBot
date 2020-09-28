@@ -7,8 +7,10 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -86,5 +88,26 @@ public class PlayerManager {
         }
 
         return INSTANCE;
+    }
+
+    public EmbedBuilder getQueue(GuildMessageReceivedEvent e, AudioTrack playingTrack) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+
+        return musicManager.scheduler.getQueue(playingTrack);
+    }
+
+    public void skip(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.nextTrack();
+    }
+
+    public void pause(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.player.setPaused(true);
+    }
+
+    public void resume(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.player.setPaused(false);
     }
 }

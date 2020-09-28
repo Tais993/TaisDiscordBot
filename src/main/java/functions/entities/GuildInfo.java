@@ -37,4 +37,8 @@ public class GuildInfo {
     public String getOwnerName() {
         return guild.getOwner().getEffectiveName();
     }
+
+    public boolean isValidRole(String roleId) {
+        return guild.getRoleById(roleId) != null;
+    }
 }

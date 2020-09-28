@@ -11,6 +11,8 @@ public class UserHandler {
         this.e = e;
         userID = e.getAuthor().getId();
 
+        if (e.getAuthor().isBot()) return;
+
         if (databaseUser.userExistsInDB(userID)) {
             databaseUser.addRandomXPToUserInDB(userID);
             if (databaseUser.checkLevelUserInDB(userID)) {

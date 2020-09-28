@@ -13,7 +13,7 @@ public class BotStats implements ICommand {
 
     String command = "botstats";
     String commandAlias = "stats";
-    String category = "bot";
+    String category = "general";
     String exampleCommand = "!serverinfo / !serverstats";
     String shortCommandDescription = "Get info about the server.";
     String fullCommandDescription = "Get information about the server.";

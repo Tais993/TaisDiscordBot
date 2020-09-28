@@ -41,7 +41,7 @@ public class InviteMain implements ICommand {
 
     @Override
     public String getCommandAlias() {
-        return null;
+        return commandAlias;
     }
 
     @Override

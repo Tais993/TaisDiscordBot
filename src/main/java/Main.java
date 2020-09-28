@@ -1,10 +1,13 @@
+import reactionshandler.OnReactionRemove;
 import commands.CommandEnum;
 import commands.CommandHandler;
 import functions.entities.BotInfo;
+import music.youtube.Search;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import reactionshandler.OnReactionAdded;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.BufferedReader;
@@ -31,6 +34,11 @@ public class Main extends ListenerAdapter {
         BotInfo.bot = jda.getSelfUser();
 
         jda.addEventListener(new CommandHandler());
+        jda.addEventListener(new OnReactionAdded());
+        jda.addEventListener(new OnReactionRemove());
+
+        Search search = new Search();
+        search.setYtApiKey();
     }
 }
 

@@ -1,14 +1,15 @@
 package commands;
 
+import commands.amongus.StartGame;
 import commands.bot.BotStats;
+import commands.bot.Shutdown;
 import commands.fun.EightBall;
 import commands.fun.Mock;
 import commands.fun.Ping;
-import commands.fun.Quote;
+import commands.fun.Kaas;
+import commands.general.Quote;
 import commands.general.Level;
-import commands.music.Join;
-import commands.music.Leave;
-import commands.music.Play;
+import commands.music.*;
 import commands.util.*;
 import commands.util.ban.TempBan;
 import commands.util.invitecommand.InviteMain;
@@ -39,7 +40,15 @@ public class CommandEnum {
         CHANGEBOTPREFIX(new ChangeBotPrefix()),
         PLAY(new Play()),
         JOIN(new Join()),
-        LEAVE(new Leave());
+        LEAVE(new Leave()),
+        SKIP(new Skip()),
+        QUEUE(new Queue()),
+        PAUSE(new Pause()),
+        RESUME(new Resume()),
+        SHUTDOWN(new Shutdown()),
+        STARTGAME(new StartGame()),
+        REACTIONROLE(new ReactionRole()),
+        KAAS(new Kaas());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -50,6 +59,7 @@ public class CommandEnum {
             return c;
         }
     }
+
     public static SelfUser bot;
 
     Colors colors = new Colors();
@@ -61,6 +71,7 @@ public class CommandEnum {
     static List utilCategory = new List();
     static List botCategory = new List();
     static List generalCategory = new List();
+    static List musicCategory = new List();
 
     public boolean checkCommand(GuildMessageReceivedEvent event, String[] messageSentSplit) {
         for (AllMyCommands value : AllMyCommands.values()) {
@@ -186,6 +197,39 @@ public class CommandEnum {
                     }
                 }
                 break;
+            case "bot":
+                for (String item : CommandEnum.botCategory.getItems()) {
+                    for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
+                        ICommand c = value.getCommand();
+
+                        if (item.equals(c.getCommand())) {
+                            eb.addField(item, c.getShortCommandDescription(), true);
+                        }
+                    }
+                }
+                break;
+            case "general":
+                for (String item : CommandEnum.generalCategory.getItems()) {
+                    for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
+                        ICommand c = value.getCommand();
+
+                        if (item.equals(c.getCommand())) {
+                            eb.addField(item, c.getShortCommandDescription(), true);
+                        }
+                    }
+                }
+                break;
+            case "music":
+                for (String item : CommandEnum.musicCategory.getItems()) {
+                    for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
+                        ICommand c = value.getCommand();
+
+                        if (item.equals(c.getCommand())) {
+                            eb.addField(item, c.getShortCommandDescription(), true);
+                        }
+                    }
+                }
+                break;
         }
 
         return eb;
@@ -209,12 +253,16 @@ public class CommandEnum {
                 case "general":
                     generalCategory.add(c.getCommand());
                     break;
+                case "music":
+                    musicCategory.add(c.getCommand());
+                    break;
             }
         }
         categories.add("bot");
         categories.add("fun");
         categories.add("util");
         categories.add("general");
+        categories.add("music");
     }
 
     public SelfUser getBot() {

@@ -2,7 +2,6 @@ package commands.music;
 
 import commands.CommandEnum;
 import commands.ICommand;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -13,7 +12,7 @@ public class Leave implements ICommand {
 
     String command = "leave";
     String commandAlias = "leave";
-    String category = "general";
+    String category = "music";
     String exampleCommand = "`!leave`";
     String shortCommandDescription = "Leave the bot from a voice channel.";
     String fullCommandDescription = "Leave the bot from a voice channel.";

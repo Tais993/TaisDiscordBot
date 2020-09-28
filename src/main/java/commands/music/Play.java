@@ -4,6 +4,7 @@ import commands.CommandEnum;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 import music.PlayerManager;
+import music.youtube.Search;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
@@ -19,7 +20,7 @@ public class Play implements ICommand {
 
     String command = "play";
     String commandAlias = "p";
-    String category = "general";
+    String category = "music";
     String exampleCommand = "`!play <URL>`";
     String shortCommandDescription = "Plays music.";
     String fullCommandDescription = "Plays music.";
@@ -43,8 +44,7 @@ public class Play implements ICommand {
         String input = e.getMessage().getContentRaw().replace(databaseGuild.getPrefixGuildInDB(e.getGuild().getId()) + command + " ", "");
 
         if (!isUrl(input)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: currently requires a valid URL").build()).queue();
-            url = search(input);
+            if (!searchByName(input)) return;
         } else {
             url = input;
         }
@@ -53,7 +53,7 @@ public class Play implements ICommand {
 
         manager.loadAndPlay(e.getChannel(), url);
 
-        manager.getGuildMusicManager(e.getGuild()).player.setVolume(15);
+        manager.getGuildMusicManager(e.getGuild()).player.setVolume(50);
     }
 
     private boolean isUrl(String input) {
@@ -65,8 +65,18 @@ public class Play implements ICommand {
         }
     }
 
-    private String search(String input) {
-        return input;
+    private boolean searchByName(String input) {
+        Search search = new Search();
+
+        String videoUrl = search.getVideoUrl(input);
+
+        if (videoUrl.startsWith("Error:")) {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription(videoUrl).build()).queue();
+            return false;
+        }
+
+        url = videoUrl;
+        return true;
     }
 
     @Override

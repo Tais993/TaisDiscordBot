@@ -1,3 +1,6 @@
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.MessageActivity;
 import reactionshandler.OnReactionRemove;
 import commands.CommandEnum;
 import commands.CommandHandler;
@@ -28,7 +31,10 @@ public class Main extends ListenerAdapter {
         JDABuilder builder = new JDABuilder(AccountType.BOT);
         builder.setToken(token);
         JDA jda = builder.build();
+
         jda.awaitReady();
+
+        jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.of(Activity.ActivityType.WATCHING   , "lttstore.com"));
 
         CommandEnum.bot = jda.getSelfUser();
         BotInfo.bot = jda.getSelfUser();

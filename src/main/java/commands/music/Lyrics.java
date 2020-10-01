@@ -1,23 +1,24 @@
-package commands.bot;
+package commands.music;
 
+import commands.CommandEnum;
 import commands.ICommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Shutdown implements ICommand {
+public class Lyrics implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "shutdown";
-    String commandAlias = "sd";
-    String category = "general";
-    String exampleCommand = "`!shutdown`";
-    String shortCommandDescription = "Stop the bot";
-    String fullCommandDescription = "Stop the bot";
+    String command = "lyrics";
+    String commandAlias = "lyrics";
+    String category = "music";
+    String exampleCommand = "`!lyrics (song)`";
+    String shortCommandDescription = "Get the lyrics of a song.";
+    String fullCommandDescription = "Get the lyrics of a song.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        System.exit(1);
+        e.getChannel().sendMessage("Soon..").queue();
     }
 
     @Override

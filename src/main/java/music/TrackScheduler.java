@@ -7,22 +7,22 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.LinkedList;
 
 /**
  * This class schedules tracks for the audio player. It contains the queue of tracks.
  */
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
-    private final BlockingQueue<AudioTrack> queue;
+    private final LinkedList<AudioTrack> queue;
+    private int currentIndex = 0;
 
     /**
      * @param player The audio player this scheduler uses
      */
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new LinkedList<>();
     }
 
     /**
@@ -61,22 +61,36 @@ public class TrackScheduler extends AudioEventAdapter {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(colors.getCurrentColor());
 
-
         eb.setTitle("Queue");
         eb.appendDescription("*Currently playing*\n");
         eb.appendDescription("**" + np.getInfo().author + "**\n");
         eb.appendDescription("[" + np.getInfo().title + "](" + np.getInfo().uri + ")\n");
         eb.appendDescription(videoDurationToYoutube(np.getPosition()) + " / " + videoDurationToYoutube(np.getDuration()) + "\n");
 
-        for (AudioTrack value : queue) {
-            eb.appendDescription("\n");
+        currentIndex = 0;
 
-            eb.appendDescription("**" + value.getInfo().author + "**\n");
-            eb.appendDescription("[" + value.getInfo().title + "](" + value.getInfo().uri + ")\n");
-            eb.appendDescription(videoDurationToYoutube(value.getDuration()) + "\n");
-        }
+        queue.forEach((audioTrack -> {
+            eb.appendDescription("\n");
+            currentIndex++;
+
+            eb.appendDescription("*Number in queue: " + currentIndex + "*\n");
+            eb.appendDescription("**" + audioTrack.getInfo().author + "**\n");
+            eb.appendDescription("[" + audioTrack.getInfo().title + "](" + audioTrack.getInfo().uri + ")\n");
+            eb.appendDescription(videoDurationToYoutube(audioTrack.getDuration()) + "\n");
+        }));
 
         return eb;
+    }
+
+    public AudioTrack removeFromQueue(int removeAudioTrackIndex) {
+        AudioTrack audioTrack;
+
+        if (queue.size() >= removeAudioTrackIndex) {
+            audioTrack = queue.get(removeAudioTrackIndex - 1);
+            queue.remove(removeAudioTrackIndex - 1);
+            return audioTrack;
+        }
+        return null;
     }
 
     public static String videoDurationToYoutube(long value) {

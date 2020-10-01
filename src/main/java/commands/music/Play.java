@@ -53,7 +53,7 @@ public class Play implements ICommand {
 
         manager.loadAndPlay(e.getChannel(), url);
 
-        manager.getGuildMusicManager(e.getGuild()).player.setVolume(50);
+        manager.getGuildMusicManager(e.getGuild()).player.setVolume(100);
     }
 
     private boolean isUrl(String input) {

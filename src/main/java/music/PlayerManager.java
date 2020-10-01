@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,6 +15,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static music.TrackScheduler.videoDurationToYoutube;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;
@@ -48,7 +51,13 @@ public class PlayerManager {
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                channel.sendMessage("Adding to queue " + track.getInfo().title).queue();
+                Colors colors = new Colors();
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setTitle("Adding to queue ");
+                eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
+                eb.setColor(colors.getCurrentColor());
+
+                channel.sendMessage(eb.build()).queue();
 
                 play(musicManager, track);
             }
@@ -94,6 +103,27 @@ public class PlayerManager {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
 
         return musicManager.scheduler.getQueue(playingTrack);
+    }
+
+    public EmbedBuilder removeFromQueue(GuildMessageReceivedEvent e, int removeAudioTrackIndex) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        AudioTrack audioTrack = musicManager.scheduler.removeFromQueue(removeAudioTrackIndex);
+
+        EmbedBuilder eb = new EmbedBuilder();
+        Colors colors = new Colors();
+        eb.setColor(colors.getCurrentColor());
+
+        if (audioTrack == null) {
+            eb.setTitle("Error removing track from queue");
+            eb.appendDescription("Given index is higher as queue size");
+        } else {
+            eb.setTitle("Succesfully removed " + audioTrack.getInfo().title);
+            eb.appendDescription("**" + audioTrack.getInfo().author + "**\n");
+            eb.appendDescription("[" + audioTrack.getInfo().title + "](" + audioTrack.getInfo().uri + ")\n");
+            eb.appendDescription(videoDurationToYoutube(audioTrack.getDuration()));
+        }
+
+        return eb;
     }
 
     public void skip(GuildMessageReceivedEvent e) {

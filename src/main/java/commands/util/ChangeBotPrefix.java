@@ -26,7 +26,9 @@ public class ChangeBotPrefix implements ICommand {
         String currentPrefix = databaseGuild.getPrefixGuildInDB(e.getGuild().getId());
 
         if (args.length > 1) {
-            prefix = e.getMessage().getContentRaw().replaceAll(currentPrefix + command + " ", "");
+            String toReplace = currentPrefix + command + " ";
+            String messageRaw = e.getMessage().getContentRaw();
+            prefix = messageRaw.replace(toReplace, "");
             databaseGuild.setPrefixGuildInDB(guildID, prefix);
             e.getChannel().sendMessage("Prefix changed to: " + prefix).queue();
         } else {

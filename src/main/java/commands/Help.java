@@ -23,6 +23,12 @@ public class Help implements ICommand{
                 case "util":
                     e.getChannel().sendMessage(commandEnum.getHelpCategory("util").build()).queue();
                     break;
+                case "general":
+                    e.getChannel().sendMessage(commandEnum.getHelpCategory("general").build()).queue();
+                    break;
+                case "music":
+                    e.getChannel().sendMessage(commandEnum.getHelpCategory("music").build()).queue();
+                    break;
                 default:
                     if (commandEnum.checkOrValidCommand(event, args)){
                         e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();

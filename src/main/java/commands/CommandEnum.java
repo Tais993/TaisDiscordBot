@@ -3,10 +3,8 @@ package commands;
 import commands.amongus.StartGame;
 import commands.bot.BotStats;
 import commands.bot.Shutdown;
-import commands.fun.EightBall;
-import commands.fun.Mock;
-import commands.fun.Ping;
-import commands.fun.Kaas;
+import commands.fun.*;
+import commands.general.AddHug;
 import commands.general.Quote;
 import commands.general.Level;
 import commands.music.*;
@@ -48,7 +46,14 @@ public class CommandEnum {
         SHUTDOWN(new Shutdown()),
         STARTGAME(new StartGame()),
         REACTIONROLE(new ReactionRole()),
-        KAAS(new Kaas());
+        KAAS(new Kaas()),
+        NOWPLAYING(new NowPlaying()),
+        REMOVE(new Remove()),
+        LYRICS(new Lyrics()),
+        HUG(new Hug()),
+        ADDHUG(new AddHug()),
+        RICKROLL(new RickRoll()),
+        CLEAR(new Clear());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -69,7 +74,6 @@ public class CommandEnum {
     static ArrayList categories = new ArrayList();
     static List funCategory = new List();
     static List utilCategory = new List();
-    static List botCategory = new List();
     static List generalCategory = new List();
     static List musicCategory = new List();
 
@@ -144,7 +148,7 @@ public class CommandEnum {
                 eb.setFooter("Made by Tijs | " + time.getFullDate());
 
                 eb.setTitle("Help " + c.getCommand());
-                eb.setDescription("(option) means optimal\n" +
+                eb.setDescription("(option) means optional\n" +
                         "<option> is required");
                 eb.addField(c.getExampleCommand(),  c.getFullCommandDescription(), true);
 
@@ -197,17 +201,6 @@ public class CommandEnum {
                     }
                 }
                 break;
-            case "bot":
-                for (String item : CommandEnum.botCategory.getItems()) {
-                    for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
-                        ICommand c = value.getCommand();
-
-                        if (item.equals(c.getCommand())) {
-                            eb.addField(item, c.getShortCommandDescription(), true);
-                        }
-                    }
-                }
-                break;
             case "general":
                 for (String item : CommandEnum.generalCategory.getItems()) {
                     for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
@@ -247,9 +240,6 @@ public class CommandEnum {
                 case "util":
                     utilCategory.add(c.getCommand());
                     break;
-                case "bot":
-                    botCategory.add(c.getCommand());
-                    break;
                 case "general":
                     generalCategory.add(c.getCommand());
                     break;
@@ -258,7 +248,6 @@ public class CommandEnum {
                     break;
             }
         }
-        categories.add("bot");
         categories.add("fun");
         categories.add("util");
         categories.add("general");

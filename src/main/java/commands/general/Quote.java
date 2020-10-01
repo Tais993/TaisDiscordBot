@@ -26,7 +26,8 @@ public class Quote implements ICommand {
     String fullCommandDescription = "Create a message quote, channel and Sun Tzu are optimal.\n" +
             "Channel should be like `#general`\n" +
             "Sun Tzu should be `true` to be on\n" +
-            "If you use `!quote text <input>` \nchange input to the text you would like to quote.";
+            "If you use `!quote text <input>` \n" +
+            "change input to the text you would like to quote.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {

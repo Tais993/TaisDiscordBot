@@ -12,7 +12,6 @@ public class WhoIs implements ICommand {
     GuildMessageReceivedEvent e;
     Member member;
     CommandEnum commandEnum = new CommandEnum();
-    Colors colors = new Colors();
 
     String command = "userinfo";
     String commandAlias = "whois";

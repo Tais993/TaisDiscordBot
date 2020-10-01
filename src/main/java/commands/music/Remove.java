@@ -1,23 +1,29 @@
-package commands.bot;
+package commands.music;
 
 import commands.ICommand;
+import music.PlayerManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Shutdown implements ICommand {
+public class Remove implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "shutdown";
-    String commandAlias = "sd";
-    String category = "general";
-    String exampleCommand = "`!shutdown`";
-    String shortCommandDescription = "Stop the bot";
-    String fullCommandDescription = "Stop the bot";
+    String command = "remove";
+    String commandAlias = "remove";
+    String category = "music";
+    String exampleCommand = "`!remove <index>`";
+    String shortCommandDescription = "Removes song from queue.";
+    String fullCommandDescription = "Removes song from queue.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        System.exit(1);
+        PlayerManager manager = PlayerManager.getInstance();
+
+        EmbedBuilder eb = manager.removeFromQueue(e, 1);
+
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

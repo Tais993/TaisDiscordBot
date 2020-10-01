@@ -48,7 +48,7 @@ public class ReactionRole implements ICommand {
 
         Permissions permissions = new Permissions(e.getGuild());
 
-        if (permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_ROLES)) {
+        if (!permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_ROLES)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("reactionrole").setDescription("Error: requires manage roles permission.").build()).queue();
         }
 

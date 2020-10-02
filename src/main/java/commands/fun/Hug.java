@@ -54,8 +54,11 @@ public class Hug implements ICommand {
             return;
         }
 
-        if (r.nextInt(101) == 100) {
-            e.getChannel().sendMessage("https://media.tenor.co/videos/a63b7a5bcb603f717e08232eba5a282b/mp4").queue();
+        int easterEgg = r.nextInt(101);
+
+        if (easterEgg >= 99) {
+            createFile("https://media1.tenor.com/images/4d853211454cb61fa38e308f60c62e28/tenor.gif?itemid=15723089");
+            e.getChannel().sendMessage("KNOLPOWER").addFile(file).queue();
             return;
         }
 

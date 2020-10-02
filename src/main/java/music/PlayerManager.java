@@ -10,6 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -126,6 +127,13 @@ public class PlayerManager {
         return eb;
     }
 
+    public boolean setVolume(GuildMessageReceivedEvent e, int volume) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.player.setVolume(volume);
+
+        return musicManager.player.getVolume() == volume;
+    }
+
     public void skip(GuildMessageReceivedEvent e) {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
         musicManager.scheduler.nextTrack();
@@ -139,5 +147,15 @@ public class PlayerManager {
     public void resume(GuildMessageReceivedEvent e) {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
         musicManager.player.setPaused(false);
+    }
+
+    public void playPreviousTrack(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.playPreviousTrack();
+    }
+
+    public void forwardsTrack(GuildMessageReceivedEvent e, long seconds) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.forwardsTrack(seconds);
     }
 }

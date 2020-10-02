@@ -53,7 +53,11 @@ public class CommandEnum {
         HUG(new Hug()),
         ADDHUG(new AddHug()),
         RICKROLL(new RickRoll()),
-        CLEAR(new Clear());
+        CLEAR(new Clear()),
+        SETVOLUME(new SetVolume()),
+        DQW(new dQw()),
+        PREVIOUS(new Previous()),
+        FORWARD(new Forward());
         ICommand c;
 
         AllMyCommands(ICommand c) {

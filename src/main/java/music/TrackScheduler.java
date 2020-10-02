@@ -17,6 +17,8 @@ public class TrackScheduler extends AudioEventAdapter {
     private final LinkedList<AudioTrack> queue;
     private int currentIndex = 0;
 
+    private AudioTrack previousAudioTrack;
+
     /**
      * @param player The audio player this scheduler uses
      */
@@ -43,6 +45,7 @@ public class TrackScheduler extends AudioEventAdapter {
      * Start the next track, stopping the current one if it is playing.
      */
     public void nextTrack() {
+        previousAudioTrack = player.getPlayingTrack();
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
         player.startTrack(queue.poll(), false);
@@ -121,5 +124,23 @@ public class TrackScheduler extends AudioEventAdapter {
         }
 
         return sb.toString();
+    }
+
+    public void playPreviousTrack() {
+        queue.addFirst(player.getPlayingTrack());
+        player.stopTrack();
+        previousAudioTrack.setPosition(0);
+        player.startTrack(previousAudioTrack.makeClone(), false);
+    }
+
+    public void forwardsTrack(long seconds) {
+        AudioTrack audioTrack = player.getPlayingTrack();
+        player.stopTrack();
+
+        long timeToSet = audioTrack .getPosition() + (seconds * 1000);
+
+        AudioTrack audioTrackClone = audioTrack.makeClone();
+        audioTrackClone.setPosition(timeToSet);
+        player.startTrack(audioTrackClone, false);
     }
 }

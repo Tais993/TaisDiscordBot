@@ -4,22 +4,22 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Forward implements ICommand {
+public class Backward implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "forward";
-    String commandAlias = "forwards";
+    String command = "backward";
+    String commandAlias = "backwards";
     String category = "music";
-    String exampleCommand = "`!forward (seconds)`";
-    String shortCommandDescription = "Forward the current playing song a amount of seconds.";
-    String fullCommandDescription = "Forward the current playing song a amount of seconds.";
+    String exampleCommand = "`!backward (seconds)`";
+    String shortCommandDescription = "Backward the current playing song a amount of seconds.";
+    String fullCommandDescription = "Backward the current playing song a amount of seconds.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.forwardsTrack(e, Long.parseLong(args[1]));
+        manager.backwardsTrack(e, Long.parseLong(args[1]));
     }
 
     @Override

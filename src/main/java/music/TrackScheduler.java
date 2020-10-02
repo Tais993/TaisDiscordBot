@@ -143,4 +143,20 @@ public class TrackScheduler extends AudioEventAdapter {
         audioTrackClone.setPosition(timeToSet);
         player.startTrack(audioTrackClone, false);
     }
+
+    public void backwardsTrack(long seconds) {
+        AudioTrack audioTrack = player.getPlayingTrack();
+        player.stopTrack();
+
+        long timeToSet = audioTrack .getPosition() - (seconds * 1000);
+
+        AudioTrack audioTrackClone = audioTrack.makeClone();
+        audioTrackClone.setPosition(timeToSet);
+        player.startTrack(audioTrackClone, false);
+    }
+
+
+    public void clearQueue() {
+        queue.clear();
+    }
 }

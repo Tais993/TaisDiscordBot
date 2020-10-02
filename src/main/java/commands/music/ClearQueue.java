@@ -4,22 +4,24 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Forward implements ICommand {
+public class ClearQueue implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "forward";
-    String commandAlias = "forwards";
+    String command = "clearqueue";
+    String commandAlias = "removeall";
     String category = "music";
-    String exampleCommand = "`!forward (seconds)`";
-    String shortCommandDescription = "Forward the current playing song a amount of seconds.";
-    String fullCommandDescription = "Forward the current playing song a amount of seconds.";
+    String exampleCommand = "`!clearqueue`";
+    String shortCommandDescription = "Queue gets cleared.";
+    String fullCommandDescription = "Queue gets cleared";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.forwardsTrack(e, Long.parseLong(args[1]));
+        manager.clearQueue(e);
+
+        e.getChannel().sendMessage("Queue has been cleared.").queue();
     }
 
     @Override

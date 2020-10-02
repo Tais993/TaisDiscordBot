@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Timer;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
@@ -45,6 +46,8 @@ public class Main extends ListenerAdapter {
 
         Search search = new Search();
         search.setYtApiKey();
+
+        Timer timer = new Timer();
     }
 }
 

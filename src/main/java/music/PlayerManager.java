@@ -158,4 +158,14 @@ public class PlayerManager {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
         musicManager.scheduler.forwardsTrack(seconds);
     }
+
+    public void backwardsTrack(GuildMessageReceivedEvent e, long seconds) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.backwardsTrack(seconds);
+    }
+
+    public void clearQueue(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.clearQueue();
+    }
 }

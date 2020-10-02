@@ -22,7 +22,7 @@ public class InviteTime {
         } else if (isNumber(args)) {
             checkSeconds(args);
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").setDescription("Give a valid time").build()).queue();
         }
     }
 
@@ -131,5 +131,4 @@ public class InviteTime {
     public boolean isDay(String args) {
         return args.contains("d");
     }
-
 }

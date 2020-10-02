@@ -1,6 +1,5 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

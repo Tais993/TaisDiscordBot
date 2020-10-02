@@ -57,7 +57,9 @@ public class CommandEnum {
         SETVOLUME(new SetVolume()),
         DQW(new dQw()),
         PREVIOUS(new Previous()),
-        FORWARD(new Forward());
+        FORWARD(new Forward()),
+        BACKWARDS(new Backward()),
+        CLEARQUEUE(new ClearQueue());
         ICommand c;
 
         AllMyCommands(ICommand c) {

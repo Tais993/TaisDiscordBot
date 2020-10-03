@@ -2,6 +2,7 @@ package commands.music;
 
 import commands.CommandEnum;
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -36,6 +37,11 @@ public class SetVolume implements ICommand {
 
         if (!(volume >= 1 && volume <= 200)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a number between 1 and 200.").build()).queue();
+            return;
+        }
+
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
             return;
         }
 

@@ -1,6 +1,7 @@
 package commands.music;
 
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -17,6 +18,11 @@ public class Backward implements ICommand {
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
+
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.backwardsTrack(e, Long.parseLong(args[1]));

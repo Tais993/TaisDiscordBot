@@ -1,6 +1,7 @@
 package commands.music;
 
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -18,8 +19,12 @@ public class Previous implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        PlayerManager manager = PlayerManager.getInstance();
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+            return;
+        }
 
+        PlayerManager manager = PlayerManager.getInstance();
         manager.playPreviousTrack(e);
     }
 

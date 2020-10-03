@@ -40,7 +40,9 @@ public class UserRemindMeDB {
 
     public void tenMinutesCheck() {
         remindMeDBArrayList.forEach((remindMeDB -> {
-            remindMeDB.tenMinutesCheck();
+            if (remindMeDB.tenMinutesCheck()) {
+
+            }
         }));
     }
 }

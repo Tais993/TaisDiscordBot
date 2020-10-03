@@ -5,6 +5,7 @@ import commands.bot.BotStats;
 import commands.bot.Shutdown;
 import commands.fun.*;
 import commands.general.AddHug;
+import commands.general.Leaderboard;
 import commands.general.Quote;
 import commands.general.Level;
 import commands.music.*;
@@ -59,7 +60,8 @@ public class CommandEnum {
         PREVIOUS(new Previous()),
         FORWARD(new Forward()),
         BACKWARDS(new Backward()),
-        CLEARQUEUE(new ClearQueue());
+        CLEARQUEUE(new ClearQueue()),
+        LEADERBOARD(new Leaderboard());
         ICommand c;
 
         AllMyCommands(ICommand c) {

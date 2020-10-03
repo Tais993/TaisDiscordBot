@@ -1,35 +1,39 @@
-package commands.music;
+package commands.general;
 
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
-import music.PlayerManager;
+import database.user.DatabaseUser;
+import database.user.UserDB;
+import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Remove implements ICommand {
-    GuildMessageReceivedEvent e;
+import java.util.ArrayList;
 
-    String command = "remove";
-    String commandAlias = "remove";
-    String category = "music";
-    String exampleCommand = "`!remove <index>`";
-    String shortCommandDescription = "Removes song from queue.";
-    String fullCommandDescription = "Removes song from queue.";
+public class Leaderboard implements ICommand {
+    GuildMessageReceivedEvent e;
+    DatabaseUser databaseUser = new DatabaseUser();
+    Colors colors = new Colors();
+
+    String command = "leaderboard";
+    String commandAlias = "leaderboard";
+    String category = "general";
+    String exampleCommand = "`!leaderboard`";
+    String shortCommandDescription = "Get the ranking of players";
+    String fullCommandDescription = "Get the ranking of players";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
+        EmbedBuilder eb = new EmbedBuilder(databaseUser.topTenLeaderboard(e));
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
-            return;
-        }
-
-        PlayerManager manager = PlayerManager.getInstance();
-
-        EmbedBuilder eb = manager.removeFromQueue(e, Integer.parseInt(args[1]));
+        eb.setColor(colors.getCurrentColor());
+        eb.setTitle("Leaderboard");
 
         e.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public String getNameUser(String userId) {
+        return e.getJDA().getUserById(userId).getName();
     }
 
     @Override

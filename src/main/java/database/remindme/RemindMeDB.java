@@ -28,8 +28,8 @@ public class RemindMeDB {
         this.contentRemindMe = contentRemindMe;
     }
 
-    public void setTimeInSeconds(int timeInSeconds) {
-        this.timeInSeconds = timeInSeconds;
+    public void setTimeInSeconds(int timeInMilliSeconds) {
+        this.timeInMilliSeconds = timeInMilliSeconds;
     }
 
     public String getRemindMeId() {
@@ -40,19 +40,7 @@ public class RemindMeDB {
         return contentRemindMe;
     }
 
-    public int getTimeInSeconds() {
-        return timeInSeconds;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public int getMinute() {
-        return minute;
+    public long getTimeInMilliSeconds() {
+        return timeInMilliSeconds;
     }
 }

@@ -3,10 +3,10 @@ package commands.music;
 import commands.CommandEnum;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import music.youtube.Search;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,15 +29,13 @@ public class Play implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        AudioManager audioManager = e.getGuild().getAudioManager();
-
-        if (!audioManager.isConnected()) {
-            Join join = new Join();
-            join.joinChannel(e);
-        }
-
         if (!(args.length > 1)) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: requires at least 1 argument").build()).queue();
+            return;
+        }
+
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
             return;
         }
 

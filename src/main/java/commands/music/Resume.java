@@ -2,6 +2,7 @@ package commands.music;
 
 import commands.CommandEnum;
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -9,7 +10,6 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Resume implements ICommand {
     GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
 
     String command = "resume";
     String commandAlias = "resume";
@@ -22,22 +22,8 @@ public class Resume implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        AudioManager audioManager = e.getGuild().getAudioManager();
-
-        if (!audioManager.isConnected()) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("resume").setDescription("Error: bot isn't connected to a voice channel.").build()).queue();
-            return;
-        }
-
-        GuildVoiceState voiceState = e.getMember().getVoiceState();
-
-        if (!voiceState.inVoiceChannel()) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("resume").setDescription("Error: you aren't connected to a voice channel.").build()).queue();
-            return;
-        }
-
-        if (!(audioManager.getConnectedChannel() == voiceState.getChannel())) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("resume").setDescription("Error: you aren't in the same channel as the bot.").build()).queue();
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
             return;
         }
 

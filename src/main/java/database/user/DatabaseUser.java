@@ -1,7 +1,10 @@
 package database.user;
 
 import com.mongodb.*;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+
+import java.util.ArrayList;
 
 public class DatabaseUser {
     public static MongoClient mongoClient;
@@ -88,5 +91,15 @@ public class DatabaseUser {
 
     public UserDB createStanderdUserDB(String userID) {
         return new UserDB(userID);
+    }
+
+    public EmbedBuilder topTenLeaderboard(GuildMessageReceivedEvent e) {
+        EmbedBuilder eb = new EmbedBuilder();
+        DBCursor cursor = user.find();
+        cursor.sort(new BasicDBObject("level", -1).append("xp", -1)).limit(10).forEach(basicDBObject -> {
+            UserDB userDB = dbObjectToUser(basicDBObject);
+            eb.addField(e.getJDA().getUserById(userDB.getUserID()).getName(), "Level: " + userDB.getLevel() + "\nXP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp(), false);
+        });
+        return eb;
     }
 }

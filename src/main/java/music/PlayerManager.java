@@ -10,7 +10,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Invite;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -46,13 +45,14 @@ public class PlayerManager {
         return musicManager;
     }
 
-    public void loadAndPlay(TextChannel channel, String trackUrl) {
+    public void loadAndPlay(TextChannel channel, String trackUrl, boolean addFirst, String userId, String userName) {
         GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
 
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 Colors colors = new Colors();
+
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setTitle("Adding to queue ");
                 eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
@@ -60,20 +60,18 @@ public class PlayerManager {
 
                 channel.sendMessage(eb.build()).queue();
 
-                play(musicManager, track);
+                if (addFirst) {
+                    playTop(musicManager, track, userId, userName);
+                } else {
+                    play(musicManager, track, userId, userName);
+                }
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                AudioTrack firstTrack = playlist.getSelectedTrack();
-
-                if (firstTrack == null) {
-                    firstTrack = playlist.getTracks().get(0);
-                }
-
-                channel.sendMessage("Adding to queue " + firstTrack.getInfo().title + " (first track of playlist " + playlist.getName() + ")").queue();
-
-                play(musicManager, firstTrack);
+                playlist.getTracks().forEach((audioTrack -> {
+                    loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName ,true);
+                }));
             }
 
             @Override
@@ -88,8 +86,52 @@ public class PlayerManager {
         });
     }
 
-    private void play (GuildMusicManager musicManager, AudioTrack track) {
-        musicManager.scheduler.queue(track);
+    public void loadAndPlay(TextChannel channel, String trackUrl, boolean addFirst, String userId, String userName, boolean isPlayList) {
+            GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
+
+            playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+                @Override
+                public void trackLoaded(AudioTrack track) {
+                    if (isPlayList) {
+                        play(musicManager, track, userId, userName);
+                        return;
+                    }
+
+                    if (addFirst) {
+                        playTop(musicManager, track, userId, userName);
+                    } else {
+                        play(musicManager, track, userId, userName);
+                    }
+                }
+
+                @Override
+                public void playlistLoaded(AudioPlaylist playlist) {
+
+                    playlist.getTracks().forEach((audioTrack -> {
+                        loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName, true);
+                    }));
+                }
+
+                @Override
+                public void noMatches() {
+                    channel.sendMessage("Nothing found by " + trackUrl).queue();
+                }
+
+                @Override
+                public void loadFailed(FriendlyException e) {
+                    channel.sendMessage("Could not play: " + e.getMessage()).queue();
+                }
+            });
+    }
+
+    private void play (GuildMusicManager musicManager, AudioTrack track, String userId, String userName) {
+        musicManager.scheduler.queue(track, userId, userName);
+        musicManager.player.setVolume(musicManager.scheduler.volume);
+    }
+
+    private void playTop (GuildMusicManager musicManager, AudioTrack track, String userId, String userName) {
+        musicManager.scheduler.addFirstToQueue(track, userId, userName);
+        musicManager.player.setVolume(musicManager.scheduler.volume);
     }
 
     public static synchronized PlayerManager getInstance() {
@@ -100,10 +142,10 @@ public class PlayerManager {
         return INSTANCE;
     }
 
-    public EmbedBuilder getQueue(GuildMessageReceivedEvent e, AudioTrack playingTrack) {
+    public EmbedBuilder getQueue(GuildMessageReceivedEvent e) {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
 
-        return musicManager.scheduler.getQueue(playingTrack);
+        return musicManager.scheduler.getQueue();
     }
 
     public EmbedBuilder removeFromQueue(GuildMessageReceivedEvent e, int removeAudioTrackIndex) {
@@ -130,6 +172,7 @@ public class PlayerManager {
     public boolean setVolume(GuildMessageReceivedEvent e, int volume) {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
         musicManager.player.setVolume(volume);
+        musicManager.scheduler.volume = volume;
 
         return musicManager.player.getVolume() == volume;
     }
@@ -167,5 +210,66 @@ public class PlayerManager {
     public void clearQueue(GuildMessageReceivedEvent e) {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
         musicManager.scheduler.clearQueue();
+    }
+
+    public void loopSongToggle(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.loopSong = !musicManager.scheduler.loopSong;
+    }
+
+    public void loopQueueToggle(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.loopQueue = !musicManager.scheduler.loopQueue;
+    }
+
+    public boolean getLoopQueue(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        return musicManager.scheduler.loopQueue;
+    }
+
+    public boolean getLoopSong(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        return musicManager.scheduler.loopSong;
+    }
+
+    public void loopOff(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.loopSong = false;
+        musicManager.scheduler.loopQueue = false;
+    }
+
+    public void shuffleQueue(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.shuffleQueue();
+    }
+
+    public void setSongPosition(GuildMessageReceivedEvent e, long seconds) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.setTrackTime(seconds);
+    }
+
+    public void moveTrackInQueue(GuildMessageReceivedEvent e, int indexTrackToMove, int indexToMoveTo) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.moveTrackInQueue(indexTrackToMove, indexToMoveTo);
+    }
+
+    public void skipToTrack(GuildMessageReceivedEvent e, int index) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.skipToTrack(index);
+    }
+
+    public void replayTrack(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.replayTrack();
+    }
+
+    public void clearQueueFromUser(GuildMessageReceivedEvent e, String userId) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        musicManager.scheduler.clearQueueFromUser(userId);
+    }
+
+    public EmbedBuilder getNowPlaying(GuildMessageReceivedEvent e) {
+        GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
+        return musicManager.scheduler.getNowPlaying();
     }
 }

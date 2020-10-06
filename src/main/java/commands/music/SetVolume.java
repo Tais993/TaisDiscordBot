@@ -11,7 +11,7 @@ public class SetVolume implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "setvolume";
-    String commandAlias = "setvolume";
+    String commandAlias = "volume";
     String category = "music";
     String exampleCommand = "`!setvolume (volume)`";
     String shortCommandDescription = "Set the volume of the bot. Ranged between 1 and 200.";

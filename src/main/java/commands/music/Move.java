@@ -1,29 +1,35 @@
 package commands.music;
 
+import commands.CommandEnum;
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Queue implements ICommand {
+public class Move implements ICommand {
     GuildMessageReceivedEvent e;
+    CommandEnum commandEnum = new CommandEnum();
 
-    String command = "queue";
-    String commandAlias = "q";
+    String command = "move";
+    String commandAlias = "move";
     String category = "music";
-    String exampleCommand = "`!queue`";
-    String shortCommandDescription = "Get the queue of the music.";
-    String fullCommandDescription = "Get the queue of the music.";
+    String exampleCommand = "`!move (index song to move) (index to move to)`";
+    String shortCommandDescription = "Loop the current queue / current song.";
+    String fullCommandDescription = "Loop the current queue / current song.\n" +
+            "`!loop all` to loop the current queue. \n" +
+            "`!loop 1` to loop the current playing song.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
-
-        EmbedBuilder eb = manager.getQueue(e);
-
-        e.getChannel().sendMessage(eb.build()).queue();
+        manager.moveTrackInQueue(e, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
     }
 
     @Override

@@ -10,6 +10,11 @@ public class UserRemindMeDB {
         this.userId = userId;
     }
 
+    public UserRemindMeDB(String userId, ArrayList<RemindMeDB> remindMeDBArrayList) {
+        this.userId = userId;
+        this.remindMeDBArrayList = remindMeDBArrayList;
+    }
+
     public void addToArrayList(RemindMeDB remindMeDB) {
         remindMeDBArrayList.add(remindMeDB);
     }
@@ -36,13 +41,5 @@ public class UserRemindMeDB {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public void tenMinutesCheck() {
-        remindMeDBArrayList.forEach((remindMeDB -> {
-            if (remindMeDB.tenMinutesCheck()) {
-
-            }
-        }));
     }
 }

@@ -11,7 +11,7 @@ public class Leave implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "leave";
-    String commandAlias = "leave";
+    String commandAlias = "disconnect";
     String category = "music";
     String exampleCommand = "`!leave`";
     String shortCommandDescription = "Leave the bot from a voice channel.";
@@ -22,6 +22,10 @@ public class Leave implements ICommand {
         e = event;
 
         AudioManager audioManager = e.getGuild().getAudioManager();
+
+        if (e.getAuthor().getId().equals("257500867568205824")) {
+            audioManager.closeAudioConnection();
+        }
 
         if (!audioManager.isConnected()) {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("leave").setDescription("Error: I'm not connected to a voice channel.").build()).queue();

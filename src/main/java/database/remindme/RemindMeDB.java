@@ -9,15 +9,7 @@ public class RemindMeDB {
     public RemindMeDB(String remindMeId, String contentRemindMe, int timeInMilliSeconds) {
         this.remindMeId = remindMeId;
         this.contentRemindMe = contentRemindMe;
-        this.timeInMilliSeconds = timeInMilliSeconds / 1000;
-    }
-
-    public boolean tenMinutesCheck() {
-        if (timeInMilliSeconds <= 600000 ) {
-            return true;
-        }
-        timeInMilliSeconds -= 600000;
-        return false;
+        this.timeInMilliSeconds = System.currentTimeMillis() + timeInMilliSeconds / 1000;
     }
 
     public void setRemindMeId(String remindMeId) {

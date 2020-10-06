@@ -4,7 +4,11 @@ import commands.ICommand;
 import functions.Colors;
 import functions.entities.GuildInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.utils.concurrent.Task;
+
+import java.util.List;
 
 public class ServerStats implements ICommand {
     GuildMessageReceivedEvent e;
@@ -21,23 +25,28 @@ public class ServerStats implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
         GuildInfo guildInfo = new GuildInfo(e.getGuild());
-        EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("Server stats of: " + e.getGuild().getName());
-        eb.addField("Total members:", e.getGuild().getMembers().size() + "", false);
-        eb.addField("Total online/DND members:", guildInfo.getOnlineMemberCount() + "", false);
-        eb.addField("Total non animated emojis:", guildInfo.getTotalNonAnimatedEmojis() + "", true);
-        eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
-        eb.addBlankField(true);
-        eb.addField("Server has been created on:", guildInfo.getDateCreated(), true);
-        eb.addField("Server owner:", guildInfo.getOwnerName(), true);
-        eb.addBlankField(true);
-        eb.setThumbnail(e.getGuild().getIconUrl());
-        eb.setFooter("Made by Tijs");
+        e.getChannel().sendMessage("Working on.. Discord I hate you").queue();
 
-        eb.setColor(colors.getCurrentColor());
-
-        e.getChannel().sendMessage(eb.build()).queue();
+//        EmbedBuilder eb = new EmbedBuilder();
+//
+//        List<Member> members = e.getGuild().loadMembers().get();
+//
+//        eb.setTitle("Server stats of: " + e.getGuild().getName());
+//        eb.addField("Total members:", members.size() + "", false);
+//        eb.addField("Total online/DND members:", guildInfo.getOnlineMemberCount() + "", false);
+//        eb.addField("Total non animated emojis:", guildInfo.getTotalNonAnimatedEmojis() + "", true);
+//        eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
+//        eb.addBlankField(true);
+//        eb.addField("Server has been created on:", guildInfo.getDateCreated(), true);
+//        eb.addField("Server owner:", guildInfo.getOwnerName(), true);
+//        eb.addBlankField(true);
+//        eb.setThumbnail(e.getGuild().getIconUrl());
+//        eb.setFooter("Made by Tijs");
+//
+//        eb.setColor(colors.getCurrentColor());
+//
+//        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

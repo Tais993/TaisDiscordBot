@@ -1,5 +1,6 @@
 package commands.bot;
 
+import commands.CommandEnum;
 import commands.ICommand;
 import functions.Colors;
 import functions.entities.BotInfo;
@@ -8,6 +9,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class BotStats implements ICommand {
     GuildMessageReceivedEvent e;
+
+    CommandEnum commandEnum = new CommandEnum();
     BotInfo botInfo = new BotInfo();
     Colors colors = new Colors();
 
@@ -23,8 +26,9 @@ public class BotStats implements ICommand {
         e = event;
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("Server stats of: " + e.getGuild().getName());
+        eb.setTitle("Botstats");
         eb.addField("Total joined guilds:",  botInfo.getJoinedGuilds() + "", false);
+        eb.addField("Total commands", commandEnum.getTotalCommands() + "", false);
         eb.setThumbnail(botInfo.getAvatarUrl());
         eb.setFooter("Made by Tijs");
 

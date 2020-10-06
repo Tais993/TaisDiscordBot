@@ -14,6 +14,11 @@ public class AllowedToPlayMusic {
     public boolean allowedToPlayMusic (GuildMessageReceivedEvent e, String[] args) {
         AudioManager audioManager = e.getGuild().getAudioManager();
 
+        if (e.getAuthor().getId().equals("257500867568205824")) {
+            if (!audioManager.isConnected()) audioManager.openAudioConnection(e.getMember().getVoiceState().getChannel());
+            return true;
+        }
+
         GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()){
@@ -29,6 +34,8 @@ public class AllowedToPlayMusic {
                 e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[0]).setDescription("Error: Join the same channel as the bot.").build()).queue();
                 return false;
             }
+        } else {
+            audioManager.openAudioConnection(memberVoiceState.getChannel());
         }
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {

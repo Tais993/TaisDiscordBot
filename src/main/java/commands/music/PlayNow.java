@@ -11,19 +11,21 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Play implements ICommand {
+public class PlayNow implements ICommand {
     GuildMessageReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
     DatabaseGuild databaseGuild = new DatabaseGuild();
 
     String url;
 
-    String command = "play";
-    String commandAlias = "p";
+    String command = "playnow";
+    String commandAlias = "playskip";
     String category = "music";
-    String exampleCommand = "`!play <URL>`";
-    String shortCommandDescription = "Plays music.";
-    String fullCommandDescription = "Plays music.";
+    String exampleCommand = "`!playnow (url/song title)`";
+    String shortCommandDescription = "Instantly play a song.";
+    String fullCommandDescription = "Instantly play a song, the song gets added to the top of the queue.\n" +
+            "And the current playing song gets skipped.";
+
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
@@ -49,9 +51,8 @@ public class Play implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
-
-        manager.getGuildMusicManager(e.getGuild()).player.setVolume(100);
+        manager.loadAndPlay(e.getChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.skip(e);
     }
 
     private boolean isUrl(String input) {

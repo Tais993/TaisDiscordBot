@@ -1,19 +1,21 @@
 package commands.music;
 
+import commands.CommandEnum;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class ClearQueue implements ICommand {
+public class Seek implements ICommand {
     GuildMessageReceivedEvent e;
+    CommandEnum commandEnum = new CommandEnum();
 
-    String command = "clearqueue";
-    String commandAlias = "removeall";
+    String command = "seek";
+    String commandAlias = "seek";
     String category = "music";
-    String exampleCommand = "`!clearqueue`";
-    String shortCommandDescription = "Queue gets cleared.";
-    String fullCommandDescription = "Queue gets cleared";
+    String exampleCommand = "`!seek (time in seconds)`";
+    String shortCommandDescription = "Set the current playing track to a specific time.";
+    String fullCommandDescription = "Set the current playing track to a specific time.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
@@ -24,10 +26,12 @@ public class ClearQueue implements ICommand {
             return;
         }
 
-        PlayerManager manager = PlayerManager.getInstance();
-        manager.clearQueueFromUser(e, args[1]);
-
-        e.getChannel().sendMessage("Queue has been cleared.").queue();
+        if (args[0].matches("\\d+")) {
+            PlayerManager manager = PlayerManager.getInstance();
+            manager.setSongPosition(e, Long.parseLong(args[0]));
+        } else {
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("seek").setDescription("Give a valid number").build()).queue();
+        }
     }
 
     @Override

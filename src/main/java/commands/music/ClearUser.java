@@ -1,29 +1,33 @@
 package commands.music;
 
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Queue implements ICommand {
+public class ClearUser implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "queue";
-    String commandAlias = "q";
+    String command = "clearuser";
+    String commandAlias = "clearuser";
     String category = "music";
-    String exampleCommand = "`!queue`";
-    String shortCommandDescription = "Get the queue of the music.";
-    String fullCommandDescription = "Get the queue of the music.";
+    String exampleCommand = "`!clearuser (userId/userTag)`";
+    String shortCommandDescription = "Queue gets cleared from a user's songs.";
+    String fullCommandDescription = "Queue gets cleared from a user's songs.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
+        manager.clearQueue(e);
 
-        EmbedBuilder eb = manager.getQueue(e);
-
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage("Queue has been cleared from user").queue();
     }
 
     @Override

@@ -17,7 +17,7 @@ public class EightBall implements ICommand {
     String exampleCommand = "`!8ball <question>?`";
     String shortCommandDescription = "Ask 8ball a question";
     String fullCommandDescription = "Ask 8ball a question, and get a totally real answer.\n" +
-            "Question mark is required.";
+            "**Question mark is required.**";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {

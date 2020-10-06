@@ -3,6 +3,7 @@ package functions.entities;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.time.OffsetDateTime;
 
@@ -35,7 +36,8 @@ public class GuildInfo {
     }
 
     public String getOwnerName() {
-        return guild.getOwner().getEffectiveName();
+        Member owner = guild.retrieveOwner().complete();
+        return owner.getEffectiveName();
     }
 
     public boolean isValidRole(String roleId) {

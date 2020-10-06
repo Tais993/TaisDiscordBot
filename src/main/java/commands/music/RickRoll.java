@@ -31,7 +31,7 @@ public class RickRoll implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getChannel(), url);
+        manager.loadAndPlay(e.getChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
 
         manager.getGuildMusicManager(e.getGuild()).player.setVolume(100);
     }

@@ -1,29 +1,30 @@
 package commands.music;
 
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Queue implements ICommand {
+public class Replay implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "queue";
-    String commandAlias = "q";
+    String command = "replay";
+    String commandAlias = "replay";
     String category = "music";
-    String exampleCommand = "`!queue`";
-    String shortCommandDescription = "Get the queue of the music.";
-    String fullCommandDescription = "Get the queue of the music.";
+    String exampleCommand = "!replay";
+    String shortCommandDescription = "Replay the current playing track.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
-
-        EmbedBuilder eb = manager.getQueue(e);
-
-        e.getChannel().sendMessage(eb.build()).queue();
+        manager.replayTrack(e);
     }
 
     @Override

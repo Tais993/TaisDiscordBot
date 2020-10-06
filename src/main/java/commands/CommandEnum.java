@@ -4,10 +4,7 @@ import commands.amongus.StartGame;
 import commands.bot.BotStats;
 import commands.bot.Shutdown;
 import commands.fun.*;
-import commands.general.AddHug;
-import commands.general.Leaderboard;
-import commands.general.Quote;
-import commands.general.Level;
+import commands.general.*;
 import commands.music.*;
 import commands.util.*;
 import commands.util.ban.TempBan;
@@ -61,7 +58,17 @@ public class CommandEnum {
         FORWARD(new Forward()),
         BACKWARDS(new Backward()),
         CLEARQUEUE(new ClearQueue()),
-        LEADERBOARD(new Leaderboard());
+        LEADERBOARD(new Leaderboard()),
+        LOOP(new Loop()),
+        SHUFFLE(new Shuffle()),
+        SEEK(new Seek()),
+        PLAYTOP(new PlayTop()),
+        MOVE(new Move()),
+        PLAYNOW(new PlayNow()),
+        SKIPTO(new SkipTo()),
+        REPLAY(new Replay()),
+        CLEARUSER(new ClearUser()),
+        SKUNK(new Skunk());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -264,5 +271,9 @@ public class CommandEnum {
 
     public SelfUser getBot() {
         return bot;
+    }
+
+    public int getTotalCommands() {
+        return AllMyCommands.values().length;
     }
 }

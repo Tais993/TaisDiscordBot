@@ -2,11 +2,17 @@ package commands.general;
 
 import commands.CommandEnum;
 import commands.ICommand;
+import database.remindme.DatabaseRemindMe;
+import database.remindme.RemindMeDB;
+import database.remindme.UserRemindMeDB;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class RemindMe implements ICommand {
     GuildMessageReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
+    DatabaseRemindMe databaseRemindMe = new DatabaseRemindMe();
+
+    int totalSeconds;
 
     String command = "remindme";
     String commandAlias = "remindme";
@@ -14,26 +20,34 @@ public class RemindMe implements ICommand {
     String exampleCommand = "`!remindme <time>s/m/h/d <content to remind you with>`";
     String shortCommandDescription = "Remind you with something you gave the bot.";
     String fullCommandDescription = "Remind you with something you gave the bot after a specified amount of time.";
+
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        System.currentTimeMillis();
-
         String time = args[2];
 
-        if (isSecond(time)) {
+        String userId = e.getAuthor().getId();
 
-        } else if (isMinute(time)) {
 
+        if (isMinute(time)) {
+            minutesToSeconds(Integer.parseInt(time));
         } else if (isHour(time)) {
-
+            minutesToSeconds(Integer.parseInt(time));
         } else if (isDay(time)) {
-
-        } else if (isNumber(time)) {
-
+            minutesToSeconds(Integer.parseInt(time));
+        } else if (isSecond(time) || isNumber(time)) {
+            totalSeconds = Integer.parseInt(time.replace("s", ""));
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("remindme").build()).queue();
+            return;
+        }
+
+        if (!databaseRemindMe.userRemindMeExistsInDB(userId)) {
+            UserRemindMeDB userRemindMeDB = new UserRemindMeDB(userId);
+            RemindMeDB remindMeDB = new RemindMeDB("1", args[1], totalSeconds);
+            userRemindMeDB.addToArrayList(remindMeDB);
+            databaseRemindMe.addUserRemindMeToDB(userRemindMeDB);
         }
     }
 
@@ -65,6 +79,27 @@ public class RemindMe implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    public void minutesToSeconds(int timeGiven) {
+        int output = timeGiven;
+        output *= 60;
+        totalSeconds = output;
+    }
+
+    public void hoursToSeconds(int timeGiven) {
+        int output = timeGiven;
+        output *= 60;
+        output *= 60;
+        totalSeconds = output;
+    }
+
+    public void daysToSeconds(int timeGiven) {
+        int output = timeGiven;
+        output *= 24;
+        output *= 60;
+        output *= 60;
+        totalSeconds = output;
     }
 
     public boolean isNumber(String args) {

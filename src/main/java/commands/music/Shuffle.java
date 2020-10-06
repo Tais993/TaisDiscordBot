@@ -1,29 +1,33 @@
 package commands.music;
 
 import commands.ICommand;
+import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class Queue implements ICommand {
+public class Shuffle implements ICommand {
     GuildMessageReceivedEvent e;
 
-    String command = "queue";
-    String commandAlias = "q";
+    String command = "shuffle";
+    String commandAlias = "shuffle";
     String category = "music";
-    String exampleCommand = "`!queue`";
-    String shortCommandDescription = "Get the queue of the music.";
-    String fullCommandDescription = "Get the queue of the music.";
+    String exampleCommand = "`!shuffle`";
+    String shortCommandDescription = "Shuffle the queue.";
+    String fullCommandDescription = "Shuffle the queue.";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
+        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
+        manager.shuffleQueue(e);
 
-        EmbedBuilder eb = manager.getQueue(e);
-
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage("Queue has been shuffeled").queue();
     }
 
     @Override

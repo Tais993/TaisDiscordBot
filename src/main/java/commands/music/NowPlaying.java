@@ -1,21 +1,12 @@
 package commands.music;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.CommandEnum;
 import commands.ICommand;
-import functions.Colors;
-import music.GuildMusicManager;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import static music.TrackScheduler.videoDurationToYoutube;
-
 public class NowPlaying implements ICommand {
     GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
-
-    Colors colors = new Colors();
 
     String command = "nowplaying";
     String commandAlias = "np";
@@ -29,19 +20,7 @@ public class NowPlaying implements ICommand {
         e = event;
 
         PlayerManager manager = PlayerManager.getInstance();
-        GuildMusicManager musicManager = manager.getGuildMusicManager(e.getGuild());
-
-        AudioTrack playingTrack = musicManager.player.getPlayingTrack();
-
-        EmbedBuilder eb = new EmbedBuilder();
-
-        eb.setTitle("Now playing");
-        eb.appendDescription("*Currently playing*\n");
-        eb.appendDescription("**" + playingTrack.getInfo().author + "**\n");
-        eb.appendDescription("[" + playingTrack.getInfo().title + "](" + playingTrack.getInfo().uri + ")\n");
-        eb.appendDescription(videoDurationToYoutube(playingTrack.getPosition()) + " / " + videoDurationToYoutube(playingTrack.getDuration()) + "\n");
-        eb.setColor(colors.getCurrentColor());
-
+        EmbedBuilder eb = manager.getNowPlaying(e);
         e.getChannel().sendMessage(eb.build()).queue();
     }
 

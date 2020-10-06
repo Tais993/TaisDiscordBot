@@ -1,82 +1,89 @@
 package database.remindme;
 
 import com.mongodb.*;
-import database.reactions.ReactionDB;
 
 import java.util.ArrayList;
 
 public class DatabaseRemindMe {
     public static MongoClient mongoClient;
     public static DB database;
-    public static DBCollection reactions;
+    public static DBCollection remindme;
+
+    int i = 0;
 
     public DatabaseRemindMe() {
         mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
         database = mongoClient.getDB("discordbot");
-        reactions = database.getCollection("remindme");
+        remindme = database.getCollection("remindme");
     }
 
-    public DBObject getDBObjectFromDB(String messageId) {
-        DBObject query = new BasicDBObject("messageId", messageId);
-        DBCursor cursor = reactions.find(query);
+    public DBObject getDBObjectFromDB(String userId) {
+        DBObject query = new BasicDBObject("userId", userId);
+        DBCursor cursor = remindme.find(query);
         return cursor.one();
     }
 
-    public ArrayList<String> allReactionsInDb() {
+    public UserRemindMeDB[] getAllUserRemindMesFromDB() {
+        UserRemindMeDB[] userRemindMeDBS = new UserRemindMeDB[0];
+        
         DBObject query = new BasicDBObject();
-        DBCursor cursor = reactions.find(query);
-
-        ArrayList<String> messageIds = new ArrayList<>();
-
-        cursor.forEach((databaseObject -> {
-            messageIds.add(databaseObject.get("messageId").toString());
+        DBCursor cursor = remindme.find(query);
+        
+        cursor.forEach((dbObject -> {
+            i++;
+            userRemindMeDBS[i] = dbObjectToUserRemindMe(dbObject);
         }));
-
-        return messageIds;
+        return userRemindMeDBS;
     }
 
-    public boolean reactionDBExistsInDB(String messageId) {
-        DBObject query = new BasicDBObject("messageId", messageId);
-        DBCursor cursor = reactions.find(query);
+    public boolean userRemindMeExistsInDB(String userId) {
+        DBObject query = new BasicDBObject("userId", userId);
+        DBCursor cursor = remindme.find(query);
         return cursor.one() != null;
     }
 
-    public DBObject reactionDBToDBObject(ReactionDB reactionDB) {
-        return new BasicDBObject("messageId", reactionDB.getMessageID()).append("TextChannelId", reactionDB.getTextChannelID()).append("playersJoining", reactionDB.getPlayersJoining());
+    public DBObject userRemindMeDBToDBObject(UserRemindMeDB userRemindMeDB) {
+        return new BasicDBObject("userId", userRemindMeDB.getUserId()).append("remindMeDBArrayList", remindMeDBArrayToDBObjectList(userRemindMeDB.getRemindMeDBArrayList()));
     }
 
-    public ReactionDB dbObjectToReactionDB(DBObject dbObject) {
-        ReactionDB reactionDB = new ReactionDB(dbObject.get("messageId").toString(), dbObject.get("TextChannelId").toString());
-        reactionDB.setPlayersJoining(Integer.parseInt(dbObject.get("playersJoining").toString()));
-
-        return reactionDB;
+    public UserRemindMeDB dbObjectToUserRemindMe(DBObject dbObject) {
+        return new UserRemindMeDB(dbObject.get("userId").toString(), dbObjectListToRemindMeDBArray((BasicDBList) dbObject.get("remindMeDBArrayList")));
     }
 
-    public void addReactionToDB(ReactionDB reactionDB) {
-        reactions.insert(reactionDBToDBObject(reactionDB));
+    public void addUserRemindMeToDB(UserRemindMeDB userRemindMeDB) {
+        remindme.insert(userRemindMeDBToDBObject(userRemindMeDB));
     }
 
-    public String getTextChannelIDFromDB(String messageID) {
-        DBObject query = new BasicDBObject("messageId", messageID);
-        DBCursor cursor = reactions.find(query);
-        return cursor.one().get("TextChannelId").toString();
+    public UserRemindMeDB getUserRemindMeFromDB(String userId) {
+        return dbObjectToUserRemindMe(getDBObjectFromDB(userId));
     }
 
-    public int getPlayersJoiningFromDB(String messageID) {
-        DBObject query = new BasicDBObject("messageId", messageID);
-        DBCursor cursor = reactions.find(query);
-        return Integer.parseInt(cursor.one().get("playersJoining").toString());
+
+    public BasicDBList remindMeDBArrayToDBObjectList(ArrayList<RemindMeDB> remindMeDBArrayList) {
+        BasicDBList basicDBList = new BasicDBList();
+        remindMeDBArrayList.forEach((remindMeDB -> {
+            basicDBList.add(new BasicDBObject("remindMeId", remindMeDB.getRemindMeId()).append("contentRemindMe", remindMeDB.getContentRemindMe()).append("timeInMilliSeconds", remindMeDB.getTimeInMilliSeconds()));
+        }));
+        return basicDBList;
     }
 
-    public void addPlayerToPlayersJoining(String messageId) {
-        ReactionDB reactionDB = getReactionDBFromDB(messageId);
-        reactionDB.addPlayer();
-
-        DBObject query = new BasicDBObject("messageId", messageId);
-        reactions.findAndModify(query, reactionDBToDBObject(reactionDB));
+    public ArrayList<RemindMeDB> dbObjectListToRemindMeDBArray(BasicDBList basicDBList) {
+        ArrayList<RemindMeDB> remindMeDBArrayList = new ArrayList<>();
+        basicDBList.forEach((value -> {
+            BasicDBObject basicDBObject = (BasicDBObject) value;
+            remindMeDBArrayList.add(new RemindMeDB(basicDBObject.get("remindMeId").toString(), basicDBObject.get("contentRemindMe").toString(), Integer.parseInt(basicDBObject.get("timeInMilliSeconds").toString())));
+        }));
+        return remindMeDBArrayList;
     }
+    
+    public UserRemindMeDB checkRemindMe() {
 
-    public ReactionDB getReactionDBFromDB(String messageId) {
-        return dbObjectToReactionDB(getDBObjectFromDB(messageId));
+        for (UserRemindMeDB userRemindMeDB : getAllUserRemindMesFromDB()) {
+            userRemindMeDB.getRemindMeDBArrayList().forEach((remindMeDB -> {
+                if (System.currentTimeMillis() >= remindMeDB.getTimeInMilliSeconds()) {
+                }
+            }));
+        }
+        return null;
     }
 }

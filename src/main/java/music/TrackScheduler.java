@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import commands.music.objects.AudioPlayerO;
 import commands.music.objects.AudioTrackO;
+import commands.music.objects.RadioO;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -25,6 +26,10 @@ public class TrackScheduler extends AudioEventAdapter {
 
     boolean loopSong = false;
     boolean loopQueue = false;
+
+    private boolean isRadio = false;
+
+    private RadioO radio = new RadioO();
 
     int volume = 100;
 
@@ -59,22 +64,26 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void nextTrack() {
         previousAudioTrackO = currentPlayingAudioTrackO;
+        isRadio = false;
         if (loopSong) {
             playerO.getPlayer().startTrack(previousAudioTrackO.getTrack().makeClone(), false);
             playerO.setPlayerUp(playerO.getUserId(), playerO.getUserTag());
             currentPlayingAudioTrackO = new AudioTrackO(playerO.getPlayer().getPlayingTrack(), playerO.getUserId(), playerO.getUserTag());
             return;
-        }
-        if (loopQueue) {
+        } else if (loopQueue) {
             queue.add(new AudioTrackO(playerO.getPlayer().getPlayingTrack().makeClone(), playerO.getUserId(), playerO.getUserTag()));
             return;
         }
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
-        AudioTrackO audioTrackO = new AudioTrackO(queue.get(0).getTrack(), queue.get(0).getUserId(), queue.get(0).getUserTag());
-        playerO.getPlayer().startTrack(queue.poll().getTrack(), false);
-        playerO.setPlayerUp(audioTrackO.getUserId(), audioTrackO.getUserTag());
-        currentPlayingAudioTrackO = new AudioTrackO(playerO.getPlayer().getPlayingTrack(), playerO.getUserId(), playerO.getUserTag());
+        if (!queue.isEmpty()) {
+            AudioTrackO audioTrackO = new AudioTrackO(queue.get(0).getTrack(), queue.get(0).getUserId(), queue.get(0).getUserTag());
+            playerO.getPlayer().startTrack(queue.poll().getTrack(), false);
+            playerO.setPlayerUp(audioTrackO.getUserId(), audioTrackO.getUserTag());
+            currentPlayingAudioTrackO = new AudioTrackO(playerO.getPlayer().getPlayingTrack(), playerO.getUserId(), playerO.getUserTag());
+        } else {
+            playerO.getPlayer().startTrack(null, false);
+        }
     }
 
     @Override
@@ -93,31 +102,66 @@ public class TrackScheduler extends AudioEventAdapter {
 
         currentIndex = 0;
 
-        queue.forEach((audioTrackO -> {
-            AudioTrack audioTrack = audioTrackO.getTrack();
-            eb.appendDescription("\n");
-            currentIndex++;
+        if (queue.size() > 0 && queue.get(0).getTrack() != null) {
+            queue.forEach((audioTrackO -> {
+                AudioTrack audioTrack = audioTrackO.getTrack();
+                eb.appendDescription("\n");
+                currentIndex++;
 
-            eb.appendDescription("*Number in queue: " + currentIndex + "*\n");
-            eb.appendDescription("**" + audioTrack.getInfo().author + "**\n");
-            eb.appendDescription("[" + audioTrack.getInfo().title + "](" + audioTrack.getInfo().uri + ")\n");
-            eb.appendDescription(videoDurationToYoutube(audioTrack.getDuration()) + " | " + audioTrackO.getUserTag() + "\n");
-        }));
+                eb.appendDescription("*Number in queue: " + currentIndex + "*\n");
+                eb.appendDescription("**" + audioTrack.getInfo().author + "**\n");
+                eb.appendDescription("[" + audioTrack.getInfo().title + "](" + audioTrack.getInfo().uri + ")\n");
+                eb.appendDescription(videoDurationToYoutube(audioTrack.getDuration()) + " | " + audioTrackO.getUserTag() + "\n");
+            }));
+        } else {
+            eb.appendDescription("\n");
+            eb.appendDescription("Currently nothing in queue");
+        }
 
         return eb;
     }
 
     public EmbedBuilder getNowPlaying() {
-        AudioTrack np = playerO.getPlayer().getPlayingTrack();
+        if (playerO.getPlayer().getPlayingTrack() != null) {
+
+            if (isRadio) {
+                return getNowRadioPlaying();
+            }
+
+            AudioTrack np = playerO.getPlayer().getPlayingTrack();
+            Colors colors = new Colors();
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(colors.getCurrentColor());
+
+            eb.setTitle("Queue");
+            eb.appendDescription("*Currently playing*\n");
+            eb.appendDescription("**" + np.getInfo().author + "**\n");
+            eb.appendDescription("[" + np.getInfo().title + "](" + np.getInfo().uri + ")\n");
+            eb.appendDescription(videoDurationToYoutube(np.getPosition()) + " / " + videoDurationToYoutube(np.getDuration()) + " | " + playerO.getUserTag());
+
+            eb.setThumbnail("https://i.ytimg.com/vi/" + np.getInfo().identifier + "/maxresdefault.jpg");
+
+            return eb;
+
+        } else {
+            Colors colors = new Colors();
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(colors.getCurrentColor());
+            eb.setTitle("Queue");
+            eb.appendDescription("Nothing playing right now.");
+            return eb;
+        }
+    }
+
+    public EmbedBuilder getNowRadioPlaying() {
         Colors colors = new Colors();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(colors.getCurrentColor());
 
         eb.setTitle("Queue");
         eb.appendDescription("*Currently playing*\n");
-        eb.appendDescription("**" + np.getInfo().author + "**\n");
-        eb.appendDescription("[" + np.getInfo().title + "](" + np.getInfo().uri + ")\n");
-        eb.appendDescription(videoDurationToYoutube(np.getPosition()) + " / " + videoDurationToYoutube(np.getDuration()) + " | " + playerO.getUserTag());
+        eb.appendDescription("**" + radio.getRadioName() + "**\n");
+        eb.appendDescription("Live");
 
         return eb;
     }
@@ -249,5 +293,17 @@ public class TrackScheduler extends AudioEventAdapter {
         queue.forEach((audioTrackO -> {
             if (audioTrackO.getUserId().equals(userId)) queue.remove(audioTrackO);
         }));
+    }
+
+    public void playRadio(AudioTrack track, String userId, String userAsTag, String radioName) {
+        AudioTrack playingTrack = playerO.getPlayer().getPlayingTrack();
+        String userIdPlayingTrack = playerO.getUserId();
+        String userAsTagPlayingTrack = playerO.getUserTag();
+
+        addFirstToQueue(playingTrack, userIdPlayingTrack, userAsTagPlayingTrack);
+        playerO.getPlayer().startTrack(track, false);
+        playerO.setPlayerUp(userId, userAsTag);
+        isRadio = true;
+        radio.setRadioName(radioName);
     }
 }

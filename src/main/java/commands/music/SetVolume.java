@@ -21,12 +21,14 @@ public class SetVolume implements ICommand {
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
-        if (!(args.length >= 1)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a number.").build()).queue();
+        PlayerManager manager = PlayerManager.getInstance();
+
+        if (!(args.length > 1)) {
+            e.getChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
             return;
         }
 
-        int volume = 0;
+        int volume;
 
         try {
             volume = Integer.parseInt(args[1]);
@@ -44,8 +46,6 @@ public class SetVolume implements ICommand {
         if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
             return;
         }
-
-        PlayerManager manager = PlayerManager.getInstance();
 
         if (manager.setVolume(e, volume)) {
             e.getChannel().sendMessage("Volume has been set correctly to " + volume).queue();

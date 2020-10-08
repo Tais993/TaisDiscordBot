@@ -124,6 +124,34 @@ public class PlayerManager {
             });
     }
 
+    public void loadAndPlayRadio(TextChannel channel, String radioUrl, String userId, String userName, String radioName) {
+        GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
+
+        playerManager.loadItemOrdered(musicManager, radioUrl, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                    playRadio(musicManager, track, userId, userName, radioName);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                playlist.getTracks().forEach((audioTrack -> {
+                    loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName, true);
+                }));
+            }
+
+            @Override
+            public void noMatches() {
+                channel.sendMessage("Nothing found by " + radioUrl).queue();
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                channel.sendMessage("Could not play: " + e.getMessage()).queue();
+            }
+        });
+    }
+
     private void play (GuildMusicManager musicManager, AudioTrack track, String userId, String userName) {
         musicManager.scheduler.queue(track, userId, userName);
         musicManager.player.setVolume(musicManager.scheduler.volume);
@@ -132,6 +160,10 @@ public class PlayerManager {
     private void playTop (GuildMusicManager musicManager, AudioTrack track, String userId, String userName) {
         musicManager.scheduler.addFirstToQueue(track, userId, userName);
         musicManager.player.setVolume(musicManager.scheduler.volume);
+    }
+
+    private void playRadio (GuildMusicManager musicManager, AudioTrack track, String userId, String userName, String radioName) {
+        musicManager.scheduler.playRadio(track, userId, userName, radioName);
     }
 
     public static synchronized PlayerManager getInstance() {
@@ -271,5 +303,10 @@ public class PlayerManager {
     public EmbedBuilder getNowPlaying(GuildMessageReceivedEvent e) {
         GuildMusicManager musicManager = getGuildMusicManager(e.getGuild());
         return musicManager.scheduler.getNowPlaying();
+    }
+
+    public int getVolume(Guild g) {
+        GuildMusicManager musicManager = getGuildMusicManager(g);
+        return musicManager.player.getVolume();
     }
 }

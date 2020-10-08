@@ -68,7 +68,8 @@ public class CommandEnum {
         SKIPTO(new SkipTo()),
         REPLAY(new Replay()),
         CLEARUSER(new ClearUser()),
-        SKUNK(new Skunk());
+        SKUNK(new Skunk()),
+        RADIO538(new Radio538());
         ICommand c;
 
         AllMyCommands(ICommand c) {

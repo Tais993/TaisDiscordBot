@@ -35,7 +35,7 @@ public class Play implements ICommand {
         }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "play")) {
             return;
         }
 
@@ -47,11 +47,13 @@ public class Play implements ICommand {
             url = input;
         }
 
+        if (url.isEmpty()) {
+            e.getChannel().sendMessage("Nothing has been found by " + input).queue();
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
-
         manager.loadAndPlay(e.getChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
-
-        manager.getGuildMusicManager(e.getGuild()).player.setVolume(100);
     }
 
     private boolean isUrl(String input) {

@@ -29,6 +29,7 @@ public class Search {
 
         String videoId = getVideoIdUsingString(fullReturnValueApi);
 
+        if (videoId.isEmpty()) return "";
         if (videoId.startsWith("Error")) return videoId;
 
         return "https://www.youtube.com/watch?v=" + videoId;
@@ -47,7 +48,7 @@ public class Search {
         JSONObject firstItemArray = (JSONObject) jsonArray.get(0);
         JSONObject id = (JSONObject) firstItemArray.get("id");
 
-        return (String) id.get("videoId");
+        return (String) id.getOrDefault("videoId", "");
     }
 
     public String getStringFromBufferedReader(BufferedReader in) {

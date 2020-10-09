@@ -102,4 +102,15 @@ public class DatabaseUser {
         });
         return eb;
     }
+
+    public void addXpToUser(String userId) {
+        UserDB userDB = new UserDB(userId);
+
+        if (userExistsInDB(userId)) {
+            addRandomXPToUserInDB(userId);
+        } else {
+            userDB.addRandomXp();
+            addUserToDB(userDB);
+        }
+    }
 }

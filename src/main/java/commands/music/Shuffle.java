@@ -20,12 +20,12 @@ public class Shuffle implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "shuffle")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.shuffleQueue(e);
+        manager.shuffleQueue(e.getGuild());
 
         e.getChannel().sendMessage("Queue has been shuffeled").queue();
     }

@@ -27,7 +27,6 @@ public class CommandEnum {
         SERVERSTATS(new ServerStats()),
         RENAME(new Rename()),
         MOCK(new Mock()),
-        TEST(new Test()),
         QUOTE(new Quote()),
         TEMPBAN(new TempBan()),
         WHOIS(new WhoIs()),
@@ -69,7 +68,8 @@ public class CommandEnum {
         REPLAY(new Replay()),
         CLEARUSER(new ClearUser()),
         SKUNK(new Skunk()),
-        RADIO538(new Radio538());
+        RADIO538(new Radio538()),
+        YOUTUBE(new YouTube());
         ICommand c;
 
         AllMyCommands(ICommand c) {

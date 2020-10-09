@@ -20,12 +20,12 @@ public class Forward implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "forward")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.forwardsTrack(e, Long.parseLong(args[1]));
+        manager.forwardsTrack(e.getGuild(), Long.parseLong(args[1]));
     }
 
     @Override

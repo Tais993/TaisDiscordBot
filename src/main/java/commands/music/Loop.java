@@ -27,7 +27,7 @@ public class Loop implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "loop")) {
             return;
         }
 
@@ -36,7 +36,7 @@ public class Loop implements ICommand {
         switch (args[1]) {
             case "1":
             case "song":
-                manager.loopSongToggle(e);
+                manager.loopSongToggle(e.getGuild());
                 GuildMusicManager musicManager = manager.getGuildMusicManager(e.getGuild());
                 AudioTrack playingTrack = musicManager.player.getPlayingTrack();
 
@@ -44,11 +44,11 @@ public class Loop implements ICommand {
                 break;
             case "all":
             case "queue":
-                manager.loopQueueToggle(e);
+                manager.loopQueueToggle(e.getGuild());
                 e.getChannel().sendMessage("Succesfully looping the queue").queue();
                 break;
             case "off":
-                manager.loopOff(e);
+                manager.loopOff(e.getGuild());
                 break;
             default:
                 e.getChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Error: either give 1 or all as input").build()).queue();

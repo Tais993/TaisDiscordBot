@@ -35,7 +35,7 @@ public class PlayTop implements ICommand {
         }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "playtop")) {
             return;
         }
 

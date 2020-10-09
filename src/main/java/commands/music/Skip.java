@@ -24,13 +24,13 @@ public class Skip implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "skip")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.skip(e);
+        manager.skip(e.getGuild());
     }
 
     @Override

@@ -20,12 +20,12 @@ public class Backward implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "backward")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.backwardsTrack(e, Long.parseLong(args[1]));
+        manager.backwardsTrack(e.getGuild(), Long.parseLong(args[1]));
     }
 
     @Override

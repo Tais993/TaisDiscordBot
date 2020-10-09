@@ -19,12 +19,12 @@ public class Replay implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "replay")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.replayTrack(e);
+        manager.replayTrack(e.getGuild());
     }
 
     @Override

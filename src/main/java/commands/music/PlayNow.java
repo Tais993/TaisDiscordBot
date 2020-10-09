@@ -37,7 +37,7 @@ public class PlayNow implements ICommand {
         }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "playnow")) {
             return;
         }
 
@@ -52,7 +52,7 @@ public class PlayNow implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
 
         manager.loadAndPlay(e.getChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag());
-        manager.skip(e);
+        manager.skip(e.getGuild());
     }
 
     private boolean isUrl(String input) {

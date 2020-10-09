@@ -7,8 +7,8 @@ public class GuildHandler {
     GuildMessageReceivedEvent e;
     String guildID;
 
-    public void checkGuild(GuildMessageReceivedEvent e) {
-        this.e = e;
+    public void checkGuild(GuildMessageReceivedEvent event) {
+        e = event;
         guildID = e.getGuild().getId();
 
         if (!databaseGuild.guildExistsInDB(guildID)){

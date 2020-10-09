@@ -43,11 +43,11 @@ public class SetVolume implements ICommand {
         }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "setvolume")) {
             return;
         }
 
-        if (manager.setVolume(e, volume)) {
+        if (manager.setVolume(e.getGuild(), volume)) {
             e.getChannel().sendMessage("Volume has been set correctly to " + volume).queue();
         } else {
             e.getChannel().sendMessage("Error unknown.").queue();

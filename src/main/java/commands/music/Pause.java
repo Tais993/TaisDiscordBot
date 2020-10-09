@@ -24,13 +24,13 @@ public class Pause implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "pause")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.pause(e);
+        manager.pause(e.getGuild());
     }
 
     @Override

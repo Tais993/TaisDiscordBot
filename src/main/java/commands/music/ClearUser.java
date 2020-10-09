@@ -20,12 +20,12 @@ public class ClearUser implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "clearuser")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.clearQueue(e);
+        manager.clearQueue(e.getGuild());
 
         e.getChannel().sendMessage("Queue has been cleared from user").queue();
     }

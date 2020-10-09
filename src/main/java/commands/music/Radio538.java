@@ -12,25 +12,20 @@ public class Radio538 implements ICommand {
     String commandAlias = "radio538";
     String category = "music";
     String exampleCommand = "!radio538";
-    String shortCommandDescription = "Listen to live radio!";
-    String fullCommandDescription = "Listen to live radio!";
+    String shortCommandDescription = "Listen to Radio 538 (Dutch)";
+    String fullCommandDescription = "Listen to Radio 538 (Dutch)";
 
     @Override
     public void command(GuildMessageReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "radio538")) {
             return;
         }
 
-        String url = "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3";
-
         PlayerManager manager = PlayerManager.getInstance();
-
-        manager.loadAndPlayRadio(e.getChannel(), url, e.getAuthor().getId(), e.getAuthor().getAsTag(), "Radio 538");
-
-        e.getChannel().sendMessage("Test").queue();
+        manager.loadAndPlay(e.getChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", false ,e.getAuthor().getId(), e.getAuthor().getAsTag());
     }
 
     @Override

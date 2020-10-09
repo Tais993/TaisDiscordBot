@@ -24,12 +24,12 @@ public class Move implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "move")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.moveTrackInQueue(e, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+        manager.moveTrackInQueue(e.getGuild(), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
     }
 
     @Override

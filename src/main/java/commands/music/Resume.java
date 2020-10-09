@@ -23,13 +23,13 @@ public class Resume implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "resume")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.resume(e);
+        manager.resume(e.getGuild());
     }
 
     @Override

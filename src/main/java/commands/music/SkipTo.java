@@ -28,12 +28,12 @@ public class SkipTo implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "skipto")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.skipToTrack(e, Integer.parseInt(args[1]));
+        manager.skipToTrack(e.getGuild(), Integer.parseInt(args[1]));
 
         AudioTrack track = manager.getGuildMusicManager(e.getGuild()).player.getPlayingTrack();
 

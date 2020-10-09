@@ -20,12 +20,12 @@ public class Previous implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "previous")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.playPreviousTrack(e);
+        manager.playPreviousTrack(e.getGuild());
     }
 
     @Override

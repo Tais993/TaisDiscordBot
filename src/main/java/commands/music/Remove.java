@@ -21,13 +21,13 @@ public class Remove implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "remove")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        EmbedBuilder eb = manager.removeFromQueue(e, Integer.parseInt(args[1]));
+        EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[1]));
 
         e.getChannel().sendMessage(eb.build()).queue();
     }

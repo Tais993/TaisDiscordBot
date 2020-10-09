@@ -22,13 +22,13 @@ public class Seek implements ICommand {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, args)) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(e, "seek")) {
             return;
         }
 
         if (args[0].matches("\\d+")) {
             PlayerManager manager = PlayerManager.getInstance();
-            manager.setSongPosition(e, Long.parseLong(args[0]));
+            manager.setSongPosition(e.getGuild(), Long.parseLong(args[0]));
         } else {
             e.getChannel().sendMessage(commandEnum.getFullHelpItem("seek").setDescription("Give a valid number").build()).queue();
         }

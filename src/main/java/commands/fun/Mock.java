@@ -25,9 +25,8 @@ public class Mock implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
-        if (args.length > 1) {
+        if (e.hasArgs()) {
             String toMock = e.getMessageWithoutCommand();
             StringBuilder output = new StringBuilder();
 
@@ -54,7 +53,7 @@ public class Mock implements ICommand {
 
             e.getMessageChannel().sendMessage(output.toString()).queue();
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("mock").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("mock").setDescription("Requires a argument").build()).queue();
         }
     }
 

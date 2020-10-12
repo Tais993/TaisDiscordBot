@@ -1,9 +1,10 @@
 package commands;
 
-import database.guild.DatabaseGuild;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+import java.util.Arrays;
 
 public class CommandReceivedEvent {
     MessageChannel messageChannel;
@@ -16,6 +17,7 @@ public class CommandReceivedEvent {
     Message message;
 
     boolean isFromGuild;
+    boolean hasArgs;
 
     String[] args;
     String messageAsString;
@@ -34,14 +36,22 @@ public class CommandReceivedEvent {
             member = e.getMember();
             guild = e.getGuild();
             textChannel = e.getTextChannel();
-
-            String guildPrefix = new DatabaseGuild().getPrefixGuildInDB(guild.getId());
-            args = messageAsString.replace(guildPrefix, "").split(" ");
-        } else {
-            args = messageAsString.replace("!", "").split(" ");
         }
 
-        messageWithoutCommand = messageAsString.replace(args[0], "");
+        args = messageAsString.split(" ");
+
+        if (args.length >= 2) {
+            hasArgs = true;
+            args = Arrays.stream(args).skip(1).toArray(String[]::new);
+            Arrays.stream(args).forEach((item -> {
+                messageWithoutCommand += item;
+                messageWithoutCommand += " ";
+            }));
+        } else {
+            hasArgs = false;
+            args[0] = "null";
+            messageWithoutCommand = messageAsString;
+        }
 
         JDA = e.getJDA();
         e.getChannel();
@@ -77,6 +87,10 @@ public class CommandReceivedEvent {
 
     public boolean isFromGuild() {
         return isFromGuild;
+    }
+
+    public boolean hasArgs() {
+        return hasArgs;
     }
 
     public String[] getArgs() {

@@ -4,15 +4,9 @@ import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.hugs.DatabaseHugs;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.RichPresence;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Random;
@@ -39,17 +33,21 @@ public class Hug implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Run this command in a Discord guild/server").build()).queue();
             return;
         }
 
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Requires a argument").build()).queue();
+            return;
+        }
+
         if (e.getMessage().getMentionedMembers().size() >= 1) {
             userToHugMentioned = e.getMessage().getMentionedMembers().get(0).getAsMention();
-        } else if (args.length >= 2) {
-            Member member = e.getGuild().getMemberById(args[1]);
+        } else if (e.hasArgs()) {
+            Member member = e.getGuild().getMemberById(e.getArgs()[0]);
             if (member != null) {
                 userToHugMentioned = member.getAsMention();
             } else {

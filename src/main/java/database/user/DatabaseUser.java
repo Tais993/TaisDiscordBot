@@ -122,7 +122,10 @@ public class DatabaseUser {
         userDB.addRandomXp();
 
         DBObject query = new BasicDBObject("userID", userId);
-        user.update(query, userToDBObject(userDB), new DBCollectionUpdateOptions().upsert(true));
+
+        if (!userExistsInDB(userId)) {
+            user.insert(query, userToDBObject(userDB));
+        }
 
         userDB = getUserFromDBToUserDB(userId);
         userDB.addRandomXp();

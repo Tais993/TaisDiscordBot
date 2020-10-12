@@ -16,7 +16,7 @@ public class Quote implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
 
     TextChannel textChannel;
-    String[] allArgs;
+    String[] args;
 
     String command = "quote";
     String commandAlias = "quote";
@@ -32,7 +32,13 @@ public class Quote implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        allArgs = e.getArgs();
+
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Requires 2 or more arguments").build()).queue();
+            return;
+        }
+
+        args = e.getArgs();
 
         if (!e.isFromGuild()) {
             quoteCommandPrivate();
@@ -42,9 +48,8 @@ public class Quote implements ICommand {
     }
 
     public void quoteCommandPrivate() {
-        String[] args =e.getArgs();
-        if (args.length >= 3) {
-            switch (args[1]) {
+        if (args.length >= 2) {
+            switch (args[0]) {
                 case "message":
                     e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Quoting a message only works in a guild.").build()).queue();
                     break;
@@ -60,16 +65,15 @@ public class Quote implements ICommand {
     }
 
     public void quoteCommandGuild() {
-        String[] args = e.getArgs();
-        if (args.length >= 3) {
-            switch (args[1]) {
+        if (args.length >= 2) {
+            switch (args[0]) {
                 case "message":
                     if (mentionsTextChannel()){
                         textChannel = e.getMessage().getMentionedChannels().get(0);
                     } else {
                         textChannel = e.getTextChannel();
                     }
-                    getMessage(args[2]);
+                    getMessage(args[1]);
                     break;
                 case "text":
                     createPersonalEmbed();
@@ -128,7 +132,7 @@ public class Quote implements ICommand {
     }
 
     public boolean isSunTzu() {
-        return allArgs[allArgs.length - 1].equalsIgnoreCase("true");
+        return args[args.length - 1].equalsIgnoreCase("true");
     }
 
     public boolean mentionsTextChannel() {
@@ -139,19 +143,19 @@ public class Quote implements ICommand {
         StringBuilder messageToQuote = new StringBuilder();
 
         if (isSunTzu()) {
-            for (int i = 2; i < allArgs.length - 1; i++) {
+            for (int i = 1; i < args.length - 1; i++) {
                 if (messageToQuote.toString().equals("")) {
-                    messageToQuote.append(allArgs[i]);
+                    messageToQuote.append(args[i]);
                 } else {
-                    messageToQuote.append(" ").append(allArgs[i]);
+                    messageToQuote.append(" ").append(args[i]);
                 }
             }
         } else {
-            for (int i = 2; i < allArgs.length; i++) {
+            for (int i = 1; i < args.length; i++) {
                 if (messageToQuote.toString().equals("")) {
-                    messageToQuote.append(allArgs[i]);
+                    messageToQuote.append(args[i]);
                 } else {
-                    messageToQuote.append(" ").append(allArgs[i]);
+                    messageToQuote.append(" ").append(args[i]);
                 }
             }
         }

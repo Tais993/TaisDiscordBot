@@ -29,34 +29,31 @@ public class Level implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
-            levelCommandPrivate(args);
+            levelCommandPrivate();
         } else {
-            levelCommandGuild(args);
+            levelCommandGuild();
         }
 
         createEmbed(databaseUser.getUserFromDBToUserDB(userGiven.getId()));
     }
 
-    public void levelCommandGuild(String[] args) {
-        if (args.length > 1) {
+    public void levelCommandGuild() {
+        if (e.hasArgs()) {
             if (e.getMessage().getMentionedMembers().size() > 0) {
                 userGiven = e.getMessage().getMentionedMembers().get(0).getUser();
-            } else if (e.getGuild().getMemberById(args[1]) != null) {
-                userGiven = e.getJDA().getUserById(args[1]);
+            } else if (e.getGuild().getMemberById(e.getArgs()[0]) != null) {
+                userGiven = e.getJDA().getUserById(e.getArgs()[0]);
             }
         } else {
             userGiven = e.getAuthor();
         }
     }
 
-    public void levelCommandPrivate(String[] args) {
-        if (args.length > 1) {
-            if (e.getJDA().getUserById(args[1]) != null) {
-                userGiven = e.getJDA().getUserById(args[1]);
-            }
+    public void levelCommandPrivate() {
+        if (e.hasArgs()) {
+                userGiven = e.getJDA().retrieveUserById(e.getArgs()[0]).complete();
         } else {
             userGiven = e.getAuthor();
         }

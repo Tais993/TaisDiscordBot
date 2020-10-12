@@ -21,14 +21,13 @@ public class AddHug implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
-        if (args.length > 2){
+        if (!e.hasArgs()){
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("addhug").setDescription("Error: requires a URL for a gif").build()).queue();
             return;
         }
 
-        String gifUrlToAdd = args[1];
+        String gifUrlToAdd = e.getArgs()[0];
 
         databaseHugs.addGifToDB(gifUrlToAdd);
 

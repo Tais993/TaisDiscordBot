@@ -7,10 +7,15 @@ import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
+
 public class WhoIs implements ICommand {
     CommandReceivedEvent e;
     Member member;
     CommandEnum commandEnum = new CommandEnum();
+
+    String userId;
 
     String command = "userinfo";
     String commandAlias = "whois";
@@ -23,28 +28,29 @@ public class WhoIs implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
-        if (!(args.length > 1)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: requires at least 1 arguments.").build()).queue();
-            return;
+        if (e.hasArgs()) {
+            userId = e.getArgs()[0];
+        } else {
+            userId = e.getAuthor().getId();
         }
 
-        if (!getMember(args)) return;
+
+        if (!getMember()) return;
 
         sendEmbed();
     }
 
-    public boolean getMember(String[] args) {
+    public boolean getMember() {
         if (e.getMessage().getMentionedMembers().size() > 0) {
             member = e.getMessage().getMentionedMembers().get(0);
-        } else if (e.getGuild().getMemberById(args[1]) != null) {
-            member = e.getGuild().getMemberById(args[1]);
+        } else if (e.getGuild().getMemberById(userId) != null) {
+            member = e.getGuild().retrieveMemberById(userId).complete();
         } else {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: ID given isn't valid.").build()).queue();
             return false;
@@ -66,7 +72,8 @@ public class WhoIs implements ICommand {
         eb.addBlankField(true);
         eb.setThumbnail(member.getUser().getAvatarUrl());
         eb.setColor(member.getColor());
-        eb.setFooter("Made by Tijs");
+        eb.setFooter("Made by Tijs ");
+        eb.setTimestamp(Instant.now());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

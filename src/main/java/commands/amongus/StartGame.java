@@ -32,19 +32,18 @@ public class StartGame implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("Command only works in a Discord guild/server").queue();
             return;
         }
 
-        if (!(args.length > 1)) {
+        if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("startgame").setDescription("Error: Requires a time").build()).queue();
             return;
         }
 
-        time = args[1];
+        time = e.getArgs()[0];
 
         role = e.getGuild().getRoleById("714049141017149453");
 

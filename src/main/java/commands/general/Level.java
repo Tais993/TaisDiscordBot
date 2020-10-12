@@ -1,6 +1,6 @@
 package commands.general;
 
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
 import database.user.UserDB;
@@ -8,14 +8,12 @@ import functions.Colors;
 import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.User;
 
 public class Level implements ICommand {
-    GuildMessageReceivedEvent e;
-    Member memberGiven;
-    UserDB userDB;
+    CommandReceivedEvent e;
+    User userGiven;
 
-    CommandEnum commandEnum = new CommandEnum();
     DatabaseUser databaseUser = new DatabaseUser();
     Colors colors = new Colors();
 
@@ -27,37 +25,55 @@ public class Level implements ICommand {
     String fullCommandDescription = "Get the level of someone in this server.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
-        if (args.length > 1) {
-            if (e.getMessage().getMentionedMembers().size() > 0) {
-                memberGiven = e.getMessage().getMentionedMembers().get(0);
-            } else if (e.getGuild().getMemberById(args[1]) != null) {
-                memberGiven = e.getGuild().getMemberById(args[1]);
-            }
+        if (!e.isFromGuild()) {
+            levelCommandPrivate(args);
         } else {
-            memberGiven = e.getMember();
+            levelCommandGuild(args);
         }
 
-        createEmbed(databaseUser.getUserFromDBToUserDB(memberGiven.getId()));
+        createEmbed(databaseUser.getUserFromDBToUserDB(userGiven.getId()));
+    }
+
+    public void levelCommandGuild(String[] args) {
+        if (args.length > 1) {
+            if (e.getMessage().getMentionedMembers().size() > 0) {
+                userGiven = e.getMessage().getMentionedMembers().get(0).getUser();
+            } else if (e.getGuild().getMemberById(args[1]) != null) {
+                userGiven = e.getJDA().getUserById(args[1]);
+            }
+        } else {
+            userGiven = e.getAuthor();
+        }
+    }
+
+    public void levelCommandPrivate(String[] args) {
+        if (args.length > 1) {
+            if (e.getJDA().getUserById(args[1]) != null) {
+                userGiven = e.getJDA().getUserById(args[1]);
+            }
+        } else {
+            userGiven = e.getAuthor();
+        }
     }
 
     public void createEmbed(UserDB userDB) {
         userDB.calculateXpForLevelUp();
 
-        UserInfo userInfo = new UserInfo(memberGiven);
+        UserInfo userInfo = new UserInfo(userGiven);
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setThumbnail(userInfo.getAvatar());
-        eb.setAuthor(memberGiven.getEffectiveName());
+        eb.setAuthor(userGiven.getAsTag());
         eb.appendDescription("Level: " + userDB.getLevel() + "\n");
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
         eb.setFooter("Made by Tijs");
 
         eb.setColor(colors.getCurrentColor());
 
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

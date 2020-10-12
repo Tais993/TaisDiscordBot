@@ -1,12 +1,12 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Radio538 implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String command = "radio538";
     String commandAlias = "radio538";
@@ -16,7 +16,7 @@ public class Radio538 implements ICommand {
     String fullCommandDescription = "Listen to Radio 538 (Dutch)";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -25,7 +25,7 @@ public class Radio538 implements ICommand {
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.loadAndPlay(e.getChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", false ,e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", false ,e.getAuthor().getId(), e.getAuthor().getAsTag());
     }
 
     @Override

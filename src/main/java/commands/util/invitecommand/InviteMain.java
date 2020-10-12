@@ -1,13 +1,13 @@
 package commands.util.invitecommand;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class InviteMain implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
 
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     String category = "util";
     String command = "invite";
     String commandAlias = "invite";
@@ -18,8 +18,13 @@ public class InviteMain implements ICommand {
             "<uses> is amount of uses the invite has.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            return;
+        }
 
         if (args.length > 2) {
             if (args[1].equals("time")) {
@@ -27,10 +32,10 @@ public class InviteMain implements ICommand {
             } else if (args[1].equals("uses")) {
                 InviteUser inviteUser = new InviteUser(event, args[2]);
             } else {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
             }
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
         }
     }
 

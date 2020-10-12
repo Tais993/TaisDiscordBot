@@ -1,14 +1,14 @@
 package commands.util;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Rename implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     Member memberGiven;
     CommandEnum commandEnum = new CommandEnum();
 
@@ -21,12 +21,18 @@ public class Rename implements ICommand {
             "Username should be below or the same as 32 chars.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            return;
+        }
+
         long idTijs = 257500867568205824L;
 
         if (!(args.length > 2)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: requires at least 2 arguments.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: requires at least 2 arguments.").build()).queue();
             return;
         }
 
@@ -35,7 +41,7 @@ public class Rename implements ICommand {
         } else if (e.getGuild().getMemberById(args[1]) != null) {
             memberGiven = e.getGuild().getMemberById(args[1]);
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: ID given isn't valid.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: ID given isn't valid.").build()).queue();
             return;
         }
 
@@ -44,7 +50,7 @@ public class Rename implements ICommand {
         } else if (e.getMember().hasPermission(Permission.NICKNAME_MANAGE) || e.getMember().getIdLong() == idTijs) {
             runRenameCommand(args);
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: Manage nicknames permission required to run this command..").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: Manage nicknames permission required to run this command..").build()).queue();
         }
     }
 
@@ -57,14 +63,14 @@ public class Rename implements ICommand {
             if (!(nickname.length() > 32)) {
                 memberGiven.modifyNickname(nickname).complete();
             } else {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: nickname must be below 32 chars!").build()).queue();
+                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: nickname must be below 32 chars!").build()).queue();
             }
         } else if (!permissions.botHasPermission(Permission.NICKNAME_MANAGE) && !permissions.botCanInteract(memberGiven)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role as the bot, and bot does not have manage nickname permission").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role as the bot, and bot does not have manage nickname permission").build()).queue();
         } else if (!permissions.botHasPermission(Permission.NICKNAME_MANAGE)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: bot does not have manage nickname permission.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: bot does not have manage nickname permission.").build()).queue();
         } else if (!permissions.botCanInteract(memberGiven)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role or the same as the bot.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: member is a higher role or the same as the bot.").build()).queue();
         }
     }
 

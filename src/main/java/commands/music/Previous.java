@@ -1,13 +1,12 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Previous implements ICommand {
-    GuildMessageReceivedEvent e;
-
     String command = "previous";
     String commandAlias = "previous";
     String category = "music";
@@ -16,16 +15,14 @@ public class Previous implements ICommand {
     String fullCommandDescription = "Return to the previous song.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
-
+    public void command(CommandReceivedEvent event, String[] args) {
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "previous")) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(event, "previous")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.playPreviousTrack(e.getGuild());
+        manager.playPreviousTrack(event.getGuild());
     }
 
     @Override

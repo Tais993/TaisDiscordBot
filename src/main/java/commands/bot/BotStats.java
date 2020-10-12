@@ -1,14 +1,14 @@
 package commands.bot;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.Colors;
 import functions.entities.BotInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class BotStats implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     CommandEnum commandEnum = new CommandEnum();
     BotInfo botInfo = new BotInfo();
@@ -22,7 +22,7 @@ public class BotStats implements ICommand {
     String fullCommandDescription = "Get information about the server.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
         EmbedBuilder eb = new EmbedBuilder();
 
@@ -34,7 +34,7 @@ public class BotStats implements ICommand {
 
         eb.setColor(colors.getCurrentColor());
 
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package commands.fun;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -20,29 +21,29 @@ public class EightBall implements ICommand {
             "**Question mark is required.**";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         if (event.getMessage().getContentRaw().contains("?")) {
             int chance = Math.round(r.nextFloat()*10);
 
             switch (chance) {
                 case 1: case 2:
-                    event.getChannel().sendMessage("For sure!").queue();
+                    event.getMessageChannel().sendMessage("For sure!").queue();
                     break;
                 case 3: case 4:
-                    event.getChannel().sendMessage("Yes.").queue();
+                    event.getMessageChannel().sendMessage("Yes.").queue();
                     break;
                 case 5: case 6:
-                    event.getChannel().sendMessage("Maybe").queue();
+                    event.getMessageChannel().sendMessage("Maybe").queue();
                     break;
                 case 7: case 8:
-                    event.getChannel().sendMessage("No.").queue();
+                    event.getMessageChannel().sendMessage("No.").queue();
                     break;
                 case 9: case 10:
-                    event.getChannel().sendMessage("Never...").queue();
+                    event.getMessageChannel().sendMessage("Never...").queue();
                     break;
             }
         } else {
-            event.getChannel().sendMessage(commandEnum.getFullHelpItem("8ball").build()).queue();
+            event.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("8ball").build()).queue();
         }
     }
 

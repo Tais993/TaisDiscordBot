@@ -1,13 +1,13 @@
 package commands.general;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 import music.youtube.Search;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class YouTube implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String url;
 
@@ -23,7 +23,7 @@ public class YouTube implements ICommand {
     String fullCommandDescription = "Search for a YouTube video.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         String input = e.getMessage().getContentRaw().replace(databaseGuild.getPrefixGuildInDB(e.getGuild().getId()) + command + " ", "");
@@ -31,16 +31,16 @@ public class YouTube implements ICommand {
         String videoUrl = search.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("youtube").setDescription(videoUrl).build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("youtube").setDescription(videoUrl).build()).queue();
         }
 
 
         url = videoUrl;
 
         if (url.isEmpty()) {
-            e.getChannel().sendMessage("Nothing has been found by " + input).queue();
+            e.getMessageChannel().sendMessage("Nothing has been found by " + input).queue();
         } else {
-            e.getChannel().sendMessage(url).queue();
+            e.getMessageChannel().sendMessage(url).queue();
         }
     }
 

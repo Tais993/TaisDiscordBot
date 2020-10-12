@@ -1,16 +1,12 @@
 package commands.music;
 
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Skip implements ICommand {
-    GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
+    CommandReceivedEvent e;
 
     String command = "skip";
     String commandAlias = "s";
@@ -20,7 +16,7 @@ public class Skip implements ICommand {
     String fullCommandDescription = "Skips the currently running song.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

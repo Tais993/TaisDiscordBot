@@ -1,6 +1,7 @@
 package commands.music;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 import functions.AllowedToPlayMusic;
@@ -12,7 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class PlayTop implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
     DatabaseGuild databaseGuild = new DatabaseGuild();
 
@@ -26,11 +27,11 @@ public class PlayTop implements ICommand {
     String fullCommandDescription = "Plays music, and song goes to the top of the queue.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         if (!(args.length > 1)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: requires at least 1 argument").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: requires at least 1 argument").build()).queue();
             return;
         }
 
@@ -49,7 +50,7 @@ public class PlayTop implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag());
     }
 
     private boolean isUrl(String input) {
@@ -67,7 +68,7 @@ public class PlayTop implements ICommand {
         String videoUrl = search.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription(videoUrl).build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription(videoUrl).build()).queue();
             return false;
         }
 

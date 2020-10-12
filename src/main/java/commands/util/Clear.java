@@ -1,18 +1,16 @@
 package commands.util;
 
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Clear implements ICommand {
-    GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
+    CommandReceivedEvent e;
 
     String command = "clear";
     String commandAlias = "clear";
@@ -22,19 +20,24 @@ public class Clear implements ICommand {
     String fullCommandDescription = "Clear the chat for a specified amount of messages.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            return;
+        }
 
         Permissions permissions = new Permissions(e.getGuild());
 
         if (permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_CHANNEL)) {
             int messagesToRemove = Integer.parseInt(args[1]);
 
-            List<Message> messages = e.getChannel().getHistory().retrievePast(messagesToRemove).complete();
+            List<Message> messages = e.getMessageChannel().getHistory().retrievePast(messagesToRemove).complete();
 
-            e.getChannel().deleteMessages(messages).queue();
+            e.getTextChannel().deleteMessages(messages).queue();
 
-            e.getChannel().sendMessage("Message removed successfully!").queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
+            e.getMessageChannel().sendMessage("Message removed successfully!").queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
         }
     }
 

@@ -1,6 +1,7 @@
 package commands.fun;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.Permissions;
 import net.dv8tion.jda.api.Permission;
@@ -12,7 +13,7 @@ public class Mock implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
     Random r = new Random();
 
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     String command = "mock";
     String commandAlias = "m";
     String category = "fun";
@@ -22,11 +23,10 @@ public class Mock implements ICommand {
             " example: `!mock testing` output: `tEsTiNg`";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
         if (args.length > 1) {
-            Permissions permissions = new Permissions(e.getGuild());
-            String toMock = e.getMessage().getContentRaw().replaceFirst("!mock ", "");
+            String toMock = e.getMessageWithoutCommand();
             StringBuilder output = new StringBuilder();
 
             int numberCount = r.nextInt(2);
@@ -46,14 +46,20 @@ public class Mock implements ICommand {
                 }
             }
 
-            if (permissions.botHasPermission(Permission.MESSAGE_MANAGE)){
-                e.getMessage().delete().complete();
-                e.getChannel().sendMessage(output.toString()).queue();
-            } else {
-                e.getChannel().sendMessage(output.toString()).queue();
+            if (e.isFromGuild()) {
+                removeMessage();
             }
+
+            e.getMessageChannel().sendMessage(output.toString()).queue();
         } else {
-            event.getChannel().sendMessage(commandEnum.getFullHelpItem("mock").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("mock").build()).queue();
+        }
+    }
+
+    public void removeMessage() {
+        Permissions permissions = new Permissions(e.getGuild());
+        if (permissions.botHasPermission(Permission.MESSAGE_MANAGE)){
+            e.getMessage().delete().complete();
         }
     }
 

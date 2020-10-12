@@ -1,15 +1,14 @@
 package commands.util;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
 import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class WhoIs implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     Member member;
     CommandEnum commandEnum = new CommandEnum();
 
@@ -22,11 +21,16 @@ public class WhoIs implements ICommand {
     String fullCommandDescription = "Get information about a user.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            return;
+        }
+
         if (!(args.length > 1)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: requires at least 1 arguments.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: requires at least 1 arguments.").build()).queue();
             return;
         }
 
@@ -41,7 +45,7 @@ public class WhoIs implements ICommand {
         } else if (e.getGuild().getMemberById(args[1]) != null) {
             member = e.getGuild().getMemberById(args[1]);
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: ID given isn't valid.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: ID given isn't valid.").build()).queue();
             return false;
         }
         return true;
@@ -63,10 +67,7 @@ public class WhoIs implements ICommand {
         eb.setColor(member.getColor());
         eb.setFooter("Made by Tijs");
 
-
-
-
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

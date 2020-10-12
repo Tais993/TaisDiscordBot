@@ -1,12 +1,13 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Shuffle implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String command = "shuffle";
     String commandAlias = "shuffle";
@@ -16,7 +17,7 @@ public class Shuffle implements ICommand {
     String fullCommandDescription = "Shuffle the queue.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -27,7 +28,7 @@ public class Shuffle implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         manager.shuffleQueue(e.getGuild());
 
-        e.getChannel().sendMessage("Queue has been shuffeled").queue();
+        e.getMessageChannel().sendMessage("Queue has been shuffeled").queue();
     }
 
     @Override

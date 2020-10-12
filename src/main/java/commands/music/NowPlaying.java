@@ -1,13 +1,11 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class NowPlaying implements ICommand {
-    GuildMessageReceivedEvent e;
-
     String command = "nowplaying";
     String commandAlias = "np";
     String category = "music";
@@ -16,12 +14,10 @@ public class NowPlaying implements ICommand {
     String fullCommandDescription = "Get the current playing song";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
-
+    public void command(CommandReceivedEvent event, String[] args) {
         PlayerManager manager = PlayerManager.getInstance();
-        EmbedBuilder eb = manager.getNowPlaying(e.getGuild());
-        e.getChannel().sendMessage(eb.build()).queue();
+        EmbedBuilder eb = manager.getNowPlaying(event.getGuild());
+        event.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

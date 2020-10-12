@@ -5,11 +5,12 @@ import database.guild.DatabaseGuild;
 import database.guild.GuildHandler;
 import database.user.UserHandler;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class CommandHandler extends ListenerAdapter {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
+
     String guildPrefix;
     String messageSent;
 
@@ -20,13 +21,22 @@ public class CommandHandler extends ListenerAdapter {
     BotPrefix botPrefix = new BotPrefix();
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        e = event;
+    public void onMessageReceived(MessageReceivedEvent event) {
+        e = new CommandReceivedEvent(event);
 
-        guildPrefix = databaseGuild.getPrefixGuildInDB(event.getGuild().getId());
+        if (e.getAuthor().isBot()) return;
+
+        if (e.isFromGuild) {
+            guildPrefix = databaseGuild.getPrefixGuildInDB(event.getGuild().getId());
+        } else {
+            guildPrefix = "!";
+        }
+
         messageSent = event.getMessage().getContentRaw();
 
-        if (messageSent.startsWith(guildPrefix)) command();
+        if (messageSent.startsWith(guildPrefix)) {
+            if (command()) return;
+        }
 
         String botUserId = e.getJDA().getSelfUser().getId();
         Member botMember = e.getGuild().getMemberById(botUserId);
@@ -37,12 +47,12 @@ public class CommandHandler extends ListenerAdapter {
         guildHandler.checkGuild(event);
     }
 
-    public void command() {
-        if (e.getAuthor().isBot()) return;
+    public boolean command() {
+        if (e.getAuthor().isBot()) return false;
 
         String[] messageSentSplit = messageSent.replace(guildPrefix, "").split(" ");
 
-        commandEnum.checkCommand(e, messageSentSplit);
+        return commandEnum.checkCommand(e, messageSentSplit);
     }
 }
 

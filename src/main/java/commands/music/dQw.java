@@ -1,13 +1,11 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class dQw implements ICommand {
-    GuildMessageReceivedEvent e;
-    DatabaseGuild databaseGuild = new DatabaseGuild();
-
     String command = "dQw";
     String commandAlias = "dQw";
     String category = "music";
@@ -16,11 +14,10 @@ public class dQw implements ICommand {
     String fullCommandDescription = "No hate ly";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
+    public void command(CommandReceivedEvent event, String[] args) {
         if (args[0].equals("dQw")) {
             RickRoll rickRoll = new RickRoll();
-            rickRoll.command(e, args);
+            rickRoll.command(event, args);
         }
     }
 

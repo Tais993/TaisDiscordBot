@@ -1,18 +1,23 @@
 package functions;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class AllowedToPlayMusic {
     CommandEnum commandEnum = new CommandEnum();
+    AudioManager audioManager;
 
-    public boolean allowedToPlayMusic (GuildMessageReceivedEvent e, String commandName) {
-        AudioManager audioManager = e.getGuild().getAudioManager();
+    public boolean allowedToPlayMusic (CommandReceivedEvent e, String commandName) {
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("You can only run this comand in a Discord server/guild!").queue();
+            return false;
+        }
 
         if (e.getAuthor().getId().equals("257500867568205824")) {
             if (e.getMember().getVoiceState().inVoiceChannel()) {
@@ -21,10 +26,12 @@ public class AllowedToPlayMusic {
             return true;
         }
 
+        audioManager = e.getGuild().getAudioManager();
+
         GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()){
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Join a voice channel before running this command.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Join a voice channel before running this command.").build()).queue();
             return false;
         }
 
@@ -33,7 +40,7 @@ public class AllowedToPlayMusic {
 
         if (audioManager.isConnected()) {
             if (!audioManager.getConnectedChannel().equals(voiceChannel)) {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Join the same channel as the bot.").build()).queue();
+                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Join the same channel as the bot.").build()).queue();
                 return false;
             }
         } else {
@@ -41,7 +48,7 @@ public class AllowedToPlayMusic {
         }
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();
             return false;
         }
 

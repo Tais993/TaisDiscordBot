@@ -1,6 +1,7 @@
 package commands.general;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.remindme.DatabaseRemindMe;
 import database.remindme.RemindMeDB;
@@ -8,7 +9,7 @@ import database.remindme.UserRemindMeDB;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class RemindMe implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
     DatabaseRemindMe databaseRemindMe = new DatabaseRemindMe();
 
@@ -22,7 +23,7 @@ public class RemindMe implements ICommand {
     String fullCommandDescription = "Remind you with something you gave the bot after a specified amount of time.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         String time = args[2];
@@ -39,7 +40,7 @@ public class RemindMe implements ICommand {
         } else if (isSecond(time) || isNumber(time)) {
             totalSeconds = Integer.parseInt(time.replace("s", ""));
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("remindme").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("remindme").build()).queue();
             return;
         }
 

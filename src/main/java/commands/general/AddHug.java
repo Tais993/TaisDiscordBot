@@ -1,6 +1,7 @@
 package commands.general;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.hugs.DatabaseHugs;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -9,7 +10,7 @@ public class AddHug implements ICommand {
     DatabaseHugs databaseHugs = new DatabaseHugs();
     CommandEnum commandEnum = new CommandEnum();
 
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     String command = "addhug";
     String commandAlias = "addhug";
     String category = "fun";
@@ -18,11 +19,11 @@ public class AddHug implements ICommand {
     String fullCommandDescription = "Add gifs to the current list";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         if (args.length > 2){
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("addhug").setDescription("Error: requires a URL for a gif").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("addhug").setDescription("Error: requires a URL for a gif").build()).queue();
             return;
         }
 
@@ -30,7 +31,7 @@ public class AddHug implements ICommand {
 
         databaseHugs.addGifToDB(gifUrlToAdd);
 
-        e.getChannel().sendMessage("Gif has been added").queue();
+        e.getMessageChannel().sendMessage("Gif has been added").queue();
     }
 
     @Override

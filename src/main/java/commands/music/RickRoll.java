@@ -1,13 +1,12 @@
 package commands.music;
 
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class RickRoll implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String command = "rickroll";
     String commandAlias = "rickroll";
@@ -17,7 +16,7 @@ public class RickRoll implements ICommand {
     String fullCommandDescription = "IMAGINE GETTING RICKROLLED LOLLL";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AudioManager audioManager = e.getGuild().getAudioManager();
@@ -31,7 +30,7 @@ public class RickRoll implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
 
         manager.getGuildMusicManager(e.getGuild()).player.setVolume(100);
     }

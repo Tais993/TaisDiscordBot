@@ -1,11 +1,9 @@
 package commands.fun;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Kaas implements ICommand {
-
-    GuildMessageReceivedEvent e;
     String command = "cheese";
     String commandAlias = "kaas";
     String category = "fun";
@@ -13,9 +11,8 @@ public class Kaas implements ICommand {
     String shortCommandDescription = "Kaas, otherwise known as cheese";
     String fullCommandDescription = "Kaas";
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
-        e.getChannel().sendMessage("kaas is lekker").queue();
+    public void command(CommandReceivedEvent event, String[] args) {
+        event.getMessageChannel().sendMessage("kaas is lekker").queue();
     }
 
     @Override

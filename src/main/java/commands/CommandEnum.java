@@ -93,7 +93,7 @@ public class CommandEnum {
     static List generalCategory = new List();
     static List musicCategory = new List();
 
-    public boolean checkCommand(GuildMessageReceivedEvent event, String[] messageSentSplit) {
+    public boolean checkCommand(CommandReceivedEvent event, String[] messageSentSplit) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
@@ -105,7 +105,7 @@ public class CommandEnum {
         return false;
     }
 
-    public boolean checkOrValidCommand(GuildMessageReceivedEvent event, String[] messageSentSplit) {
+    public boolean checkOrValidCommand(CommandReceivedEvent event, String[] messageSentSplit) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
@@ -132,7 +132,7 @@ public class CommandEnum {
         return eb;
     }
 
-    public void getHelpAllByCategory(GuildMessageReceivedEvent e) {
+    public void getHelpAllByCategory(CommandReceivedEvent e) {
         categories.forEach(category -> {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(colors.getCurrentColor());
@@ -148,7 +148,7 @@ public class CommandEnum {
                     eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
                 }
             }
-            e.getChannel().sendMessage(eb.build()).queue();
+            e.getMessageChannel().sendMessage(eb.build()).queue();
         });
     }
 

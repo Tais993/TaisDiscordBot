@@ -1,13 +1,12 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Queue implements ICommand {
-    GuildMessageReceivedEvent e;
-
     String command = "queue";
     String commandAlias = "q";
     String category = "music";
@@ -16,14 +15,12 @@ public class Queue implements ICommand {
     String fullCommandDescription = "Get the queue of the music.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
-
+    public void command(CommandReceivedEvent event, String[] args) {
         PlayerManager manager = PlayerManager.getInstance();
 
-        EmbedBuilder eb = manager.getQueue(e.getGuild());
+        EmbedBuilder eb = manager.getQueue(event.getGuild());
 
-        e.getChannel().sendMessage(eb.build()).queue();
+        event.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

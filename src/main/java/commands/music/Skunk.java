@@ -1,12 +1,12 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Skunk implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String url = "https://www.youtube.com/playlist?list=PL7tOllzEIb0Eaej-wj-KqGSerKXb1t-Dy";
 
@@ -18,7 +18,7 @@ public class Skunk implements ICommand {
     String fullCommandDescription = "Skunk, and skunk.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -26,11 +26,11 @@ public class Skunk implements ICommand {
             return;
         }
 
-        e.getChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
+        e.getMessageChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
     }
 
     @Override

@@ -1,9 +1,7 @@
 package commands;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-
 public class Help implements ICommand{
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "help";
@@ -13,25 +11,25 @@ public class Help implements ICommand{
     String shortCommandDescription = "Get some help";
     String fullCommandDescription = "Get help for a item or category, but you already know that. Right?";
 
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
         if (args.length > 1) {
             switch (args[1]) {
                 case "fun":
-                    e.getChannel().sendMessage(commandEnum.getHelpCategory("fun").build()).queue();
+                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("fun").build()).queue();
                     break;
                 case "util":
-                    e.getChannel().sendMessage(commandEnum.getHelpCategory("util").build()).queue();
+                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("util").build()).queue();
                     break;
                 case "general":
-                    e.getChannel().sendMessage(commandEnum.getHelpCategory("general").build()).queue();
+                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("general").build()).queue();
                     break;
                 case "music":
-                    e.getChannel().sendMessage(commandEnum.getHelpCategory("music").build()).queue();
+                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("music").build()).queue();
                     break;
                 default:
                     if (commandEnum.checkOrValidCommand(event, args)){
-                        e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();
+                        e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();
                     }
             }
         } else {
@@ -40,7 +38,7 @@ public class Help implements ICommand{
     }
 
     public void helpAll() {
-        e.getChannel().sendMessage(commandEnum.getHelpAll().build()).queue();
+        e.getMessageChannel().sendMessage(commandEnum.getHelpAll().build()).queue();
         commandEnum.getHelpAll();
     }
 

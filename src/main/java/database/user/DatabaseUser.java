@@ -1,6 +1,8 @@
 package database.user;
 
 import com.mongodb.*;
+import com.mongodb.client.model.DBCollectionUpdateOptions;
+import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -93,7 +95,7 @@ public class DatabaseUser {
         return new UserDB(userID);
     }
 
-    public EmbedBuilder topTenLeaderboard(GuildMessageReceivedEvent e) {
+    public EmbedBuilder topTenLeaderboard(CommandReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder();
         DBCursor cursor = user.find();
         cursor.sort(new BasicDBObject("level", -1).append("xp", -1)).limit(10).forEach(basicDBObject -> {
@@ -103,14 +105,19 @@ public class DatabaseUser {
         return eb;
     }
 
-    public void addXpToUser(String userId) {
+    public String addXpToUser(String userId) {
         UserDB userDB = new UserDB(userId);
+        userDB.addRandomXp();
 
-        if (userExistsInDB(userId)) {
-            addRandomXPToUserInDB(userId);
-        } else {
-            userDB.addRandomXp();
+        DBObject query = new BasicDBObject("userID", userId);
+        user.update(query, userToDBObject(userDB), new DBCollectionUpdateOptions().upsert(true));
+
+        userDB = getUserFromDBToUserDB(userId);
+        userDB.addRandomXp();
+        if (userDB.calculateLevel()) {
             addUserToDB(userDB);
+            return userDB.getLevel() + "";
         }
+        return "";
     }
 }

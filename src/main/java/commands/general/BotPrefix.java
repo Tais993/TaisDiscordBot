@@ -1,16 +1,16 @@
 package commands.general;
 
+import commands.CommandReceivedEvent;
 import database.guild.DatabaseGuild;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class BotPrefix {
 
     DatabaseGuild databaseGuild = new DatabaseGuild();
     Colors colors = new Colors();
 
-    public void command (GuildMessageReceivedEvent e) {
+    public void command (CommandReceivedEvent e) {
         String guildPrefix = databaseGuild.getPrefixGuildInDB(e.getGuild().getId());
 
         EmbedBuilder eb = new EmbedBuilder();
@@ -20,6 +20,6 @@ public class BotPrefix {
         eb.setDescription("`" + guildPrefix + "`");
         eb.setColor(colors.getCurrentColor());
 
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 }

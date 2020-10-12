@@ -1,12 +1,13 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ClearUser implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String command = "clearuser";
     String commandAlias = "clearuser";
@@ -16,7 +17,7 @@ public class ClearUser implements ICommand {
     String fullCommandDescription = "Queue gets cleared from a user's songs.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -27,7 +28,7 @@ public class ClearUser implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         manager.clearQueue(e.getGuild());
 
-        e.getChannel().sendMessage("Queue has been cleared from user").queue();
+        e.getMessageChannel().sendMessage("Queue has been cleared from user").queue();
     }
 
     @Override

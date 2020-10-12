@@ -14,6 +14,10 @@ public class UserInfo {
         user = memberGiven.getUser();
     }
 
+    public UserInfo(User userGiven) {
+        user = userGiven;
+    }
+
     public String getDateCreated() {
         OffsetDateTime offsetDateTime = member.getTimeCreated();
         return offsetDateTime.getDayOfMonth() + "-" + offsetDateTime.getMonthValue() + "-" + offsetDateTime.getYear() + " " + offsetDateTime.getHour() + ":" + offsetDateTime.getMinute();

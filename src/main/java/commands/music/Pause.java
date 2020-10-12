@@ -1,17 +1,11 @@
 package commands.music;
 
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 public class Pause implements ICommand {
-    GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
-
     String command = "pause";
     String commandAlias = "pause";
     String category = "music";
@@ -20,17 +14,15 @@ public class Pause implements ICommand {
     String fullCommandDescription = "Pause the currently playing music.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
-
+    public void command(CommandReceivedEvent event, String[] args) {
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "pause")) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(event, "pause")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.pause(e.getGuild());
+        manager.pause(event.getGuild());
     }
 
     @Override

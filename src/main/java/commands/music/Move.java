@@ -1,14 +1,11 @@
 package commands.music;
 
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Move implements ICommand {
-    GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
 
     String command = "move";
     String commandAlias = "move";
@@ -20,16 +17,14 @@ public class Move implements ICommand {
             "`!loop 1` to loop the current playing song.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
-
+    public void command(CommandReceivedEvent event, String[] args) {
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "move")) {
+        if (!allowedToPlayMusic.allowedToPlayMusic(event, "move")) {
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.moveTrackInQueue(e.getGuild(), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+        manager.moveTrackInQueue(event.getGuild(), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
     }
 
     @Override

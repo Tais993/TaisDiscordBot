@@ -1,16 +1,13 @@
 package commands.general;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
-import database.user.UserDB;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-
-import java.util.ArrayList;
 
 public class Leaderboard implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     DatabaseUser databaseUser = new DatabaseUser();
     Colors colors = new Colors();
 
@@ -22,18 +19,14 @@ public class Leaderboard implements ICommand {
     String fullCommandDescription = "Get the ranking of players";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
         EmbedBuilder eb = new EmbedBuilder(databaseUser.topTenLeaderboard(e));
 
         eb.setColor(colors.getCurrentColor());
         eb.setTitle("Leaderboard");
 
-        e.getChannel().sendMessage(eb.build()).queue();
-    }
-
-    public String getNameUser(String userId) {
-        return e.getJDA().getUserById(userId).getName();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

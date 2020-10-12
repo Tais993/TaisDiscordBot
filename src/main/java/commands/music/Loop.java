@@ -2,6 +2,7 @@ package commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.GuildMusicManager;
@@ -9,7 +10,7 @@ import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Loop implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "loop";
@@ -22,8 +23,7 @@ public class Loop implements ICommand {
             "`!loop 1` to loop the current playing song.\n" +
             "Run the command again to toggle it off, or use `!loop off`";
 
-    @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -40,18 +40,18 @@ public class Loop implements ICommand {
                 GuildMusicManager musicManager = manager.getGuildMusicManager(e.getGuild());
                 AudioTrack playingTrack = musicManager.player.getPlayingTrack();
 
-                e.getChannel().sendMessage("Succesfully looping: " + playingTrack.getInfo().uri).queue();
+                e.getMessageChannel().sendMessage("Succesfully looping: " + playingTrack.getInfo().uri).queue();
                 break;
             case "all":
             case "queue":
                 manager.loopQueueToggle(e.getGuild());
-                e.getChannel().sendMessage("Succesfully looping the queue").queue();
+                e.getMessageChannel().sendMessage("Succesfully looping the queue").queue();
                 break;
             case "off":
                 manager.loopOff(e.getGuild());
                 break;
             default:
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Error: either give 1 or all as input").build()).queue();
+                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Error: either give 1 or all as input").build()).queue();
                 break;
         }
     }

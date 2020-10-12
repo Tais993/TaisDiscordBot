@@ -1,13 +1,13 @@
 package commands.music;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Seek implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "seek";
@@ -18,7 +18,7 @@ public class Seek implements ICommand {
     String fullCommandDescription = "Set the current playing track to a specific time.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -30,7 +30,7 @@ public class Seek implements ICommand {
             PlayerManager manager = PlayerManager.getInstance();
             manager.setSongPosition(e.getGuild(), Long.parseLong(args[0]));
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("seek").setDescription("Give a valid number").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("seek").setDescription("Give a valid number").build()).queue();
         }
     }
 

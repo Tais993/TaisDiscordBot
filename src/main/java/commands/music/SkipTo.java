@@ -1,19 +1,17 @@
 package commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import functions.Colors;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import static music.TrackScheduler.videoDurationToYoutube;
 
 public class SkipTo implements ICommand {
-    GuildMessageReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
+    CommandReceivedEvent e;
     Colors colors = new Colors();
 
     String command = "skipto";
@@ -24,7 +22,7 @@ public class SkipTo implements ICommand {
     String fullCommandDescription = "Skip to a certain position in the queue";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -45,7 +43,7 @@ public class SkipTo implements ICommand {
         eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
         eb.appendDescription(videoDurationToYoutube(track.getPosition()) + " / " + videoDurationToYoutube(track.getDuration()) + "\n");
 
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
 
     }
 

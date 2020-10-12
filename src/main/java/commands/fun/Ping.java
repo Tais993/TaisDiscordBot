@@ -1,7 +1,7 @@
 package commands.fun;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Ping implements ICommand {
     String command = "ping";
@@ -11,8 +11,8 @@ public class Ping implements ICommand {
     String shortCommandDescription = "Get a real ping";
     String fullCommandDescription = "Not much to say, just a command that gives your totally not fake ping.";
 
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        event.getChannel().sendMessage("Ping: " + event.getMember().getJDA().getGatewayPing() + "ms").queue();
+    public void command(CommandReceivedEvent event, String[] args) {
+        event.getMessageChannel().sendMessage("Ping: " + event.getMember().getJDA().getGatewayPing() + "ms").queue();
     }
 
     public String getCommand() {

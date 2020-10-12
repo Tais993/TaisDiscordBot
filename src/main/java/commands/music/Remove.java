@@ -1,5 +1,6 @@
 package commands.music;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
@@ -7,7 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Remove implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
     String command = "remove";
     String commandAlias = "remove";
@@ -17,7 +18,7 @@ public class Remove implements ICommand {
     String fullCommandDescription = "Removes song from queue.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
@@ -29,7 +30,7 @@ public class Remove implements ICommand {
 
         EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[1]));
 
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

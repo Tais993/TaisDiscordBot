@@ -1,6 +1,7 @@
 package commands.amongus;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.reactions.DatabaseReactions;
 import database.reactions.ReactionDB;
@@ -12,12 +13,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class StartGame implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
     DatabaseReactions databaseReactions = new DatabaseReactions();
     Colors colors = new Colors();
 
-    TextChannel textChannel;
     String time = "16:00";
     Role role;
 
@@ -30,11 +30,16 @@ public class StartGame implements ICommand {
             "You can see how many people will join, and what their name is.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("Command only works in a Discord guild/server").queue();
+            return;
+        }
+
         if (!(args.length > 1)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("startgame").setDescription("Error: Requires a time").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("startgame").setDescription("Error: Requires a time").build()).queue();
             return;
         }
 
@@ -54,12 +59,12 @@ public class StartGame implements ICommand {
 
         eb.addField("Mensen die al meespelen:", "*Druk opnieuw op het vinkje om van de lijst af te worden gehaald.*", false);
 
-        e.getChannel().sendMessage(eb.build()).queue(m -> {
-            databaseReactions.addReactionToDB(new ReactionDB(m.getId(), e.getChannel().getId()));
+        e.getMessageChannel().sendMessage(eb.build()).queue(m -> {
+            databaseReactions.addReactionToDB(new ReactionDB(m.getId(), e.getMessageChannel().getId()));
             m.addReaction("U+2705").queue();
         });
 
-        e.getChannel().sendMessage(role.getAsMention() + "^^^").queue();
+        e.getMessageChannel().sendMessage(role.getAsMention() + "^^^").queue();
 
         e.getMessage().delete().queue();
     }

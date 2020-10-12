@@ -1,12 +1,13 @@
 package commands.util.invitecommand;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class InviteTime {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
-    public InviteTime(GuildMessageReceivedEvent event, String args) {
+    public InviteTime(CommandReceivedEvent event, String args) {
         e = event;
         CommandEnum commandEnum = new CommandEnum();
 
@@ -22,7 +23,7 @@ public class InviteTime {
         } else if (isNumber(args)) {
             checkSeconds(args);
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").setDescription("Give a valid time").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").setDescription("Give a valid time").build()).queue();
         }
     }
 
@@ -53,61 +54,61 @@ public class InviteTime {
     }
 
     public void checkSeconds(String args) {
-        String invite = "";
+        String invite;
 
         if (isNumber(removeTimeNote(args))){
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 86400) {
-                invite = e.getChannel().createInvite().complete().getUrl();
-                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().complete().getUrl();
+                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
-                invite = e.getChannel().createInvite().setTemporary(true).setMaxAge(timeGiven).complete().getUrl();
-                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " seconds ! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(timeGiven).complete().getUrl();
+                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " seconds ! \n" + invite).queue();
             }
         }
     }
 
     public void checkMinute(String args) {
-        String invite = "";
+        String invite;
 
         if (isNumber(removeTimeNote(args))) {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 1440) {
-                invite = e.getChannel().createInvite().complete().getUrl();
-                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().complete().getUrl();
+                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
-                invite = e.getChannel().createInvite().setTemporary(true).setMaxAge(minutesToSeconds(timeGiven)).complete().getUrl();
-                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " minutes ! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(minutesToSeconds(timeGiven)).complete().getUrl();
+                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " minutes ! \n" + invite).queue();
             }
         }
     }
 
     public void checkHour(String args) {
-        String invite = "";
+        String invite;
 
         if (isNumber(removeTimeNote(args))) {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 24) {
-                invite = e.getChannel().createInvite().complete().getUrl();
-                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().complete().getUrl();
+                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
-                invite = e.getChannel().createInvite().setTemporary(true).setMaxAge(hoursToSeconds(timeGiven)).complete().getUrl();
-                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " hours ! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(hoursToSeconds(timeGiven)).complete().getUrl();
+                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " hours ! \n" + invite).queue();
             }
         }
     }
 
     public void checkDay(String args) {
-        String invite = "";
+        String invite;
 
         if (isNumber(removeTimeNote(args))) {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 1) {
-                invite = e.getChannel().createInvite().complete().getUrl();
-                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().complete().getUrl();
+                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
-                invite = e.getChannel().createInvite().setTemporary(true).setMaxAge(daysToSeconds(timeGiven)).complete().getUrl();
-                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " days ! \n" + invite).queue();
+                invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(daysToSeconds(timeGiven)).complete().getUrl();
+                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " days ! \n" + invite).queue();
             }
         }
     }

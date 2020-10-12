@@ -1,13 +1,14 @@
 package commands.music;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class SetVolume implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
 
     String command = "setvolume";
@@ -18,13 +19,13 @@ public class SetVolume implements ICommand {
     String fullCommandDescription = "Set the volume of the bot. Ranged between 1 and 200.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
 
         PlayerManager manager = PlayerManager.getInstance();
 
         if (!(args.length > 1)) {
-            e.getChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
+            e.getMessageChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
             return;
         }
 
@@ -33,12 +34,12 @@ public class SetVolume implements ICommand {
         try {
             volume = Integer.parseInt(args[1]);
         } catch (NumberFormatException exception) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a valid number.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a valid number.").build()).queue();
             return;
         }
 
         if (!(volume >= 1 && volume <= 200)) {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a number between 1 and 200.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a number between 1 and 200.").build()).queue();
             return;
         }
 
@@ -48,9 +49,9 @@ public class SetVolume implements ICommand {
         }
 
         if (manager.setVolume(e.getGuild(), volume)) {
-            e.getChannel().sendMessage("Volume has been set correctly to " + volume).queue();
+            e.getMessageChannel().sendMessage("Volume has been set correctly to " + volume).queue();
         } else {
-            e.getChannel().sendMessage("Error unknown.").queue();
+            e.getMessageChannel().sendMessage("Error unknown.").queue();
         }
     }
 

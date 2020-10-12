@@ -1,9 +1,7 @@
 package commands;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-
 public interface ICommand {
-    GuildMessageReceivedEvent e = null;
+    CommandReceivedEvent e = null;
     String command = "";
     String commandAlias = "";
     String category = "";
@@ -11,7 +9,7 @@ public interface ICommand {
     String shortCommandDescription = "";
     String fullCommandDescription = "";
 
-    void command(GuildMessageReceivedEvent event, String[] args);
+    void command(CommandReceivedEvent event, String[] args);
 
     String getCommand();
 

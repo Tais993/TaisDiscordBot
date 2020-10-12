@@ -1,6 +1,7 @@
 package commands.fun;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.hugs.DatabaseHugs;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -27,7 +28,7 @@ public class Hug implements ICommand {
     static String filePath = "C:\\Users\\Tijs\\Documents\\Discord bot\\gif\\animehug.gif";
     static File file = new File(filePath);
 
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     String command = "hug";
     String commandAlias = "hug";
     String category = "fun";
@@ -36,8 +37,13 @@ public class Hug implements ICommand {
     String fullCommandDescription = "*No homo* lets hug each other!";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Run this command in a Discord guild/server").build()).queue();
+            return;
+        }
 
         if (e.getMessage().getMentionedMembers().size() >= 1) {
             userToHugMentioned = e.getMessage().getMentionedMembers().get(0).getAsMention();
@@ -46,11 +52,11 @@ public class Hug implements ICommand {
             if (member != null) {
                 userToHugMentioned = member.getAsMention();
             } else {
-                e.getChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Error: give a valid userId").build()).queue();
+                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Error: give a valid userId").build()).queue();
                 return;
             }
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Error: either mention a user or give a user ID").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Error: either mention a user or give a user ID").build()).queue();
             return;
         }
 
@@ -58,7 +64,7 @@ public class Hug implements ICommand {
 
         if (easterEgg >= 99) {
             createFile("https://media1.tenor.com/images/4d853211454cb61fa38e308f60c62e28/tenor.gif?itemid=15723089");
-            e.getChannel().sendMessage("KNOLPOWER").addFile(file).queue();
+            e.getMessageChannel().sendMessage("KNOLPOWER").addFile(file).queue();
             return;
         }
 
@@ -70,7 +76,7 @@ public class Hug implements ICommand {
 
         authorMentioned = e.getAuthor().getAsMention();
 
-        e.getChannel().sendMessage(authorMentioned + " hugs " + userToHugMentioned + " :heart:").addFile(file).queue();
+        e.getMessageChannel().sendMessage(authorMentioned + " hugs " + userToHugMentioned + " :heart:").addFile(file).queue();
 
     }
 

@@ -1,18 +1,11 @@
 package commands.util;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
 import functions.entities.GuildInfo;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.utils.concurrent.Task;
-
-import java.util.List;
 
 public class ServerStats implements ICommand {
-    GuildMessageReceivedEvent e;
-    Colors colors = new Colors();
+    CommandReceivedEvent e;
 
     String command = "serverinfo";
     String commandAlias = "serverstats";
@@ -22,11 +15,17 @@ public class ServerStats implements ICommand {
     String fullCommandDescription = "Get information about the server.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            return;
+        }
+
         GuildInfo guildInfo = new GuildInfo(e.getGuild());
 
-        e.getChannel().sendMessage("Working on.. Discord I hate you").queue();
+        e.getMessageChannel().sendMessage("Working on.. Discord I hate you").queue();
 
 //        EmbedBuilder eb = new EmbedBuilder();
 //

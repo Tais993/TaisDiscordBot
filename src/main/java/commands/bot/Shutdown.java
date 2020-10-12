@@ -1,11 +1,9 @@
 package commands.bot;
 
+import commands.CommandReceivedEvent;
 import commands.ICommand;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Shutdown implements ICommand {
-    GuildMessageReceivedEvent e;
-
     String command = "shutdown";
     String commandAlias = "sd";
     String category = "general";
@@ -14,8 +12,7 @@ public class Shutdown implements ICommand {
     String fullCommandDescription = "Stop the bot";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
-        e = event;
+    public void command(CommandReceivedEvent event, String[] args) {
 
         System.exit(1);
     }

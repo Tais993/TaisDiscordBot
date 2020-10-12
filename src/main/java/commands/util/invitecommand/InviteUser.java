@@ -1,20 +1,21 @@
 package commands.util.invitecommand;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class InviteUser {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
 
-    public InviteUser(GuildMessageReceivedEvent event, String args) {
+    public InviteUser(CommandReceivedEvent event, String args) {
         e = event;
         CommandEnum commandEnum = new CommandEnum();
 
         if (isNumber(args)) {
-            String invite = e.getChannel().createInvite().setMaxUses(Integer.valueOf(args)).complete().getUrl();
-            e.getChannel().sendMessage("A temporary invite has been created for " + args + " uses! \n" + invite).queue();
+            String invite = e.getTextChannel().createInvite().setMaxUses(Integer.valueOf(args)).complete().getUrl();
+            e.getMessageChannel().sendMessage("A temporary invite has been created for " + args + " uses! \n" + invite).queue();
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
         }
     }
 

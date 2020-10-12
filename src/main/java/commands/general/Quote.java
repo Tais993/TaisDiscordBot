@@ -1,17 +1,17 @@
 package commands.general;
 
-import functions.Colors;
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
+import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
 public class Quote implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     Colors colors = new Colors();
     CommandEnum commandEnum = new CommandEnum();
 
@@ -30,17 +30,44 @@ public class Quote implements ICommand {
             "change input to the text you would like to quote.";
 
     @Override
-    public void command(GuildMessageReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event, String[] args) {
         e = event;
         allArgs = args;
 
+        if (!e.isFromGuild()) {
+            quoteCommandPrivate();
+        } else {
+            quoteCommandGuild();
+        }
+    }
+
+    public void quoteCommandPrivate() {
+        String[] args =e.getArgs();
+        if (args.length >= 3) {
+            switch (args[1]) {
+                case "message":
+                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Quoting a message only works in a guild.").build()).queue();
+                    break;
+                case "text":
+                    createPersonalEmbed();
+                    break;
+                default:
+                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: second input should  either be `text` or `message`.").build()).queue();
+            }
+        } else {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: requires at least 3 arguments.").build()).queue();
+        }
+    }
+
+    public void quoteCommandGuild() {
+        String[] args = e.getArgs();
         if (args.length >= 3) {
             switch (args[1]) {
                 case "message":
                     if (mentionsTextChannel()){
                         textChannel = e.getMessage().getMentionedChannels().get(0);
                     } else {
-                        textChannel = e.getChannel();
+                        textChannel = e.getTextChannel();
                     }
                     getMessage(args[2]);
                     break;
@@ -48,10 +75,10 @@ public class Quote implements ICommand {
                     createPersonalEmbed();
                     break;
                 default:
-                    e.getChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: second input should  either be `text` or `message`.").build()).queue();
+                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: second input should  either be `text` or `message`.").build()).queue();
             }
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: requires at least 3 arguments.").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: requires at least 3 arguments.").build()).queue();
         }
     }
 
@@ -70,7 +97,7 @@ public class Quote implements ICommand {
             eb.appendDescription("\n[Link](" + message.getJumpUrl() + ")");
         }
         
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     public void createPersonalEmbed() {
@@ -86,7 +113,7 @@ public class Quote implements ICommand {
         }
 
         eb.setDescription(getMessageToQuote());
-        e.getChannel().sendMessage(eb.build()).queue();
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     public void getMessage(String id) {
@@ -94,7 +121,7 @@ public class Quote implements ICommand {
             if (failure instanceof ErrorResponseException) {
                 ErrorResponseException ex = (ErrorResponseException) failure;
                 if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
-                    e.getChannel().sendMessage("Message doesn't exist!").queue();
+                    e.getMessageChannel().sendMessage("Message doesn't exist!").queue();
                 }
             }
             failure.printStackTrace();

@@ -1,12 +1,12 @@
 package commands.util;
 
 import commands.CommandEnum;
+import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ChangeBotPrefix implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     CommandEnum commandEnum = new CommandEnum();
     DatabaseGuild databaseGuild = new DatabaseGuild();
 
@@ -18,9 +18,15 @@ public class ChangeBotPrefix implements ICommand {
     String fullCommandDescription = "Set the prefix of the bot in this guild.";
 
     @Override
-    public void command(GuildMessageReceivedEvent e, String[] args) {
-        this.e = e;
+    public void command(CommandReceivedEvent event, String[] args) {
+        e = event;
         String prefix;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            return;
+        }
+
         String guildID = e.getGuild().getId();
 
         String currentPrefix = databaseGuild.getPrefixGuildInDB(e.getGuild().getId());
@@ -30,9 +36,9 @@ public class ChangeBotPrefix implements ICommand {
             String messageRaw = e.getMessage().getContentRaw();
             prefix = messageRaw.replace(toReplace, "");
             databaseGuild.setPrefixGuildInDB(guildID, prefix);
-            e.getChannel().sendMessage("Prefix changed to: " + prefix).queue();
+            e.getMessageChannel().sendMessage("Prefix changed to: " + prefix).queue();
         } else {
-            e.getChannel().sendMessage(commandEnum.getFullHelpItem("setbotprefix").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("setbotprefix").build()).queue();
         }
     }
 

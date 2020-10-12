@@ -17,8 +17,10 @@ public class Forward implements ICommand {
     String fullCommandDescription = "Forward the current playing song a amount of seconds.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
+
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "forward")) {

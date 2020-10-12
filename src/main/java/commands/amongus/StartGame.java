@@ -30,8 +30,9 @@ public class StartGame implements ICommand {
             "You can see how many people will join, and what their name is.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("Command only works in a Discord guild/server").queue();
@@ -47,8 +48,7 @@ public class StartGame implements ICommand {
 
         role = e.getGuild().getRoleById("714049141017149453");
 
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(colors.getCurrentColor());
+        EmbedBuilder eb = getEmbed();
 
         eb.setAuthor("Among Us Game", "https://cdn.discordapp.com/icons/705908114406506517/0929283dd126725f7c11ee6a0edb56cc.webp", "https://cdn.discordapp.com/icons/705908114406506517/0929283dd126725f7c11ee6a0edb56cc.webp");
         eb.setTitle("Wil jij ook meedoen? Druk op het vinkje onder dit bericht!");

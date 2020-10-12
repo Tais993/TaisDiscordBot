@@ -22,8 +22,9 @@ public class SkipTo implements ICommand {
     String fullCommandDescription = "Skip to a certain position in the queue";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "skipto")) {

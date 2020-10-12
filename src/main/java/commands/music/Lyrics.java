@@ -13,7 +13,7 @@ public class Lyrics implements ICommand {
     String fullCommandDescription = "Get the lyrics of a song.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         event.getMessageChannel().sendMessage("Soon..").queue();
     }
 

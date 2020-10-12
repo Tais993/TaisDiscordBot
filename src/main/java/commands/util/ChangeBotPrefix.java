@@ -18,8 +18,9 @@ public class ChangeBotPrefix implements ICommand {
     String fullCommandDescription = "Set the prefix of the bot in this guild.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
         String prefix;
 
         if (!e.isFromGuild()) {

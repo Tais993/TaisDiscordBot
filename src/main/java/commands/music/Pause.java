@@ -14,7 +14,7 @@ public class Pause implements ICommand {
     String fullCommandDescription = "Pause the currently playing music.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(event, "pause")) {
             return;

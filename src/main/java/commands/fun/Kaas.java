@@ -11,7 +11,7 @@ public class Kaas implements ICommand {
     String shortCommandDescription = "Kaas, otherwise known as cheese";
     String fullCommandDescription = "Kaas";
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         event.getMessageChannel().sendMessage("kaas is lekker").queue();
     }
 

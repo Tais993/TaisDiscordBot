@@ -44,8 +44,9 @@ public class ReactionRole implements ICommand {
             "`!reactionrole message <messageId>` to assign the reaction roles to a already sent message.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();

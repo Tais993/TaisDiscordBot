@@ -17,8 +17,9 @@ public class ClearQueue implements ICommand {
     String fullCommandDescription = "Queue gets cleared";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "clearqueue")) {

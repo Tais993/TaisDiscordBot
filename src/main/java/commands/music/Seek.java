@@ -18,8 +18,9 @@ public class Seek implements ICommand {
     String fullCommandDescription = "Set the current playing track to a specific time.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "seek")) {

@@ -19,11 +19,11 @@ public class Leaderboard implements ICommand {
     String fullCommandDescription = "Get the ranking of players";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+
         EmbedBuilder eb = new EmbedBuilder(databaseUser.topTenLeaderboard(e));
 
-        eb.setColor(colors.getCurrentColor());
         eb.setTitle("Leaderboard");
 
         e.getMessageChannel().sendMessage(eb.build()).queue();

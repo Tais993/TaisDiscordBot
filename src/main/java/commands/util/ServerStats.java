@@ -15,7 +15,7 @@ public class ServerStats implements ICommand {
     String fullCommandDescription = "Get information about the server.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         if (!e.isFromGuild()) {

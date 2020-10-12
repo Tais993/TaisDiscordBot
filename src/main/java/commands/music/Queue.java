@@ -15,7 +15,7 @@ public class Queue implements ICommand {
     String fullCommandDescription = "Get the queue of the music.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         PlayerManager manager = PlayerManager.getInstance();
 
         EmbedBuilder eb = manager.getQueue(event.getGuild());

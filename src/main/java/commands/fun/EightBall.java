@@ -21,7 +21,7 @@ public class EightBall implements ICommand {
             "**Question mark is required.**";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         if (event.getMessage().getContentRaw().contains("?")) {
             int chance = Math.round(r.nextFloat()*10);
 

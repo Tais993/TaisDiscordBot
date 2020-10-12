@@ -17,7 +17,7 @@ public class ClearUser implements ICommand {
     String fullCommandDescription = "Queue gets cleared from a user's songs.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

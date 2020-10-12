@@ -22,8 +22,9 @@ public class TempBan implements ICommand {
             "Requires both for the bot and user ban members permission";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("You cannot ban people in DM's.").queue();

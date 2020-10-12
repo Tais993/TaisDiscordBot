@@ -16,7 +16,7 @@ public class Skip implements ICommand {
     String fullCommandDescription = "Skips the currently running song.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

@@ -19,8 +19,9 @@ public class AddHug implements ICommand {
     String fullCommandDescription = "Add gifs to the current list";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (args.length > 2){
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("addhug").setDescription("Error: requires a URL for a gif").build()).queue();

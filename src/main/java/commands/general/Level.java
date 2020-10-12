@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
+import java.time.Instant;
+
 public class Level implements ICommand {
     CommandReceivedEvent e;
     User userGiven;
@@ -25,8 +27,9 @@ public class Level implements ICommand {
     String fullCommandDescription = "Get the level of someone in this server.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             levelCommandPrivate(args);
@@ -71,6 +74,7 @@ public class Level implements ICommand {
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
         eb.setFooter("Made by Tijs");
 
+        eb.setTimestamp(Instant.now());
         eb.setColor(colors.getCurrentColor());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();

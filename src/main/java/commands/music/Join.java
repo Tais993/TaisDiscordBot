@@ -22,7 +22,7 @@ public class Join implements ICommand {
     String fullCommandDescription = "Joins the bot in a voice channel.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         audioManager = e.getGuild().getAudioManager();

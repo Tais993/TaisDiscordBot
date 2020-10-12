@@ -15,7 +15,7 @@ public class Previous implements ICommand {
     String fullCommandDescription = "Return to the previous song.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(event, "previous")) {
             return;

@@ -18,8 +18,9 @@ public class InviteMain implements ICommand {
             "<uses> is amount of uses the invite has.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();

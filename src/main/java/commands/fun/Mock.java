@@ -23,8 +23,10 @@ public class Mock implements ICommand {
             " example: `!mock testing` output: `tEsTiNg`";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
+
         if (args.length > 1) {
             String toMock = e.getMessageWithoutCommand();
             StringBuilder output = new StringBuilder();

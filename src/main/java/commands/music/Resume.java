@@ -16,7 +16,7 @@ public class Resume implements ICommand {
     String fullCommandDescription = "Get the queue of the music.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

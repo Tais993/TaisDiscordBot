@@ -16,7 +16,7 @@ public class Radio538 implements ICommand {
     String fullCommandDescription = "Listen to Radio 538 (Dutch)";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

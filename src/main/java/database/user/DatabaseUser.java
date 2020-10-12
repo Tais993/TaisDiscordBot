@@ -3,10 +3,14 @@ package database.user;
 import com.mongodb.*;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
 import commands.CommandReceivedEvent;
+import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.time.Instant;
 import java.util.ArrayList;
+
+import static commands.CommandEnum.bot;
 
 public class DatabaseUser {
     public static MongoClient mongoClient;
@@ -97,11 +101,19 @@ public class DatabaseUser {
 
     public EmbedBuilder topTenLeaderboard(CommandReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder();
+        Colors colors = new Colors();
+
+        eb.setColor(colors.getCurrentColor());
+        eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+        eb.setFooter("Made by Tijs ");
+        eb.setTimestamp(Instant.now());
+
         DBCursor cursor = user.find();
         cursor.sort(new BasicDBObject("level", -1).append("xp", -1)).limit(10).forEach(basicDBObject -> {
             UserDB userDB = dbObjectToUser(basicDBObject);
             eb.addField(e.getJDA().getUserById(userDB.getUserID()).getName(), "Level: " + userDB.getLevel() + "\nXP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp(), false);
         });
+
         return eb;
     }
 

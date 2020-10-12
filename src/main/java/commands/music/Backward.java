@@ -17,8 +17,9 @@ public class Backward implements ICommand {
     String fullCommandDescription = "Backward the current playing song a amount of seconds.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "backward")) {

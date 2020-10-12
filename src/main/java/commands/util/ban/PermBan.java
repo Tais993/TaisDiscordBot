@@ -2,10 +2,9 @@ package commands.util.ban;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class PermBan implements ICommand {
-    GuildMessageReceivedEvent e;
+    CommandReceivedEvent e;
     String command = "permban";
     String commandAlias = "permban";
     String category = "util";
@@ -15,8 +14,8 @@ public class PermBan implements ICommand {
             "Question mark is required.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
-
+    public void command(CommandReceivedEvent event) {
+        e = event;
     }
 
     @Override

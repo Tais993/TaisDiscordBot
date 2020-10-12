@@ -30,9 +30,9 @@ public class Quote implements ICommand {
             "change input to the text you would like to quote.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
-        allArgs = args;
+        allArgs = e.getArgs();
 
         if (!e.isFromGuild()) {
             quoteCommandPrivate();

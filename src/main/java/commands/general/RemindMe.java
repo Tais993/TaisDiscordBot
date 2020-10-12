@@ -23,8 +23,9 @@ public class RemindMe implements ICommand {
     String fullCommandDescription = "Remind you with something you gave the bot after a specified amount of time.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         String time = args[2];
 

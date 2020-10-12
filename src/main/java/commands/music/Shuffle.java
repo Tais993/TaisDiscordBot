@@ -17,7 +17,7 @@ public class Shuffle implements ICommand {
     String fullCommandDescription = "Shuffle the queue.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

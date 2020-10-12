@@ -22,17 +22,14 @@ public class BotStats implements ICommand {
     String fullCommandDescription = "Get information about the server.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
-        EmbedBuilder eb = new EmbedBuilder();
+        EmbedBuilder eb = getEmbed();
 
         eb.setTitle("Botstats");
         eb.addField("Total joined guilds:",  botInfo.getJoinedGuilds() + "", false);
         eb.addField("Total commands", commandEnum.getTotalCommands() + "", false);
         eb.setThumbnail(botInfo.getAvatarUrl());
-        eb.setFooter("Made by Tijs");
-
-        eb.setColor(colors.getCurrentColor());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

@@ -11,24 +11,20 @@ public class Help implements ICommand{
     String shortCommandDescription = "Get some help";
     String fullCommandDescription = "Get help for a item or category, but you already know that. Right?";
 
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
+
         if (args.length > 1) {
             switch (args[1]) {
                 case "fun":
-                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("fun").build()).queue();
-                    break;
                 case "util":
-                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("util").build()).queue();
-                    break;
                 case "general":
-                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("general").build()).queue();
-                    break;
                 case "music":
-                    e.getMessageChannel().sendMessage(commandEnum.getHelpCategory("music").build()).queue();
+                    commandEnum.getHelpCategory(args[1], e);
                     break;
                 default:
-                    if (commandEnum.checkOrValidCommand(event, args)){
+                    if (commandEnum.checkOrValidCommand(args)){
                         e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();
                     }
             }
@@ -37,11 +33,7 @@ public class Help implements ICommand{
         }
     }
 
-    public void helpAll() {
-        e.getMessageChannel().sendMessage(commandEnum.getHelpAll().build()).queue();
-        commandEnum.getHelpAll();
-    }
-
+    @Override
     public String getCommand() {
         return command;
     }

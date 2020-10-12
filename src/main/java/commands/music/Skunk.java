@@ -18,7 +18,7 @@ public class Skunk implements ICommand {
     String fullCommandDescription = "Skunk, and skunk.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

@@ -37,8 +37,9 @@ public class Hug implements ICommand {
     String fullCommandDescription = "*No homo* lets hug each other!";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Run this command in a Discord guild/server").build()).queue();

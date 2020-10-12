@@ -19,8 +19,9 @@ public class SetVolume implements ICommand {
     String fullCommandDescription = "Set the volume of the bot. Ranged between 1 and 200.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         PlayerManager manager = PlayerManager.getInstance();
 

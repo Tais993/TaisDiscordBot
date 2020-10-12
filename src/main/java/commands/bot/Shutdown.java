@@ -12,7 +12,7 @@ public class Shutdown implements ICommand {
     String fullCommandDescription = "Stop the bot";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
 
         System.exit(1);
     }

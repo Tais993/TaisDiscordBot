@@ -15,7 +15,7 @@ public class Replay implements ICommand {
     String shortCommandDescription = "Replay the current playing track.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();

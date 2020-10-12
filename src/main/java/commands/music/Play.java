@@ -27,8 +27,9 @@ public class Play implements ICommand {
     String fullCommandDescription = "Plays music.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!(args.length > 1)) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription("Error: requires at least 1 argument").build()).queue();

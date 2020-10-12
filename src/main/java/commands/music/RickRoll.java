@@ -1,5 +1,6 @@
 package commands.music;
 
+import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
@@ -7,17 +8,29 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 public class RickRoll implements ICommand {
     CommandReceivedEvent e;
+    CommandEnum commandEnum = new CommandEnum();
 
     String command = "rickroll";
-    String commandAlias = "rickroll";
+    String commandAlias = "dQw";
     String category = "music";
     String exampleCommand = "`!rickroll`";
     String shortCommandDescription = "Good one";
     String fullCommandDescription = "IMAGINE GETTING RICKROLLED LOLLL";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+
+        if (!e.isFromGuild()) {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rickroll").setDescription("You can only run this comand in a Discord server/guild!").build()).queue();
+            return;
+        }
+
+        if (e.getArgs()[0].equalsIgnoreCase("dqw")) {
+            if (!e.getArgs()[0].equals("dQw")) {
+                return;
+            }
+        }
 
         AudioManager audioManager = e.getGuild().getAudioManager();
 

@@ -14,7 +14,7 @@ public class NowPlaying implements ICommand {
     String fullCommandDescription = "Get the current playing song";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         PlayerManager manager = PlayerManager.getInstance();
         EmbedBuilder eb = manager.getNowPlaying(event.getGuild());
         event.getMessageChannel().sendMessage(eb.build()).queue();

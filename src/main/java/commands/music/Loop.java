@@ -23,8 +23,9 @@ public class Loop implements ICommand {
             "`!loop 1` to loop the current playing song.\n" +
             "Run the command again to toggle it off, or use `!loop off`";
 
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "loop")) {

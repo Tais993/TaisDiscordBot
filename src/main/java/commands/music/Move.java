@@ -17,7 +17,9 @@ public class Move implements ICommand {
             "`!loop 1` to loop the current playing song.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
+        String[] args = event.getArgs();
+
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(event, "move")) {
             return;

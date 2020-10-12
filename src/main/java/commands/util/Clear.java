@@ -20,8 +20,9 @@ public class Clear implements ICommand {
     String fullCommandDescription = "Clear the chat for a specified amount of messages.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
+        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();

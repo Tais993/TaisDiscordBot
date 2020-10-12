@@ -23,7 +23,7 @@ public class YouTube implements ICommand {
     String fullCommandDescription = "Search for a YouTube video.";
 
     @Override
-    public void command(CommandReceivedEvent event, String[] args) {
+    public void command(CommandReceivedEvent event) {
         e = event;
 
         String input = e.getMessage().getContentRaw().replace(databaseGuild.getPrefixGuildInDB(e.getGuild().getId()) + command + " ", "");

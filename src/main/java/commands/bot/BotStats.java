@@ -12,7 +12,6 @@ public class BotStats implements ICommand {
 
     CommandEnum commandEnum = new CommandEnum();
     BotInfo botInfo = new BotInfo();
-    Colors colors = new Colors();
 
     String command = "botstats";
     String commandAlias = "stats";
@@ -29,6 +28,7 @@ public class BotStats implements ICommand {
         eb.setTitle("Botstats");
         eb.addField("Total joined guilds:",  botInfo.getJoinedGuilds() + "", false);
         eb.addField("Total commands", commandEnum.getTotalCommands() + "", false);
+        eb.addField("Created by:", e.getJDA().retrieveUserById("257500867568205824").complete().getAsTag(), false);
         eb.setThumbnail(botInfo.getAvatarUrl());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();

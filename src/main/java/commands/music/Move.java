@@ -1,11 +1,14 @@
 package commands.music;
 
+import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 
 public class Move implements ICommand {
+    CommandReceivedEvent e;
+    CommandEnum commandEnum = new CommandEnum();
 
     String command = "move";
     String commandAlias = "move";
@@ -18,7 +21,13 @@ public class Move implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        String[] args = event.getArgs();
+        e = event;
+
+        String[] args = e.getArgs();
+
+        if (!e.hasArgs() || args.length <= 1) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 2 arguments")).queue();
+        }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(event, "move")) {
@@ -26,7 +35,7 @@ public class Move implements ICommand {
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.moveTrackInQueue(event.getGuild(), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+        manager.moveTrackInQueue(event.getGuild(), Integer.parseInt(e.getArgs()[0]), Integer.parseInt(e.getArgs()[1]));
     }
 
     @Override

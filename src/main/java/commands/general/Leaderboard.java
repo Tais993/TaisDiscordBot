@@ -3,13 +3,11 @@ package commands.general;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 public class Leaderboard implements ICommand {
     CommandReceivedEvent e;
     DatabaseUser databaseUser = new DatabaseUser();
-    Colors colors = new Colors();
 
     String command = "leaderboard";
     String commandAlias = "leaderboard";

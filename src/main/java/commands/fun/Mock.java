@@ -1,16 +1,13 @@
 package commands.fun;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.Permissions;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Random;
 
 public class Mock implements ICommand {
-    CommandEnum commandEnum = new CommandEnum();
     Random r = new Random();
 
     CommandReceivedEvent e;

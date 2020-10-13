@@ -2,6 +2,7 @@ package commands;
 
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.time.Instant;
 
@@ -9,6 +10,7 @@ import static commands.CommandEnum.bot;
 
 public interface ICommand {
     CommandReceivedEvent e = null;
+    CommandEnum commandEnum = new CommandEnum();
     String command = "";
     String commandAlias = "";
     String category = "";
@@ -28,6 +30,13 @@ public interface ICommand {
         eb.setTimestamp(Instant.now());
 
         return eb;
+    }
+
+    default MessageEmbed getFullHelp(String error) {
+        if (error.isEmpty()) {
+            return commandEnum.getFullHelpItem(getCommand()).build();
+        }
+        return commandEnum.getFullHelpItem(getCommand()).setDescription(error).build();
     }
 
     String getCommand();

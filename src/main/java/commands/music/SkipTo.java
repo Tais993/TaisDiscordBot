@@ -1,6 +1,7 @@
 package commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
@@ -13,6 +14,7 @@ import static music.TrackScheduler.videoDurationToYoutube;
 public class SkipTo implements ICommand {
     CommandReceivedEvent e;
     Colors colors = new Colors();
+    CommandEnum commandEnum = new CommandEnum();
 
     String command = "skipto";
     String commandAlias = "skipto";
@@ -24,7 +26,10 @@ public class SkipTo implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
+
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+        }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "skipto")) {
@@ -32,13 +37,12 @@ public class SkipTo implements ICommand {
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.skipToTrack(e.getGuild(), Integer.parseInt(args[1]));
+        manager.skipToTrack(e.getGuild(), Integer.parseInt(e.getArgs()[0]));
 
         AudioTrack track = manager.getGuildMusicManager(e.getGuild()).player.getPlayingTrack();
 
-        EmbedBuilder eb = new EmbedBuilder();
+        EmbedBuilder eb = new EmbedBuilder(getEmbed());
         eb.setTitle("Queue has been skipped to:");
-        eb.setColor(colors.getCurrentColor());
         eb.appendDescription("*Currently playing*\n");
         eb.appendDescription("**" + track.getInfo().author + "**\n");
         eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");

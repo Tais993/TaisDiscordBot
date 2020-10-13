@@ -25,8 +25,13 @@ public class ClearUser implements ICommand {
             return;
         }
 
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
-        manager.clearQueue(e.getGuild());
+        manager.clearQueueFromUser(e.getGuild(), e.getArgs()[0]);
 
         e.getMessageChannel().sendMessage("Queue has been cleared from user").queue();
     }

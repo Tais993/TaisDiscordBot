@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.util.Random;
 
 public class EightBall implements ICommand {
-    CommandEnum commandEnum = new CommandEnum();
     Random r = new Random();
 
     GuildMessageReceivedEvent e;

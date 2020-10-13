@@ -19,7 +19,6 @@ public class ClearQueue implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "clearqueue")) {
@@ -27,7 +26,7 @@ public class ClearQueue implements ICommand {
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.clearQueueFromUser(e.getGuild(), args[1]);
+        manager.clearQueue(e.getGuild());
 
         e.getMessageChannel().sendMessage("Queue has been cleared.").queue();
     }

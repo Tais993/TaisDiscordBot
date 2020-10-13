@@ -99,11 +99,11 @@ public class CommandEnum {
         return false;
     }
 
-    public boolean checkOrValidCommand(String[] messageSentSplit) {
+    public boolean checkOrValidCommand(String arg) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (messageSentSplit[0].equalsIgnoreCase(c.getCommand())) {
+            if (arg.equalsIgnoreCase(c.getCommand())) {
                 return true;
             }
         }

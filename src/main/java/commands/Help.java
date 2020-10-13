@@ -13,23 +13,21 @@ public class Help implements ICommand{
 
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
-        if (args.length > 1) {
-            switch (args[1]) {
+        if (e.hasArgs) {
+            String[] args = e.getArgs();
+            switch (args[0]) {
                 case "fun":
                 case "util":
                 case "general":
                 case "music":
-                    commandEnum.getHelpCategory(args[1], e);
+                    commandEnum.getHelpCategory(args[0], e);
                     break;
                 default:
-                    if (commandEnum.checkOrValidCommand(args)){
-                        e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[1]).build()).queue();
+                    if (commandEnum.checkOrValidCommand(args[0])){
+                        e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0]).build()).queue();
                     }
             }
-        } else {
-            commandEnum.getHelpAllByCategory(e);
         }
     }
 

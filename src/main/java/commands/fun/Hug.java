@@ -13,7 +13,6 @@ import java.util.Random;
 
 public class Hug implements ICommand {
     DatabaseHugs databaseHugs = new DatabaseHugs();
-    CommandEnum commandEnum = new CommandEnum();
     Random r = new Random();
 
     String authorMentioned;

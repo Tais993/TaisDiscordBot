@@ -21,11 +21,10 @@ public class SetVolume implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        if (!(args.length > 1)) {
+        if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
             return;
         }
@@ -33,14 +32,14 @@ public class SetVolume implements ICommand {
         int volume;
 
         try {
-            volume = Integer.parseInt(args[1]);
+            volume = Integer.parseInt(e.getArgs()[0]);
         } catch (NumberFormatException exception) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a valid number.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid number.")).queue();
             return;
         }
 
         if (!(volume >= 1 && volume <= 200)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("setvolume").setDescription("Error: give a number between 1 and 200.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: give a number between 1 and 200.")).queue();
             return;
         }
 

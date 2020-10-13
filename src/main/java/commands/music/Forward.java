@@ -1,5 +1,6 @@
 package commands.music;
 
+import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
@@ -8,6 +9,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Forward implements ICommand {
     CommandReceivedEvent e;
+
+    CommandEnum commandEnum = new CommandEnum();
 
     String command = "forward";
     String commandAlias = "forwards";
@@ -19,16 +22,18 @@ public class Forward implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
-
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "forward")) {
             return;
         }
 
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
-        manager.forwardsTrack(e.getGuild(), Long.parseLong(args[1]));
+        manager.forwardsTrack(e.getGuild(), Long.parseLong(e.getArgs()[0]));
     }
 
     @Override

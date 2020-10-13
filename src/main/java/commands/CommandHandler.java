@@ -6,6 +6,7 @@ import database.guild.DatabaseGuild;
 import database.guild.GuildHandler;
 import database.user.UserHandler;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -39,17 +40,14 @@ public class CommandHandler extends ListenerAdapter {
             if (command()) return;
         }
 
-        String botUserId = e.getJDA().getSelfUser().getId();
-        Member botMember = e.getGuild().getMemberById(botUserId);
+        SelfUser botUser = e.getJDA().getSelfUser();
 
-        if (e.getMessage().getMentionedMembers().contains(botMember)) botPrefix.command(e);
+        if (e.getMessage().getMentionedUsers().contains(botUser)) botPrefix.command(e);
 
-        userHandler.checkUser(event);
-        guildHandler.checkGuild(event);
 
-        if (!e.isFromGuild) {
-            YouTube youTube = new YouTube();
-            youTube.command(e);
+        if (e.isFromGuild) {
+            userHandler.checkUser(event);
+            guildHandler.checkGuild(event);
         }
     }
 

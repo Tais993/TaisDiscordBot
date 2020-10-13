@@ -19,15 +19,19 @@ public class Backward implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "backward")) {
             return;
         }
 
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
-        manager.backwardsTrack(e.getGuild(), Long.parseLong(args[1]));
+        manager.backwardsTrack(e.getGuild(), Long.parseLong(e.getArgs()[0]));
     }
 
     @Override

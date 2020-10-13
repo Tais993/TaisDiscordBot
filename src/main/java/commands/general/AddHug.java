@@ -1,14 +1,11 @@
 package commands.general;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.hugs.DatabaseHugs;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class AddHug implements ICommand {
     DatabaseHugs databaseHugs = new DatabaseHugs();
-    CommandEnum commandEnum = new CommandEnum();
 
     CommandReceivedEvent e;
     String command = "addhug";

@@ -25,16 +25,20 @@ public class Loop implements ICommand {
 
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "loop")) {
             return;
         }
 
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Requires at least 1 argument").build()).queue();
+            return;
+        }
+
         PlayerManager manager = PlayerManager.getInstance();
 
-        switch (args[1]) {
+        switch (e.getArgs()[0]) {
             case "1":
             case "song":
                 manager.loopSongToggle(e.getGuild());
@@ -52,7 +56,7 @@ public class Loop implements ICommand {
                 manager.loopOff(e.getGuild());
                 break;
             default:
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Error: either give 1 or all as input").build()).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Error: either give 1 or all as input")).queue();
                 break;
         }
     }

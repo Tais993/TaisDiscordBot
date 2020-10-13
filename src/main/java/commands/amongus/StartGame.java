@@ -5,18 +5,12 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.reactions.DatabaseReactions;
 import database.reactions.ReactionDB;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class StartGame implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
     DatabaseReactions databaseReactions = new DatabaseReactions();
-    Colors colors = new Colors();
 
     String time = "16:00";
     Role role;
@@ -24,7 +18,7 @@ public class StartGame implements ICommand {
     String command = "startgame";
     String commandAlias = "startgame";
     String category = "fun";
-    String exampleCommand = "`!startgame`";
+    String exampleCommand = "`!startgame <time>`";
     String shortCommandDescription = "Start a game of among us";
     String fullCommandDescription = "Start a game of among us, set amount of imposters, and more.\n" +
             "You can see how many people will join, and what their name is.";

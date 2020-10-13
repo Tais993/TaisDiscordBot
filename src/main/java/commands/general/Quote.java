@@ -1,6 +1,5 @@
 package commands.general;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.Colors;
@@ -13,7 +12,6 @@ import net.dv8tion.jda.api.requests.ErrorResponse;
 public class Quote implements ICommand {
     CommandReceivedEvent e;
     Colors colors = new Colors();
-    CommandEnum commandEnum = new CommandEnum();
 
     TextChannel textChannel;
     String[] args;
@@ -113,6 +111,7 @@ public class Quote implements ICommand {
         } else {
             eb.setTitle("Quote from: " + e.getAuthor().getName());
             eb.setThumbnail(e.getAuthor().getAvatarUrl());
+//            eb.setAuthor(e.getAuthor().getAsTag(), e.getAuthor().getAvatarUrl(), e.getAuthor().getAvatarUrl());
         }
 
         eb.setDescription(getMessageToQuote());

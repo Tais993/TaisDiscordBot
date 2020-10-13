@@ -20,16 +20,20 @@ public class Seek implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
+
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            return;
+        }
 
         AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
         if (!allowedToPlayMusic.allowedToPlayMusic(e, "seek")) {
             return;
         }
 
-        if (args[0].matches("\\d+")) {
+        if (e.getArgs()[0].matches("\\d+")) {
             PlayerManager manager = PlayerManager.getInstance();
-            manager.setSongPosition(e.getGuild(), Long.parseLong(args[0]));
+            manager.setSongPosition(e.getGuild(), Long.parseLong(e.getArgs()[0]));
         } else {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("seek").setDescription("Give a valid number").build()).queue();
         }

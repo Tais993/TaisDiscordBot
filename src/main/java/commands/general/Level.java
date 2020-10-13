@@ -69,7 +69,7 @@ public class Level implements ICommand {
         eb.setAuthor(userGiven.getAsTag());
         eb.appendDescription("Level: " + userDB.getLevel() + "\n");
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
-        eb.setFooter("Made by Tijs");
+        eb.setFooter("Made by Tijs ");
 
         eb.setTimestamp(Instant.now());
         eb.setColor(colors.getCurrentColor());

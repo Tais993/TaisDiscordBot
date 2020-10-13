@@ -1,6 +1,7 @@
 package commands;
 
 import commands.general.BotPrefix;
+import commands.general.YouTube;
 import database.guild.DatabaseGuild;
 import database.guild.GuildHandler;
 import database.user.UserHandler;
@@ -45,6 +46,11 @@ public class CommandHandler extends ListenerAdapter {
 
         userHandler.checkUser(event);
         guildHandler.checkGuild(event);
+
+        if (!e.isFromGuild) {
+            YouTube youTube = new YouTube();
+            youTube.command(e);
+        }
     }
 
     public boolean command() {

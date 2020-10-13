@@ -18,7 +18,7 @@ public class Queue implements ICommand {
     public void command(CommandReceivedEvent event) {
         PlayerManager manager = PlayerManager.getInstance();
 
-        EmbedBuilder eb = manager.getQueue(event.getGuild());
+        EmbedBuilder eb = manager.getQueue(event.getGuild(), getEmbed());
 
         event.getMessageChannel().sendMessage(eb.build()).queue();
     }

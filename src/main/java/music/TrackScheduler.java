@@ -94,9 +94,9 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-    public EmbedBuilder getQueue() {
+    public EmbedBuilder getQueue(EmbedBuilder embed) {
 
-        EmbedBuilder eb = getNowPlaying();
+        EmbedBuilder eb = getNowPlaying(embed);
         eb.appendDescription("\n");
 
 
@@ -121,7 +121,7 @@ public class TrackScheduler extends AudioEventAdapter {
         return eb;
     }
 
-    public EmbedBuilder getNowPlaying() {
+    public EmbedBuilder getNowPlaying(EmbedBuilder embed) {
         if (playerO.getPlayer().getPlayingTrack() != null) {
 
             if (isRadio) {
@@ -130,7 +130,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
             AudioTrack np = playerO.getPlayer().getPlayingTrack();
             Colors colors = new Colors();
-            EmbedBuilder eb = new EmbedBuilder();
+            EmbedBuilder eb = new EmbedBuilder(embed);
             eb.setColor(colors.getCurrentColor());
 
             eb.setTitle("Queue");

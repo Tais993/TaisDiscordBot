@@ -11,7 +11,6 @@ import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -174,9 +173,9 @@ public class PlayerManager {
         return INSTANCE;
     }
 
-    public EmbedBuilder getQueue(Guild g) {
+    public EmbedBuilder getQueue(Guild g, EmbedBuilder embed) {
         GuildMusicManager musicManager = getGuildMusicManager(g);
-        return musicManager.scheduler.getQueue();
+        return musicManager.scheduler.getQueue(embed);
     }
 
     public EmbedBuilder removeFromQueue(Guild g, int removeAudioTrackIndex) {
@@ -299,9 +298,9 @@ public class PlayerManager {
         musicManager.scheduler.clearQueueFromUser(userId);
     }
 
-    public EmbedBuilder getNowPlaying(Guild g) {
+    public EmbedBuilder getNowPlaying(Guild g, EmbedBuilder embed) {
         GuildMusicManager musicManager = getGuildMusicManager(g);
-        return musicManager.scheduler.getNowPlaying();
+        return musicManager.scheduler.getNowPlaying(embed);
     }
 
     public int getVolume(Guild g) {

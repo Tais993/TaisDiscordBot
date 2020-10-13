@@ -19,14 +19,14 @@ public class AllowedToPlayMusic {
             return false;
         }
 
+        audioManager = e.getGuild().getAudioManager();
+
         if (e.getAuthor().getId().equals("257500867568205824")) {
             if (e.getMember().getVoiceState().inVoiceChannel()) {
                 if (!audioManager.isConnected()) audioManager.openAudioConnection(e.getMember().getVoiceState().getChannel());
             }
             return true;
         }
-
-        audioManager = e.getGuild().getAudioManager();
 
         GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 

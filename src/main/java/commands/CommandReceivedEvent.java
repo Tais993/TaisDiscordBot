@@ -21,7 +21,7 @@ public class CommandReceivedEvent {
 
     String[] args;
     String messageAsString;
-    String messageWithoutCommand;
+    String messageWithoutCommand = "";
 
     public CommandReceivedEvent(MessageReceivedEvent e) {
         isFromGuild = e.isFromGuild();
@@ -43,13 +43,16 @@ public class CommandReceivedEvent {
         if (args.length >= 2) {
             hasArgs = true;
             args = Arrays.stream(args).skip(1).toArray(String[]::new);
+
             Arrays.stream(args).forEach((item -> {
+                if (!messageWithoutCommand.isEmpty()) {
+                    messageWithoutCommand += " ";
+                }
                 messageWithoutCommand += item;
-                messageWithoutCommand += " ";
             }));
         } else {
             hasArgs = false;
-            args[0] = "null";
+            args[0] = "";
             messageWithoutCommand = messageAsString;
         }
 

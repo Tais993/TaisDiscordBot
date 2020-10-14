@@ -32,13 +32,15 @@ public class Clear implements ICommand {
         Permissions permissions = new Permissions(e.getGuild());
 
         if (permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_CHANNEL)) {
-            int messagesToRemove = Integer.parseInt(args[1]);
+            int messagesToRemove = Integer.parseInt(args[0]);
 
             List<Message> messages = e.getMessageChannel().getHistory().retrievePast(messagesToRemove).complete();
 
             e.getTextChannel().deleteMessages(messages).queue();
 
             e.getMessageChannel().sendMessage("Message removed successfully!").queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
+        } else {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires permission MANAGE_CHANNEL")).queue();
         }
     }
 

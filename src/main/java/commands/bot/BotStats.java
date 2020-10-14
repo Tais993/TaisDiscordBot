@@ -3,7 +3,6 @@ package commands.bot;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
 import functions.entities.BotInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -27,8 +26,9 @@ public class BotStats implements ICommand {
 
         eb.setTitle("Botstats");
         eb.addField("Total joined guilds:",  botInfo.getJoinedGuilds() + "", false);
-        eb.addField("Total commands", commandEnum.getTotalCommands() + "", false);
-        eb.addField("Created by:", e.getJDA().retrieveUserById("257500867568205824").complete().getAsTag(), false);
+        eb.addField("Total commands", commandEnum.getTotalCommands() + "", true);
+        eb.addField("Created by:", e.getJDA().retrieveUserById("257500867568205824").complete().getAsTag(), true);
+        eb.addField("Github:", "[Click here to get it!](https://github.com/Tais993/taisdiscordbot)", true);
         eb.setThumbnail(botInfo.getAvatarUrl());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();

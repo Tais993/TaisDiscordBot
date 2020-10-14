@@ -1,16 +1,13 @@
 package commands.general;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.remindme.DatabaseRemindMe;
 import database.remindme.RemindMeDB;
 import database.remindme.UserRemindMeDB;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class RemindMe implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
     DatabaseRemindMe databaseRemindMe = new DatabaseRemindMe();
 
     int totalSeconds;

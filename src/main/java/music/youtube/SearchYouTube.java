@@ -9,7 +9,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.net.URL;
 
-public class Search {
+public class SearchYouTube {
 
     static String ytApiKey;
     JSONParser parser = new JSONParser();

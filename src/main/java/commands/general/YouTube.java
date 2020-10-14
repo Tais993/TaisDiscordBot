@@ -4,7 +4,7 @@ import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
-import music.youtube.Search;
+import music.youtube.SearchYouTube;
 
 public class YouTube implements ICommand {
     CommandReceivedEvent e;
@@ -13,7 +13,7 @@ public class YouTube implements ICommand {
 
     CommandEnum commandEnum = new CommandEnum();
     DatabaseGuild databaseGuild = new DatabaseGuild();
-    Search search = new Search();
+    SearchYouTube searchYouTube = new SearchYouTube();
 
     String command = "youtube";
     String commandAlias = "youtube";
@@ -28,7 +28,7 @@ public class YouTube implements ICommand {
 
         String input = e.getMessage().getContentRaw().replace(databaseGuild.getPrefixGuildInDB(e.getGuild().getId()) + command + " ", "");
 
-        String videoUrl = search.getVideoUrl(input);
+        String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("youtube").setDescription(videoUrl).build()).queue();

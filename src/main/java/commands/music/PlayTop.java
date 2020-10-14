@@ -6,8 +6,7 @@ import commands.ICommand;
 import database.guild.DatabaseGuild;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import music.youtube.Search;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -63,9 +62,9 @@ public class PlayTop implements ICommand {
     }
 
     private boolean searchByName(String input) {
-        Search search = new Search();
+        SearchYouTube searchYouTube = new SearchYouTube();
 
-        String videoUrl = search.getVideoUrl(input);
+        String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription(videoUrl).build()).queue();

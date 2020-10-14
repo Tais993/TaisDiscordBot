@@ -1,14 +1,14 @@
 import commands.CommandEnum;
 import commands.CommandHandler;
 import functions.entities.BotInfo;
-import music.youtube.Search;
+import music.spotify.SearchSpotify;
+import music.youtube.SearchYouTube;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import reactionshandler.OnReactionAdded;
 import reactionshandler.OnReactionRemove;
 
@@ -42,8 +42,11 @@ public class Main extends ListenerAdapter {
         jda.addEventListener(new OnReactionAdded());
         jda.addEventListener(new OnReactionRemove());
 
-        Search search = new Search();
-        search.setYtApiKey();
+        SearchYouTube searchYouTube = new SearchYouTube();
+        searchYouTube.setYtApiKey();
+
+        SearchSpotify searchSpotify = new SearchSpotify();
+        searchSpotify.setSpotifyApiKey();
 
 //        Timer timer = new Timer(); // creating timer
 //        TimerTask task = new RemindMeHandler(); // creating timer task

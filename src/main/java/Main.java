@@ -13,18 +13,15 @@ import reactionshandler.OnReactionAdded;
 import reactionshandler.OnReactionRemove;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         CommandEnum commandEnum = new CommandEnum();
         commandEnum.getListsReady();
 
-        InputStream is = new FileInputStream(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\Discord bot\\token\\tais.token");
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\Discord bot\\token\\tais.token")));
+
         String token = br.readLine();
         br.close();
 

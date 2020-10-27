@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 public class WhoIs implements ICommand {
     CommandReceivedEvent e;
@@ -70,7 +69,7 @@ public class WhoIs implements ICommand {
         eb.addField("Roles:", userInfo.getRoles(), true);
 
         eb.addBlankField(true);
-        eb.setThumbnail(member.getUser().getAvatarUrl());
+        eb.setThumbnail(member.getUser().getEffectiveAvatarUrl());
         eb.setColor(member.getColor());
         eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());

@@ -1,6 +1,5 @@
 package commands.fun;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

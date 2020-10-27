@@ -85,7 +85,8 @@ public class Quote implements ICommand {
     }
 
     public void createEmbed(Message message) {
-        EmbedBuilder eb = getEmbed();
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(colors.getCurrentColor());
 
         if (isSunTzu()) {
             eb.setTitle("Quote from: Sun Tzu");
@@ -111,7 +112,6 @@ public class Quote implements ICommand {
         } else {
             eb.setTitle("Quote from: " + e.getAuthor().getName());
             eb.setThumbnail(e.getAuthor().getAvatarUrl());
-//            eb.setAuthor(e.getAuthor().getAsTag(), e.getAuthor().getAvatarUrl(), e.getAuthor().getAvatarUrl());
         }
 
         eb.setDescription(getMessageToQuote());

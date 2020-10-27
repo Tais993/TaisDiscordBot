@@ -7,7 +7,6 @@ import database.user.UserDB;
 import functions.Colors;
 import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;

@@ -25,7 +25,7 @@ public class Radio538 implements ICommand {
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.loadAndPlay(e.getTextChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", false ,e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlayRadio(e.getTextChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", e.getAuthor().getId(), e.getAuthor().getAsTag(), "Radio538");
     }
 
     @Override

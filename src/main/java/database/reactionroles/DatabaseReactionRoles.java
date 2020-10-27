@@ -2,8 +2,6 @@ package database.reactionroles;
 
 import com.mongodb.*;
 
-import java.util.List;
-
 public class DatabaseReactionRoles {
     public static MongoClient mongoClient;
     public static DB database;

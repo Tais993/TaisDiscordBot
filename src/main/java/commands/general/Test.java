@@ -3,7 +3,6 @@ package commands.general;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.spotify.SearchSpotify;
-import net.dv8tion.jda.api.Permission;
 
 public class Test implements ICommand {
     CommandReceivedEvent e;

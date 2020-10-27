@@ -13,7 +13,9 @@ import reactionshandler.OnReactionAdded;
 import reactionshandler.OnReactionRemove;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 public class Main extends ListenerAdapter {
     public static void main(String[] args) throws Exception {

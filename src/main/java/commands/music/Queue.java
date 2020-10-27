@@ -4,7 +4,6 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Queue implements ICommand {
     String command = "queue";

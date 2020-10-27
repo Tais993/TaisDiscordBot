@@ -7,7 +7,6 @@ import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.GuildMusicManager;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Loop implements ICommand {
     CommandReceivedEvent e;

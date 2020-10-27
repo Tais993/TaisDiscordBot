@@ -1,11 +1,9 @@
 package commands;
 
 import commands.general.BotPrefix;
-import commands.general.YouTube;
 import database.guild.DatabaseGuild;
 import database.guild.GuildHandler;
 import database.user.UserHandler;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

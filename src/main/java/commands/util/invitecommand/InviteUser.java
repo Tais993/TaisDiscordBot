@@ -2,7 +2,6 @@ package commands.util.invitecommand;
 
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class InviteUser {
     CommandReceivedEvent e;

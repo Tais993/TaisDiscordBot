@@ -10,12 +10,9 @@ import commands.util.*;
 import commands.util.ban.TempBan;
 import commands.util.invitecommand.InviteMain;
 import functions.Colors;
-import functions.Time;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.awt.*;
 import java.time.Instant;
 import java.util.ArrayList;
 

@@ -22,7 +22,7 @@ public class DatabaseJokes {
     public JokeDB getJokeAsJokeDB(String jokeId) {
         DBObject query = new BasicDBObject("jokeId", jokeId);
         DBCursor cursor = jokes.find(query);
-//        return dbObjectToJokeDB(cursor.one());
+        return dbObjectToJokeDB(cursor.one());
     }
 
     public boolean jokeExists(String jokeId) {
@@ -35,16 +35,16 @@ public class DatabaseJokes {
         return new BasicDBObject("jokeId", jokeDB.getJokeId()).append("setup", jokeDB.getSetup()).append("punchline", jokeDB.getPunchline());
     }
 
-//    public JokeDB dbObjectToJokeDB(DBObject dbObject) {
-//        String guildID = dbObject.get("guildID").toString();
-//        String prefix = dbObject.get("prefix").toString();
-//
-////        JokeDB guildDB = new JokeDB(guildID);
-//        guildDB.setPrefix(prefix);
-//        return guildDB;
-//    }
+    public JokeDB dbObjectToJokeDB(DBObject dbObject) {
+        String setup = dbObject.get("setup").toString();
+        String punchline = dbObject.get("punchline").toString();
+        String jokeId = dbObject.get("jokeId").toString();
 
-    public void addGuild(JokeDB jokeDB) {
+        JokeDB jokeDB = new JokeDB(setup, punchline);
+        return jokeDB;
+    }
+
+    public void addJoke(JokeDB jokeDB) {
         jokes.insert(jokeDBToDBObject(jokeDB));
     }
 }

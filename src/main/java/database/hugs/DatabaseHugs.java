@@ -1,8 +1,6 @@
 package database.hugs;
 
 import com.mongodb.*;
-import database.guild.GuildDB;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class DatabaseHugs {
     public static MongoClient mongoClient;

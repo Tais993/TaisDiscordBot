@@ -4,7 +4,6 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Previous implements ICommand {
     String command = "previous";

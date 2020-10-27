@@ -1,6 +1,5 @@
 package commands.amongus;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.reactions.DatabaseReactions;

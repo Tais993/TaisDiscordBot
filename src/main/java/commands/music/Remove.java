@@ -5,7 +5,6 @@ import commands.ICommand;
 import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class Remove implements ICommand {
     CommandReceivedEvent e;

@@ -11,6 +11,16 @@ public class JokeDB {
         this.punchline = punchline;
     }
 
+    public JokeDB(int jokeId, String setup, String punchline) {
+        this.jokeId = jokeId;
+        this.setup = setup;
+        this.punchline = punchline;
+    }
+
+    public void setJokeId(int jokeId) {
+        this.jokeId = jokeId;
+    }
+
     public void setPunchline(String punchline) {
         this.punchline = punchline;
     }

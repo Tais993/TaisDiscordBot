@@ -1,28 +1,33 @@
 package database.jokes;
 
 public class JokeDB {
-    String guildID;
-    String prefix = "!";
+    int jokeId;
+    String setup;
+    String punchline;
 
 
-    public JokeDB(String guildID) {
-        this.guildID = guildID;
+    public JokeDB(String setup, String punchline) {
+        this.setup = setup;
+        this.punchline = punchline;
     }
 
-    public JokeDB(String guildID, String prefix) {
-        this.guildID = guildID;
-        this.prefix = prefix;
+    public void setPunchline(String punchline) {
+        this.punchline = punchline;
     }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
+    public void setSetup(String setup) {
+        this.setup = setup;
     }
 
-    public String getPrefix() {
-        return prefix;
+    public int getJokeId() {
+        return jokeId;
     }
 
-    public String getGuildID() {
-        return guildID;
+    public String getPunchline() {
+        return punchline;
+    }
+
+    public String getSetup() {
+        return setup;
     }
 }

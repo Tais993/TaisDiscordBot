@@ -21,7 +21,13 @@ public class Joke implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        JokeDB jokeDB = databaseJokes.getRandomJokeFromDatabase();
+        if (!databaseJokes.containsIdList()) {
+            databaseJokes.createIdList();
+        } else {
+            databaseJokes.getIdList();
+        }
+
+        JokeDB jokeDB = databaseJokes.getRandomJoke();
 
         EmbedBuilder eb = getEmbed();
 

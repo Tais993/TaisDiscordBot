@@ -3,10 +3,11 @@ package database.jokes;
 import com.mongodb.*;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class DatabaseJokes {
+    Random r = new Random();
+
     public static MongoClient mongoClient;
     public static DB database;
     public static DBCollection jokes;
@@ -17,13 +18,13 @@ public class DatabaseJokes {
         jokes = database.getCollection("jokes");
     }
 
-    public DBObject getJoke(String jokeId) {
+    public DBObject getJoke(int jokeId) {
         DBObject query = new BasicDBObject("jokeId", jokeId);
         DBCursor cursor = jokes.find(query);
         return cursor.one();
     }
 
-    public JokeDB getJokeAsJokeDB(String jokeId) {
+    public JokeDB getJokeAsJokeDB(int jokeId) {
         DBObject query = new BasicDBObject("jokeId", jokeId);
         DBCursor cursor = jokes.find(query);
         return dbObjectToJokeDB(cursor.one());
@@ -32,8 +33,7 @@ public class DatabaseJokes {
     public JokeDB getRandomJokeFromDatabase() {
         DBObject query = new BasicDBObject();
         DBCursor cursor = jokes.find(query);
-        Random r = new Random();
-        cursor.skip(r.nextInt((int) jokes.getCount()));
+        cursor.skip(1);
         return dbObjectToJokeDB(cursor.one());
     }
 
@@ -62,36 +62,55 @@ public class DatabaseJokes {
         ArrayList<Integer> ids = new ArrayList<>();
         ids.add(0);
 
+        dbObject.put("isList", true);
         dbObject.put("ids", ids);
+
+        jokes.insert(dbObject);
     }
 
-    public void getIdList() {
-        DBObject query = new BasicDBObject("ids", -1);
+    public ArrayList<Integer> getIdList() {
+        DBObject query = new BasicDBObject("isList", true);
         DBCursor cursor = jokes.find(query);
 
-        BasicDBList basicDBList =(BasicDBList)cursor.one().get("ids");
-
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-
-        basicDBList.forEach((id -> {
-            System.out.println(id.toString());
-        }));
+        return (ArrayList<Integer>) cursor.one().get("ids");
     }
 
-    public boolean isIdList() {
-        ArrayList<Integer> ids = new ArrayList<>();
-        ids.add(0);
-        DBObject query = new BasicDBObject("ids", ids);
+    public JokeDB getRandomJoke() {
+        ArrayList<Integer> list = getIdList();
+        int id = list.get(r.nextInt(list.size()));
+        return getJokeAsJokeDB(id);
+    }
+
+    public int getAndAddId() {
+        DBObject query = new BasicDBObject("isList", true);
+        DBCursor cursor = jokes.find(query);
+        DBObject dbObject = cursor.one();
+
+        ArrayList<Integer> list = (ArrayList<Integer>) dbObject.get("ids");
+
+        int id = r.nextInt(1000);
+
+        while (list.contains(id)) {
+            id = r.nextInt(1000);
+        }
+
+        list.add(id);
+
+        dbObject.put("ids", list);
+
+        jokes.update(query, dbObject);
+
+        return id;
+    }
+
+    public boolean containsIdList() {
+        DBObject query = new BasicDBObject("isList", true);
         DBCursor cursor = jokes.find(query);
         return cursor.one() != null;
     }
 
-    public boolean isValidId() {
-
-        return true;
-    }
-
     public void addJoke(JokeDB jokeDB) {
+        jokeDB.setJokeId(getAndAddId());
         jokes.insert(jokeDBToDBObject(jokeDB));
     }
 }

@@ -20,6 +20,11 @@ public class AddJoke implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage(getFullHelp("YOU DARE TO PING EVERYONE? WELL NOT IN MY SIGHT!")).queue();
+            return;
+        }
+
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires 2 arguments")).queue();
             return;

@@ -19,17 +19,23 @@ public class CommandReceivedEvent {
     boolean isFromGuild;
     boolean hasArgs;
     boolean isBotModerator;
+    boolean mentionsEveryone;
 
     String[] args;
     String messageAsString;
     String messageWithoutCommand = "";
 
-    public CommandReceivedEvent(MessageReceivedEvent e) {
+    String prefix;
+
+    String command;
+
+    public CommandReceivedEvent(MessageReceivedEvent e, String prefix) {
 
         isFromGuild = e.isFromGuild();
         messageChannel = e.getChannel();
         user = e.getAuthor();
 
+        this.prefix = prefix;
         message = e.getMessage();
 
         messageAsString = e.getMessage().getContentRaw();
@@ -58,10 +64,13 @@ public class CommandReceivedEvent {
             messageWithoutCommand = messageAsString;
         }
 
+        mentionsEveryone = message.mentionsEveryone();
+
+        command = messageAsString.replace(prefix, "").split(" ")[0];
+
         isBotModerator = e.getAuthor().getId().equalsIgnoreCase("257500867568205824");
 
         JDA = e.getJDA();
-        e.getChannel();
     }
 
     public TextChannel getTextChannel() {
@@ -114,5 +123,17 @@ public class CommandReceivedEvent {
 
     public boolean isBotModerator() {
         return isBotModerator;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public boolean mentionsEveryone() {
+        return mentionsEveryone;
     }
 }

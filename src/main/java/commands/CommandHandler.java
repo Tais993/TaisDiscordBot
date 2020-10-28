@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class CommandHandler extends ListenerAdapter {
     CommandReceivedEvent e;
 
-    String guildPrefix;
+    String prefix;
     String messageSent;
 
     CommandEnum commandEnum = new CommandEnum();
@@ -22,26 +22,23 @@ public class CommandHandler extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        e = new CommandReceivedEvent(event);
+        if (event.getAuthor().isBot()) return;
 
-        if (e.getAuthor().isBot()) return;
-
-        if (e.isFromGuild) {
-            guildPrefix = databaseGuild.getPrefixGuildInDB(event.getGuild().getId());
+        if (event.isFromGuild()) {
+            prefix = databaseGuild.getPrefixGuildInDB(event.getGuild().getId());
         } else {
-            guildPrefix = "!";
+            prefix = "!";
         }
 
-        messageSent = event.getMessage().getContentRaw();
+        if (event.getMessage().getContentRaw().startsWith(prefix)) {
+            e = new CommandReceivedEvent(event, prefix);
 
-        if (messageSent.startsWith(guildPrefix)) {
             if (command()) return;
         }
 
         SelfUser botUser = e.getJDA().getSelfUser();
 
         if (e.getMessage().getMentionedUsers().contains(botUser)) botPrefix.command(e);
-
 
         if (e.isFromGuild) {
             userHandler.checkUser(event);
@@ -50,11 +47,7 @@ public class CommandHandler extends ListenerAdapter {
     }
 
     public boolean command() {
-        if (e.getAuthor().isBot()) return false;
-
-        String[] messageSentSplit = messageSent.replace(guildPrefix, "").split(" ");
-
-        return commandEnum.checkCommand(e, messageSentSplit);
+        return commandEnum.checkCommand(e);
     }
 }
 

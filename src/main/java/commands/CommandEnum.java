@@ -90,12 +90,12 @@ public class CommandEnum {
 
     static ArrayList categories = new ArrayList();
 
-    public boolean checkCommand(CommandReceivedEvent event, String[] messageSentSplit) {
+    public boolean checkCommand(CommandReceivedEvent e) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (messageSentSplit[0].equalsIgnoreCase(c.getCommand()) || messageSentSplit[0].equalsIgnoreCase(c.getCommandAlias())) {
-                c.command(event);
+            if (e.getCommand().equalsIgnoreCase(c.getCommand()) || e.getCommand().equalsIgnoreCase(c.getCommandAlias())) {
+                c.command(e);
                 return true;
             }
         }

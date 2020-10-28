@@ -24,6 +24,11 @@ public class DatabaseJokes {
         return cursor.one();
     }
 
+    public void removeJokeById(int jokeId) {
+        DBObject query = new BasicDBObject("jokeId", jokeId);
+        jokes.remove(query);
+    }
+
     public JokeDB getJokeAsJokeDB(int jokeId) {
         DBObject query = new BasicDBObject("jokeId", jokeId);
         DBCursor cursor = jokes.find(query);
@@ -50,10 +55,9 @@ public class DatabaseJokes {
     public JokeDB dbObjectToJokeDB(DBObject dbObject) {
         String setup = dbObject.get("setup").toString();
         String punchline = dbObject.get("punchline").toString();
-        String jokeId = dbObject.get("jokeId").toString();
+        int jokeId = Integer.parseInt(dbObject.get("jokeId").toString());
 
-        JokeDB jokeDB = new JokeDB(setup, punchline);
-        return jokeDB;
+        return new JokeDB(jokeId, setup, punchline);
     }
 
     public void createIdList() {
@@ -77,7 +81,9 @@ public class DatabaseJokes {
 
     public JokeDB getRandomJoke() {
         ArrayList<Integer> list = getIdList();
-        int id = list.get(r.nextInt(list.size()));
+        int itemToGet = r.nextInt(list.size());
+
+        int id = list.get(itemToGet);
         return getJokeAsJokeDB(id);
     }
 

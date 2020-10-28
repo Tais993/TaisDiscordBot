@@ -18,12 +18,14 @@ public class CommandReceivedEvent {
 
     boolean isFromGuild;
     boolean hasArgs;
+    boolean isBotModerator;
 
     String[] args;
     String messageAsString;
     String messageWithoutCommand = "";
 
     public CommandReceivedEvent(MessageReceivedEvent e) {
+
         isFromGuild = e.isFromGuild();
         messageChannel = e.getChannel();
         user = e.getAuthor();
@@ -55,6 +57,8 @@ public class CommandReceivedEvent {
             args[0] = "";
             messageWithoutCommand = messageAsString;
         }
+
+        isBotModerator = e.getAuthor().getId().equalsIgnoreCase("257500867568205824");
 
         JDA = e.getJDA();
         e.getChannel();
@@ -106,5 +110,9 @@ public class CommandReceivedEvent {
 
     public String getMessageWithoutCommand() {
         return messageWithoutCommand;
+    }
+
+    public boolean isBotModerator() {
+        return isBotModerator;
     }
 }

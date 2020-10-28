@@ -13,8 +13,11 @@ public class Shutdown implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-
-        System.exit(1);
+        if (event.isBotModerator()) {
+            System.exit(1);
+        } else {
+            event.getMessageChannel().sendMessage(getFullHelp("Imagine not being owner, kinda cringe ngl.")).queue();
+        }
     }
 
     @Override

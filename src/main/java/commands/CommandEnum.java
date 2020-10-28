@@ -1,7 +1,9 @@
 package commands;
 
 import commands.amongus.StartGame;
+import commands.bot.AddJoke;
 import commands.bot.BotStats;
+import commands.bot.RemoveJoke;
 import commands.bot.Shutdown;
 import commands.fun.*;
 import commands.general.*;
@@ -69,7 +71,8 @@ public class CommandEnum {
         YOUTUBE(new YouTube()),
         TEST(new Test()),
         JOKE(new Joke()),
-        ADDJOKE(new AddJoke());
+        ADDJOKE(new AddJoke()),
+        REMOVEJOKE(new RemoveJoke());
         ICommand c;
 
         AllMyCommands(ICommand c) {

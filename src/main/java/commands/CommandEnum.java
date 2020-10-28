@@ -68,7 +68,8 @@ public class CommandEnum {
         RADIO538(new Radio538()),
         YOUTUBE(new YouTube()),
         TEST(new Test()),
-        JOKE(new Joke());
+        JOKE(new Joke()),
+        ADDJOKE(new AddJoke());
         ICommand c;
 
         AllMyCommands(ICommand c) {

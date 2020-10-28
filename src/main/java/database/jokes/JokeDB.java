@@ -1,7 +1,7 @@
 package database.jokes;
 
 public class JokeDB {
-    int jokeId;
+    int jokeId = 0;
     String setup;
     String punchline;
 

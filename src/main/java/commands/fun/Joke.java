@@ -2,9 +2,13 @@ package commands.fun;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
+import database.jokes.DatabaseJokes;
+import database.jokes.JokeDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 public class Joke implements ICommand {
+    DatabaseJokes databaseJokes = new DatabaseJokes();
+
     CommandReceivedEvent e;
     String command = "joke";
     String commandAlias = "joke";
@@ -17,13 +21,13 @@ public class Joke implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        JokeDB jokeDB = databaseJokes.getRandomJokeFromDatabase();
+
         EmbedBuilder eb = getEmbed();
 
-        eb.setDescription("Knock Knock.\n" +
-                "Who's there?\n" +
-                "Opportunity.\n" +
-                "\n\n" +
-                "That is impossible. Opportunity doesn’t come knocking twice!");
+        eb.setDescription(jokeDB.getSetup() + "\n");
+        eb.appendDescription("*" + jokeDB.getPunchline() + "*");
+        eb.setFooter("Joke Id: " + jokeDB.getJokeId());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

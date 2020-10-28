@@ -9,12 +9,12 @@ public class AddJoke implements ICommand {
     DatabaseJokes databaseJokes = new DatabaseJokes();
 
     CommandReceivedEvent e;
-    String command = "joke";
-    String commandAlias = "joke";
+    String command = "addjoke";
+    String commandAlias = "addjoke";
     String category = "fun";
-    String exampleCommand = "`!joke`";
-    String shortCommandDescription = "Get a funny joke";
-    String fullCommandDescription = "Get a funny joke that actually, isn't funny at all.";
+    String exampleCommand = "`!addjoke`";
+    String shortCommandDescription = "Add a funny joke";
+    String fullCommandDescription = "Add a funny joke that actually, isn't funny at all.";
 
     @Override
     public void command(CommandReceivedEvent event) {
@@ -22,6 +22,8 @@ public class AddJoke implements ICommand {
 
         String fullMessage = event.getMessageWithoutCommand();
         String[] args = fullMessage.split(";");
+
+        if (args[1].charAt(0) == ' ') args[1] = args[1].replaceFirst(" ", "");
 
         String setup = args[0];
         String punchline = args[1];

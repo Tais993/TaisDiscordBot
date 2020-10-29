@@ -1,12 +1,12 @@
 package commands;
 
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.time.Instant;
 
 import static commands.CommandEnum.bot;
+import static functions.Colors.getCurrentColor;
 
 public interface ICommand {
     CommandReceivedEvent e = null;
@@ -22,9 +22,8 @@ public interface ICommand {
 
     default EmbedBuilder getEmbed() {
         EmbedBuilder eb = new EmbedBuilder();
-        Colors colors = new Colors();
 
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
         eb.setAuthor("Tais", "https://github.com/Tais993/TaisDiscordBot", bot.getAvatarUrl());
         eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());

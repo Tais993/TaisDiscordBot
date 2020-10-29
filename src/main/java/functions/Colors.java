@@ -3,10 +3,10 @@ package functions;
 import java.awt.*;
 
 public class Colors {
-    Color purple = new Color(148, 0, 211);
-    Color orange = new Color(219, 65, 5);
+    private static final Color purple = new Color(148, 0, 211);
+    private static final Color orange = new Color(219, 65, 5);
 
-    public Color getCurrentColor() {
+    public static Color getCurrentColor() {
         return orange;
     }
 }

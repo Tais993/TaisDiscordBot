@@ -2,21 +2,18 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import database.user.DatabaseUser;
 import database.user.UserDB;
-import functions.Colors;
 import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 
+import static functions.Colors.getCurrentColor;
+
 public class Level implements ICommand {
     CommandReceivedEvent e;
     User userGiven;
-
-    DatabaseUser databaseUser = new DatabaseUser();
-    Colors colors = new Colors();
 
     String command = "level";
     String commandAlias = "rank";
@@ -35,7 +32,7 @@ public class Level implements ICommand {
             levelCommandGuild();
         }
 
-        createEmbed(databaseUser.getUserFromDBToUserDB(userGiven.getId()));
+        createEmbed(e.getUserDB());
     }
 
     public void levelCommandGuild() {
@@ -71,7 +68,7 @@ public class Level implements ICommand {
         eb.setFooter("Made by Tijs ");
 
         eb.setTimestamp(Instant.now());
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

@@ -16,7 +16,7 @@ public class Shutdown implements ICommand {
         if (event.isBotModerator()) {
             System.exit(1);
         } else {
-            event.getMessageChannel().sendMessage(getFullHelp("Imagine not being owner, kinda cringe ngl.")).queue();
+            event.getMessageChannel().sendMessage(getFullHelp("Imagine not being bot moderator, kinda cringe ngl.")).queue();
         }
     }
 

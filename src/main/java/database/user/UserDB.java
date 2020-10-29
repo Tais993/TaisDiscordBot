@@ -8,6 +8,8 @@ public class UserDB {
     int xp = 0;
     int xpForLevelUp = 100;
 
+    boolean isBotModerator = false;
+
 
     public UserDB(String userID) {
         this.userID = userID;
@@ -46,7 +48,6 @@ public class UserDB {
         return xpForLevelUp;
     }
 
-
     public void calculateXpForLevelUp() {
         xpForLevelUp = level * 100;
     }
@@ -58,5 +59,13 @@ public class UserDB {
             return true;
         }
         return false;
+    }
+
+    public boolean isBotModerator() {
+        return isBotModerator;
+    }
+
+    public void setBotModerator(boolean botModerator) {
+        isBotModerator = botModerator;
     }
 }

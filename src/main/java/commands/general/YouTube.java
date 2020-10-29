@@ -31,14 +31,19 @@ public class YouTube implements ICommand {
             return;
         }
 
-        String input = e.getMessage().getContentRaw().replace(databaseGuild.getPrefixGuildInDB(e.getGuild().getId()) + command + " ", "");
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires something to search, I can't search nothing.")).queue();
+            return;
+        }
+
+        String input = e.getMessageWithoutCommand();
 
         String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage(getFullHelp(videoUrl)).queue();
+            return;
         }
-
 
         url = videoUrl;
 

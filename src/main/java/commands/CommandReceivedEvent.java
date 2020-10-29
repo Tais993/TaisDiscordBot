@@ -1,5 +1,7 @@
 package commands;
 
+import database.user.DatabaseUser;
+import database.user.UserDB;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -26,8 +28,9 @@ public class CommandReceivedEvent {
     String messageWithoutCommand = "";
 
     String prefix;
-
     String command;
+
+    UserDB userDB;
 
     public CommandReceivedEvent(MessageReceivedEvent e, String prefix) {
 
@@ -68,9 +71,11 @@ public class CommandReceivedEvent {
 
         command = messageAsString.replace(prefix, "").split(" ")[0];
 
-        isBotModerator = e.getAuthor().getId().equalsIgnoreCase("257500867568205824");
-
         JDA = e.getJDA();
+
+        DatabaseUser databaseUser = new DatabaseUser();
+        userDB = databaseUser.getUserFromDBToUserDB(e.getAuthor().getId());
+        isBotModerator = userDB.isBotModerator();
     }
 
     public TextChannel getTextChannel() {
@@ -123,6 +128,10 @@ public class CommandReceivedEvent {
 
     public boolean isBotModerator() {
         return isBotModerator;
+    }
+
+    public UserDB getUserDB() {
+        return userDB;
     }
 
     public String getPrefix() {

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.time.Instant;
 
 import static commands.CommandEnum.bot;
+import static functions.Colors.getCurrentColor;
 
 public class DatabaseUser {
     public static MongoClient mongoClient;
@@ -38,7 +39,10 @@ public class DatabaseUser {
         DBObject query = new BasicDBObject("userID", userID);
         DBCursor cursor = user.find(query);
         if (cursor.one() == null){
-            return createStanderdUserDB(userID);
+            UserDB userDB = new UserDB(userID);
+            user.insert(userToDBObject(userDB));
+
+            return new UserDB(userID);
         }
         return dbObjectToUser(cursor.one());
     }
@@ -50,7 +54,7 @@ public class DatabaseUser {
     }
 
     public DBObject userToDBObject(UserDB userDB) {
-        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp());
+        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("isBotModerator", userDB.isBotModerator());
     }
 
     public UserDB dbObjectToUser(DBObject dbObject) {
@@ -62,6 +66,8 @@ public class DatabaseUser {
         userDB.setLevel(level);
         userDB.setXp(xp);
         userDB.calculateXpForLevelUp();
+        userDB.setBotModerator(Boolean.parseBoolean(dbObject.get("isBotModerator").toString()));
+
         return userDB;
     }
 
@@ -69,11 +75,19 @@ public class DatabaseUser {
         user.insert(userToDBObject(userDB));
     }
 
-    public void addRandomXPToUserInDB(String userID) {
+    public String addRandomXPToUserInDB(String userID) {
+        String returnValue;
+
         UserDB userDB = getUserFromDBToUserDB(userID);
         userDB.addRandomXp();
+
         DBObject query = new BasicDBObject("userID", userID);
+
+        returnValue = userDB.calculateLevel() ? userDB.getLevel() + "" : "";
+
         user.findAndModify(query, userToDBObject(userDB));
+
+        return returnValue;
     }
 
     public boolean checkLevelUserInDB(String userID) {
@@ -88,20 +102,10 @@ public class DatabaseUser {
         return false;
     }
 
-    public int getLevelUserInDB(String userID) {
-        UserDB userDB = getUserFromDBToUserDB(userID);
-        return userDB.getLevel();
-    }
-
-    public UserDB createStanderdUserDB(String userID) {
-        return new UserDB(userID);
-    }
-
     public EmbedBuilder topTenLeaderboard(CommandReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder();
-        Colors colors = new Colors();
 
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
         eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
         eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());
@@ -113,22 +117,5 @@ public class DatabaseUser {
         });
 
         return eb;
-    }
-
-    public String addXpToUser(String userId) {
-        UserDB userDB = new UserDB(userId);
-        userDB.addRandomXp();
-
-        if (!userExistsInDB(userId)) {
-            user.insert(userToDBObject(userDB));
-        }
-
-        userDB = getUserFromDBToUserDB(userId);
-        userDB.addRandomXp();
-        if (userDB.calculateLevel()) {
-            addUserToDB(userDB);
-            return userDB.getLevel() + "";
-        }
-        return "";
     }
 }

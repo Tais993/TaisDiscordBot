@@ -9,21 +9,21 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 public class AllowedToPlayMusic {
-    CommandEnum commandEnum = new CommandEnum();
-    AudioManager audioManager;
+    public static boolean allowedToPlayMusic (CommandReceivedEvent e, String commandName) {
 
-    public boolean allowedToPlayMusic (CommandReceivedEvent e, String commandName) {
+        CommandEnum commandEnum = new CommandEnum();
+        AudioManager audioManager;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("You can only run this comand in a Discord server/guild!").queue();
+            e.getMessageChannel().sendMessage("You can only run this command in a Discord server/guild!").queue();
             return false;
         }
 
         audioManager = e.getGuild().getAudioManager();
 
-        if (e.getAuthor().getId().equals("257500867568205824")) {
+        if (e.isBotModerator()) {
             if (e.getMember().getVoiceState().inVoiceChannel()) {
-                if (!audioManager.isConnected()) audioManager.openAudioConnection(e.getMember().getVoiceState().getChannel());
+                if (audioManager.isConnected()) audioManager.openAudioConnection(e.getMember().getVoiceState().getChannel());
             }
             return true;
         }
@@ -38,13 +38,9 @@ public class AllowedToPlayMusic {
         VoiceChannel voiceChannel = memberVoiceState.getChannel();
         Member selfMember = e.getGuild().getSelfMember();
 
-        if (audioManager.isConnected()) {
-            if (!audioManager.getConnectedChannel().equals(voiceChannel)) {
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Join the same channel as the bot.").build()).queue();
-                return false;
-            }
-        } else {
-            audioManager.openAudioConnection(memberVoiceState.getChannel());
+        if (audioManager.isConnected() && !audioManager.getConnectedChannel().equals(voiceChannel)) {
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName).setDescription("Error: Join the same channel as the bot.").build()).queue();
+            return false;
         }
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {

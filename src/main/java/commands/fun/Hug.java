@@ -33,12 +33,17 @@ public class Hug implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Run this command in a Discord guild/server").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Run this command in a Discord guild/server")).queue();
+            return;
+        }
+
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<")).queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Requires a argument").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires a argument")).queue();
             return;
         }
 
@@ -49,11 +54,11 @@ public class Hug implements ICommand {
             if (member != null) {
                 userToHugMentioned = member.getAsMention();
             } else {
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Error: give a valid userId").build()).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid userId")).queue();
                 return;
             }
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("hug").setDescription("Error: either mention a user or give a user ID").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: either mention a user or give a user ID")).queue();
             return;
         }
 

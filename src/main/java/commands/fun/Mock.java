@@ -23,6 +23,11 @@ public class Mock implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention people! Not nice >.<")).queue();
+            return;
+        }
+
         if (e.hasArgs()) {
             String toMock = e.getMessageWithoutCommand();
             StringBuilder output = new StringBuilder();

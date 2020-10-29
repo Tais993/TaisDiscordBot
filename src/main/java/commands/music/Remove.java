@@ -2,9 +2,10 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Remove implements ICommand {
     CommandReceivedEvent e;
@@ -21,10 +22,7 @@ public class Remove implements ICommand {
         e = event;
         String[] args = e.getArgs();
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "remove")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "remove")) return;
 
         PlayerManager manager = PlayerManager.getInstance();
 

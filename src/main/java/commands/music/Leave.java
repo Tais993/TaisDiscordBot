@@ -23,7 +23,7 @@ public class Leave implements ICommand {
 
         AudioManager audioManager = e.getGuild().getAudioManager();
 
-        if (e.getAuthor().getId().equals("257500867568205824")) {
+        if (e.isBotModerator()) {
             audioManager.closeAudioConnection();
         }
 

@@ -4,9 +4,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.GuildMusicManager;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Loop implements ICommand {
     CommandReceivedEvent e;
@@ -25,10 +26,7 @@ public class Loop implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "loop")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "loop")) return;
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Requires at least 1 argument").build()).queue();

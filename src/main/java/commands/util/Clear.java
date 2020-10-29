@@ -22,17 +22,21 @@ public class Clear implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            return;
+        }
+
         Permissions permissions = new Permissions(e.getGuild());
 
         if (permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_CHANNEL)) {
-            int messagesToRemove = Integer.parseInt(args[0]);
+            int messagesToRemove = Integer.parseInt(e.getArgs()[0]);
 
             List<Message> messages = e.getMessageChannel().getHistory().retrievePast(messagesToRemove).complete();
 

@@ -2,10 +2,16 @@ package commands.util;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
+import functions.Colors;
 import functions.entities.GuildInfo;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+
+import java.util.List;
 
 public class ServerStats implements ICommand {
     CommandReceivedEvent e;
+    Colors colors = new Colors();
 
     String command = "serverinfo";
     String commandAlias = "serverstats";
@@ -25,27 +31,21 @@ public class ServerStats implements ICommand {
 
         GuildInfo guildInfo = new GuildInfo(e.getGuild());
 
-        e.getMessageChannel().sendMessage("Working on.. Discord I hate you").queue();
+        EmbedBuilder eb = new EmbedBuilder();
 
-//        EmbedBuilder eb = new EmbedBuilder();
-//
-//        List<Member> members = e.getGuild().loadMembers().get();
-//
-//        eb.setTitle("Server stats of: " + e.getGuild().getName());
-//        eb.addField("Total members:", members.size() + "", false);
+        eb.setTitle("Server stats of: " + e.getGuild().getName());
+        eb.addField("Total members:", e.getGuild().getMemberCount() + "", true);
 //        eb.addField("Total online/DND members:", guildInfo.getOnlineMemberCount() + "", false);
-//        eb.addField("Total non animated emojis:", guildInfo.getTotalNonAnimatedEmojis() + "", true);
-//        eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
-//        eb.addBlankField(true);
-//        eb.addField("Server has been created on:", guildInfo.getDateCreated(), true);
-//        eb.addField("Server owner:", guildInfo.getOwnerName(), true);
-//        eb.addBlankField(true);
-//        eb.setThumbnail(e.getGuild().getIconUrl());
-//        eb.setFooter("Made by Tijs");
-//
-//        eb.setColor(colors.getCurrentColor());
-//
-//        e.getChannel().sendMessage(eb.build()).queue();
+        eb.addField("Total non animated emojis:", guildInfo.getTotalNonAnimatedEmojis() + "", true);
+        eb.addBlankField(true);
+        eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
+        eb.addField("Server owner:", guildInfo.getOwnerName(), true);
+        eb.setThumbnail(e.getGuild().getIconUrl());
+        eb.setFooter("Made by Tijs");
+
+        eb.setColor(colors.getCurrentColor());
+
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

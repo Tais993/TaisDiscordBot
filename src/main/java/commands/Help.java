@@ -28,6 +28,8 @@ public class Help implements ICommand{
                         e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0]).build()).queue();
                     }
             }
+        } else {
+            commandEnum.getHelpAllByCategory(e);
         }
     }
 

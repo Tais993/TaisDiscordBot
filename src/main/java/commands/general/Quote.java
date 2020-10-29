@@ -31,8 +31,13 @@ public class Quote implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<")).queue();
+            return;
+        }
+
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Requires 2 or more arguments").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires 2 or more arguments")).queue();
             return;
         }
 
@@ -49,16 +54,16 @@ public class Quote implements ICommand {
         if (args.length >= 2) {
             switch (args[0]) {
                 case "message":
-                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Quoting a message only works in a guild.").build()).queue();
+                    e.getMessageChannel().sendMessage(getFullHelp("Quoting a message only works in a guild.")).queue();
                     break;
                 case "text":
                     createPersonalEmbed();
                     break;
                 default:
-                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: second input should  either be `text` or `message`.").build()).queue();
+                    e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.")).queue();
             }
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: requires at least 3 arguments.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 3 arguments.")).queue();
         }
     }
 
@@ -77,10 +82,10 @@ public class Quote implements ICommand {
                     createPersonalEmbed();
                     break;
                 default:
-                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: second input should  either be `text` or `message`.").build()).queue();
+                    e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.")).queue();
             }
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("quote").setDescription("Error: requires at least 3 arguments.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 3 arguments.")).queue();
         }
     }
 

@@ -2,8 +2,9 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Previous implements ICommand {
     String command = "previous";
@@ -15,10 +16,8 @@ public class Previous implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(event, "previous")) {
-            return;
-        }
+
+        if (!allowedToPlayMusic(event, "previous")) return;
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.playPreviousTrack(event.getGuild());

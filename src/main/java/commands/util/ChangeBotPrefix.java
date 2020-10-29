@@ -1,13 +1,11 @@
 package commands.util;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 
 public class ChangeBotPrefix implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
     DatabaseGuild databaseGuild = new DatabaseGuild();
 
     String command = "setbotprefix";
@@ -20,7 +18,7 @@ public class ChangeBotPrefix implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
+
         String prefix;
 
         if (!e.isFromGuild()) {
@@ -30,17 +28,18 @@ public class ChangeBotPrefix implements ICommand {
 
         String guildID = e.getGuild().getId();
 
-        String currentPrefix = databaseGuild.getPrefixGuildInDB(e.getGuild().getId());
+        String currentPrefix = databaseGuild.getPrefixGuildInDB(guildID);
 
-        if (args.length > 1) {
-            String toReplace = currentPrefix + command + " ";
-            String messageRaw = e.getMessage().getContentRaw();
-            prefix = messageRaw.replace(toReplace, "");
-            databaseGuild.setPrefixGuildInDB(guildID, prefix);
-            e.getMessageChannel().sendMessage("Prefix changed to: " + prefix).queue();
-        } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("setbotprefix").build()).queue();
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            return;
         }
+
+        String toReplace = currentPrefix + command + " ";
+        String messageRaw = e.getMessage().getContentRaw();
+        prefix = messageRaw.replace(toReplace, "");
+        databaseGuild.setPrefixGuildInDB(guildID, prefix);
+        e.getMessageChannel().sendMessage("Prefix changed to: " + prefix).queue();
     }
 
     @Override

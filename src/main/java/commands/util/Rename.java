@@ -23,7 +23,6 @@ public class Rename implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
@@ -32,10 +31,12 @@ public class Rename implements ICommand {
 
         long idTijs = 257500867568205824L;
 
-        if (!(args.length > 2)) {
+        if (!e.hasArgs() || !(e.getArgs().length > 2)) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rename").setDescription("Error: requires at least 2 arguments.").build()).queue();
             return;
         }
+
+        String[] args = e.getArgs();
 
         if (e.getMessage().getMentionedMembers().size() > 0) {
             memberGiven = e.getMessage().getMentionedMembers().get(0);

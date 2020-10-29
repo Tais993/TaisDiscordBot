@@ -2,8 +2,9 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Skunk implements ICommand {
     CommandReceivedEvent e;
@@ -21,10 +22,7 @@ public class Skunk implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "skunk")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "skunk")) return;
 
         e.getMessageChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
 

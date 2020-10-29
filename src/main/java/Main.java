@@ -1,6 +1,5 @@
 import commands.CommandEnum;
 import commands.CommandHandler;
-import functions.entities.BotInfo;
 import music.spotify.SearchSpotify;
 import music.youtube.SearchYouTube;
 import net.dv8tion.jda.api.JDA;
@@ -28,14 +27,11 @@ public class Main extends ListenerAdapter {
         br.close();
 
         JDA jda = JDABuilder.createDefault(token).setDisabledIntents(GatewayIntent.GUILD_MEMBERS).build();
-        //
-        // .setMemberCachePolicy(MemberCachePolicy.ALL).setDisabledIntents(GatewayIntent.GUILD_PRESENCES)
 
         jda.awaitReady();
         jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.of(Activity.ActivityType.WATCHING   , "lttstore.com"));
 
         CommandEnum.bot = jda.getSelfUser();
-        BotInfo.bot = jda.getSelfUser();
 
         jda.addEventListener(new CommandHandler());
         jda.addEventListener(new OnReactionAdded());

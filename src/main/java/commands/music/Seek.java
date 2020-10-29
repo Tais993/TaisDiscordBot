@@ -3,8 +3,9 @@ package commands.music;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Seek implements ICommand {
     CommandReceivedEvent e;
@@ -26,10 +27,7 @@ public class Seek implements ICommand {
             return;
         }
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "seek")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "seek")) return;
 
         if (e.getArgs()[0].matches("\\d+")) {
             PlayerManager manager = PlayerManager.getInstance();

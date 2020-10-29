@@ -3,10 +3,10 @@ package commands.util.invitecommand;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 
-public class InviteUser {
+public class InviteUses {
     CommandReceivedEvent e;
 
-    public InviteUser(CommandReceivedEvent event, String args) {
+    public void inviteUses(CommandReceivedEvent event, String args) {
         e = event;
         CommandEnum commandEnum = new CommandEnum();
 

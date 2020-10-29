@@ -1,14 +1,13 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class SetVolume implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
 
     String command = "setvolume";
     String commandAlias = "volume";
@@ -42,10 +41,7 @@ public class SetVolume implements ICommand {
             return;
         }
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "setvolume")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "setvolume")) return;
 
         if (manager.setVolume(e.getGuild(), volume)) {
             e.getMessageChannel().sendMessage("Volume has been set correctly to " + volume).queue();

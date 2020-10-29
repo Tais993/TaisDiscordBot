@@ -1,6 +1,5 @@
 package functions.entities;
 
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -26,9 +25,9 @@ public class GuildInfo {
         return (int) guild.getEmotes().stream().filter(value -> !value.isAnimated()).count();
     }
 
-    public int getOnlineMemberCount() {
-        return (int) guild.getMembers().stream().filter(value -> value.getOnlineStatus() == OnlineStatus.ONLINE || value.getOnlineStatus() == OnlineStatus.DO_NOT_DISTURB).count();
-    }
+//    public int getOnlineMemberCount() {
+//        return (int) guild.getMembers().stream().filter(value -> value.getOnlineStatus() == OnlineStatus.ONLINE || value.getOnlineStatus() == OnlineStatus.DO_NOT_DISTURB).count();
+//    }
 
     public String getDateCreated() {
         OffsetDateTime offsetDateTime = guild.getTimeCreated();

@@ -30,7 +30,7 @@ public class DatabaseGuild {
         DBObject query = new BasicDBObject("guildID", guildID);
         DBCursor cursor = guild.find(query);
         if (cursor.one() == null){
-            return createStandardGuildDB(guildID);
+            return new GuildDB(guildID);
         }
         return dbObjectToGuildDB(cursor.one());
     }
@@ -69,9 +69,5 @@ public class DatabaseGuild {
 
         DBObject query = new BasicDBObject("guildID", guildID);
         guild.findAndModify(query, guildDBToDBObject(guildDB));
-    }
-
-    public static GuildDB createStandardGuildDB(String guildID) {
-        return new GuildDB(guildID);
     }
 }

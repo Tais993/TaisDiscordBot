@@ -2,8 +2,9 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Backward implements ICommand {
     CommandReceivedEvent e;
@@ -19,10 +20,8 @@ public class Backward implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "backward")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "backward")) return;
+
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();

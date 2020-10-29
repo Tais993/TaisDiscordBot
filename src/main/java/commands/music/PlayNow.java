@@ -1,20 +1,17 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import database.guild.DatabaseGuild;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+
 public class PlayNow implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
-    DatabaseGuild databaseGuild = new DatabaseGuild();
 
     String url;
 
@@ -36,10 +33,7 @@ public class PlayNow implements ICommand {
             return;
         }
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "playnow")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "playnow")) return;
 
         String input = e.getMessageWithoutCommand();
 
@@ -70,7 +64,7 @@ public class PlayNow implements ICommand {
         String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription(videoUrl).build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp(videoUrl)).queue();
             return false;
         }
 

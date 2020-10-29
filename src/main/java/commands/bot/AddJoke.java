@@ -21,7 +21,7 @@ public class AddJoke implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("YOU DARE TO PING EVERYONE? WELL NOT IN MY SIGHT!")).queue();
+            e.getMessageChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
             return;
         }
 

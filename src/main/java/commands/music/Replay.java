@@ -2,8 +2,9 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Replay implements ICommand {
     CommandReceivedEvent e;
@@ -18,8 +19,7 @@ public class Replay implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "replay")) {
+        if (!allowedToPlayMusic(e, "replay")) {
             return;
         }
 

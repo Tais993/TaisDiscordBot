@@ -3,8 +3,6 @@ package commands.general;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.remindme.DatabaseRemindMe;
-import database.remindme.RemindMeDB;
-import database.remindme.UserRemindMeDB;
 
 public class RemindMe implements ICommand {
     CommandReceivedEvent e;
@@ -21,33 +19,35 @@ public class RemindMe implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        e = event;
-        String[] args = e.getArgs();
+        event.getMessageChannel().sendMessage("I'm sorry, the remind me command is on pause ;-;").queue();
 
-        String time = args[2];
-
-        String userId = e.getAuthor().getId();
-
-
-        if (isMinute(time)) {
-            minutesToSeconds(Integer.parseInt(time));
-        } else if (isHour(time)) {
-            minutesToSeconds(Integer.parseInt(time));
-        } else if (isDay(time)) {
-            minutesToSeconds(Integer.parseInt(time));
-        } else if (isSecond(time) || isNumber(time)) {
-            totalSeconds = Integer.parseInt(time.replace("s", ""));
-        } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("remindme").build()).queue();
-            return;
-        }
-
-        if (!databaseRemindMe.userRemindMeExistsInDB(userId)) {
-            UserRemindMeDB userRemindMeDB = new UserRemindMeDB(userId);
-            RemindMeDB remindMeDB = new RemindMeDB("1", args[1], totalSeconds);
-            userRemindMeDB.addToArrayList(remindMeDB);
-            databaseRemindMe.addUserRemindMeToDB(userRemindMeDB);
-        }
+//        e = event;
+//        String[] args = e.getArgs();
+//
+//        String time = args[2];
+//
+//        String userId = e.getAuthor().getId();
+//
+//
+//        if (isMinute(time)) {
+//            minutesToSeconds(Integer.parseInt(time));
+//        } else if (isHour(time)) {
+//            minutesToSeconds(Integer.parseInt(time));
+//        } else if (isDay(time)) {
+//            minutesToSeconds(Integer.parseInt(time));
+//        } else if (isSecond(time) || isNumber(time)) {
+//            totalSeconds = Integer.parseInt(time.replace("s", ""));
+//        } else {
+//            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("remindme").build()).queue();
+//            return;
+//        }
+//
+//        if (!databaseRemindMe.userRemindMeExistsInDB(userId)) {
+//            UserRemindMeDB userRemindMeDB = new UserRemindMeDB(userId);
+//            RemindMeDB remindMeDB = new RemindMeDB("1", args[1], totalSeconds);
+//            userRemindMeDB.addToArrayList(remindMeDB);
+//            databaseRemindMe.addUserRemindMeToDB(userRemindMeDB);
+//        }
     }
 
     @Override

@@ -26,6 +26,11 @@ public class StartGame implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
+            return;
+        }
+
         if (!e.isFromGuild()) {
             e.getMessageChannel().sendMessage("Command only works in a Discord guild/server").queue();
             return;

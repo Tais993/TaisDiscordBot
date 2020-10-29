@@ -1,15 +1,13 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Forward implements ICommand {
     CommandReceivedEvent e;
-
-    CommandEnum commandEnum = new CommandEnum();
 
     String command = "forward";
     String commandAlias = "forwards";
@@ -22,13 +20,11 @@ public class Forward implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "forward")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "forward")) return;
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();

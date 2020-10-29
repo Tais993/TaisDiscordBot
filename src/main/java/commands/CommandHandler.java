@@ -36,14 +36,19 @@ public class CommandHandler extends ListenerAdapter {
             if (command()) return;
         }
 
-        SelfUser botUser = e.getJDA().getSelfUser();
+        if (event.getMessage().getMentionedUsers().contains(event.getJDA().getSelfUser())) botPrefix.command(e);
 
-        if (e.getMessage().getMentionedUsers().contains(botUser)) botPrefix.command(e);
-
-        if (e.isFromGuild) {
+        if (event.isFromGuild()) {
             userHandler.checkUser(event);
             guildHandler.checkGuild(event);
         }
+
+        if (event.isFromGuild()) {
+            System.out.println(event.getGuild().getName() + " " + event.getAuthor().getAsTag() + " > " + event.getMessage().getContentRaw());
+        } else {
+            System.out.println("DM's " + event.getAuthor().getAsTag() + " > " + event.getMessage().getContentRaw());
+        }
+
     }
 
     public boolean command() {

@@ -2,8 +2,9 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Radio538 implements ICommand {
     CommandReceivedEvent e;
@@ -19,10 +20,7 @@ public class Radio538 implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "radio538")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "radio538")) return;
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.loadAndPlayRadio(e.getTextChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", e.getAuthor().getId(), e.getAuthor().getAsTag(), "Radio538");

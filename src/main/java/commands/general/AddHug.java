@@ -19,8 +19,13 @@ public class AddHug implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<")).queue();
+            return;
+        }
+
         if (!e.hasArgs()){
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("addhug").setDescription("Error: requires a URL for a gif").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires a URL for a gif")).queue();
             return;
         }
 

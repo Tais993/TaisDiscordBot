@@ -4,11 +4,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import functions.Colors;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 import static music.TrackScheduler.videoDurationToYoutube;
 
 public class SkipTo implements ICommand {
@@ -29,12 +29,10 @@ public class SkipTo implements ICommand {
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
-        }
-
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "skipto")) {
             return;
         }
+
+        if (!allowedToPlayMusic(e, "skipto")) return;
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.skipToTrack(e.getGuild(), Integer.parseInt(e.getArgs()[0]));

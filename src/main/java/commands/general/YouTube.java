@@ -26,12 +26,17 @@ public class YouTube implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
+            return;
+        }
+
         String input = e.getMessage().getContentRaw().replace(databaseGuild.getPrefixGuildInDB(e.getGuild().getId()) + command + " ", "");
 
         String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("youtube").setDescription(videoUrl).build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp(videoUrl)).queue();
         }
 
 

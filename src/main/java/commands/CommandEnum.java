@@ -13,7 +13,9 @@ import commands.util.ban.TempBan;
 import commands.util.invitecommand.InviteMain;
 import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.SelfUser;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -88,7 +90,7 @@ public class CommandEnum {
 
     Colors colors = new Colors();
 
-    static ArrayList categories = new ArrayList();
+    static ArrayList<String> categories = new ArrayList<>();
 
     public boolean checkCommand(CommandReceivedEvent e) {
         for (AllMyCommands value : AllMyCommands.values()) {
@@ -114,6 +116,9 @@ public class CommandEnum {
     }
 
     public void getHelpAllByCategory(CommandReceivedEvent e) {
+
+        PrivateChannel privateChannel = e.getAuthor().openPrivateChannel().complete();
+
         categories.forEach(category -> {
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(colors.getCurrentColor());
@@ -128,13 +133,13 @@ public class CommandEnum {
 
                 if (c.getCategory().equals(category)) {
                     if (eb.getFields().size() == 24) {
-                        e.getMessageChannel().sendMessage(eb.build()).queue();
+                        privateChannel.sendMessage(eb.build()).queue();
                         eb.clearFields();
                     }
                     eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
                 }
             }
-            e.getMessageChannel().sendMessage(eb.build()).queue();
+            privateChannel.sendMessage(eb.build()).queue();
         });
     }
 

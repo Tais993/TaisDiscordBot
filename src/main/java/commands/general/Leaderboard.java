@@ -20,7 +20,7 @@ public class Leaderboard implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        EmbedBuilder eb = new EmbedBuilder(databaseUser.topTenLeaderboard(e));
+        EmbedBuilder eb = databaseUser.topTenLeaderboard(e);
 
         eb.setTitle("Leaderboard");
 

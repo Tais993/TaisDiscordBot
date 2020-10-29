@@ -6,7 +6,7 @@ import commands.CommandReceivedEvent;
 public class InviteTime {
     CommandReceivedEvent e;
 
-    public InviteTime(CommandReceivedEvent event, String args) {
+    public void inviteTime(CommandReceivedEvent event, String args) {
         e = event;
         CommandEnum commandEnum = new CommandEnum();
 

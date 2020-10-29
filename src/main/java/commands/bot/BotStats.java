@@ -1,16 +1,11 @@
 package commands.bot;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.entities.BotInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 public class BotStats implements ICommand {
     CommandReceivedEvent e;
-
-    CommandEnum commandEnum = new CommandEnum();
-    BotInfo botInfo = new BotInfo();
 
     String command = "botstats";
     String commandAlias = "stats";
@@ -25,11 +20,11 @@ public class BotStats implements ICommand {
         EmbedBuilder eb = getEmbed();
 
         eb.setTitle("Botstats");
-        eb.addField("Total joined guilds:",  botInfo.getJoinedGuilds() + "", false);
+        eb.addField("Total joined guilds:",  e.getJDA().getSelfUser().getMutualGuilds().size() + "", false);
         eb.addField("Total commands", commandEnum.getTotalCommands() + "", true);
         eb.addField("Created by:", e.getJDA().retrieveUserById("257500867568205824").complete().getAsTag(), true);
         eb.addField("Github:", "[Click here to get it!](https://github.com/Tais993/taisdiscordbot \"Tais Discord Bot on Githubz\")", true);
-        eb.setThumbnail(botInfo.getAvatarUrl());
+        eb.setThumbnail(e.getJDA().getSelfUser().getAvatarUrl());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

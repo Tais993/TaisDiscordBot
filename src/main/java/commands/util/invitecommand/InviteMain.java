@@ -7,6 +7,9 @@ import commands.ICommand;
 public class InviteMain implements ICommand {
     CommandEnum commandEnum = new CommandEnum();
 
+    InviteTime inviteTime = new InviteTime();
+    InviteUses inviteUses = new InviteUses();
+
     CommandReceivedEvent e;
     String category = "util";
     String command = "invite";
@@ -29,14 +32,14 @@ public class InviteMain implements ICommand {
 
         if (args.length > 2) {
             if (args[1].equals("time")) {
-                InviteTime inviteTime = new InviteTime(event, args[2]);
+                inviteTime.inviteTime(event, args[2]);
             } else if (args[1].equals("uses")) {
-                InviteUser inviteUser = new InviteUser(event, args[2]);
+                inviteUses.inviteUses(event, args[2]);
             } else {
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("invite")).queue();
             }
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("invite")).queue();
         }
     }
 

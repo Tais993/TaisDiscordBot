@@ -39,7 +39,6 @@ public class WhoIs implements ICommand {
             userId = e.getAuthor().getId();
         }
 
-
         if (!getMember()) return;
 
         sendEmbed();
@@ -48,11 +47,13 @@ public class WhoIs implements ICommand {
     public boolean getMember() {
         if (e.getMessage().getMentionedMembers().size() > 0) {
             member = e.getMessage().getMentionedMembers().get(0);
-        } else if (e.getGuild().getMemberById(userId) != null) {
-            member = e.getGuild().retrieveMemberById(userId).complete();
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: ID given isn't valid.").build()).queue();
-            return false;
+            member = e.getGuild().retrieveMemberById(userId).complete();
+
+            if (member == null) {
+                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: ID given isn't valid.").build()).queue();
+                return false;
+            }
         }
         return true;
     }

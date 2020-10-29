@@ -2,8 +2,9 @@ package commands.music;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Skip implements ICommand {
     CommandReceivedEvent e;
@@ -19,10 +20,7 @@ public class Skip implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "skip")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "skip")) return;
 
         PlayerManager manager = PlayerManager.getInstance();
 

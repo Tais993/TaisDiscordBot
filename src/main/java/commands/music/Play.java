@@ -4,12 +4,13 @@ import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
-import functions.AllowedToPlayMusic;
 import music.PlayerManager;
 import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static functions.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Play implements ICommand {
     CommandReceivedEvent e;
@@ -34,10 +35,7 @@ public class Play implements ICommand {
             return;
         }
 
-        AllowedToPlayMusic allowedToPlayMusic = new AllowedToPlayMusic();
-        if (!allowedToPlayMusic.allowedToPlayMusic(e, "play")) {
-            return;
-        }
+        if (!allowedToPlayMusic(e, "play")) return;
 
         String input = e.getMessageWithoutCommand();
 

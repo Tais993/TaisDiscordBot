@@ -24,7 +24,7 @@ public class Help implements ICommand{
                     commandEnum.getHelpCategory(args[0], e);
                     break;
                 default:
-                    if (commandEnum.checkOrValidCommand(args[0])){
+                    if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())){
                         e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0]).build()).queue();
                     }
             }

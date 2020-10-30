@@ -1,3 +1,4 @@
+import ch.qos.logback.classic.Logger;
 import commands.CommandEnum;
 import commands.CommandHandler;
 import music.spotify.SearchSpotify;
@@ -10,6 +11,10 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import reactionshandler.OnReactionAdded;
 import reactionshandler.OnReactionRemove;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.BufferedReader;
@@ -42,6 +47,10 @@ public class Main extends ListenerAdapter {
 
         SearchSpotify searchSpotify = new SearchSpotify();
         searchSpotify.setSpotifyApiKey();
+
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
+        rootLogger.setLevel(Level.ERROR);
 
 //        Timer timer = new Timer(); // creating timer
 //        TimerTask task = new RemindMeHandler(); // creating timer task

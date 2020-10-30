@@ -10,7 +10,7 @@ public class RemoveJoke implements ICommand {
     CommandReceivedEvent e;
     String command = "removejoke";
     String commandAlias = "deletejoke";
-    String category = "fun";
+    String category = "botmoderation";
     String exampleCommand = "`!deletejoke `";
     String shortCommandDescription = "Add a funny joke";
     String fullCommandDescription = "Add a funny joke that actually, isn't funny at all.";
@@ -18,11 +18,6 @@ public class RemoveJoke implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-
-        if (!e.isBotModerator()) {
-            e.getMessageChannel().sendMessage(getFullHelp("You've to be a bot moderator to run this command")).queue();
-            return;
-        }
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument (the joke ID)")).queue();

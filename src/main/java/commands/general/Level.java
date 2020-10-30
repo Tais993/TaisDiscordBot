@@ -2,21 +2,18 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import database.user.DatabaseUser;
 import database.user.UserDB;
-import functions.Colors;
 import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 
+import static functions.Colors.getCurrentColor;
+
 public class Level implements ICommand {
     CommandReceivedEvent e;
     User userGiven;
-
-    DatabaseUser databaseUser = new DatabaseUser();
-    Colors colors = new Colors();
 
     String command = "level";
     String commandAlias = "rank";
@@ -35,7 +32,7 @@ public class Level implements ICommand {
             levelCommandGuild();
         }
 
-        createEmbed(databaseUser.getUserFromDBToUserDB(userGiven.getId()));
+        createEmbed(e.getUserDB());
     }
 
     public void levelCommandGuild() {
@@ -52,7 +49,7 @@ public class Level implements ICommand {
 
     public void levelCommandPrivate() {
         if (e.hasArgs()) {
-                userGiven = e.getJDA().retrieveUserById(e.getArgs()[0]).complete();
+            userGiven = e.getJDA().retrieveUserById(e.getArgs()[0]).complete();
         } else {
             userGiven = e.getAuthor();
         }
@@ -61,17 +58,16 @@ public class Level implements ICommand {
     public void createEmbed(UserDB userDB) {
         userDB.calculateXpForLevelUp();
 
-        UserInfo userInfo = new UserInfo(userGiven);
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setThumbnail(userInfo.getAvatar());
+        eb.setThumbnail(userGiven.getAsTag());
         eb.setAuthor(userGiven.getAsTag());
         eb.appendDescription("Level: " + userDB.getLevel() + "\n");
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
         eb.setFooter("Made by Tijs ");
 
         eb.setTimestamp(Instant.now());
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

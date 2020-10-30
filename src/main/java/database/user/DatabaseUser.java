@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import java.time.Instant;
 
 import static commands.CommandEnum.bot;
+import static functions.Colors.getCurrentColor;
 
 public class DatabaseUser {
     public static MongoClient mongoClient;
@@ -38,19 +39,16 @@ public class DatabaseUser {
         DBObject query = new BasicDBObject("userID", userID);
         DBCursor cursor = user.find(query);
         if (cursor.one() == null){
-            return createStanderdUserDB(userID);
+            UserDB userDB = new UserDB(userID);
+            user.insert(userToDBObject(userDB));
+
+            return new UserDB(userID);
         }
         return dbObjectToUser(cursor.one());
     }
 
-    public boolean userExistsInDB(String userID) {
-        DBObject query = new BasicDBObject("userID", userID);
-        DBCursor cursor = user.find(query);
-        return cursor.one() != null;
-    }
-
     public DBObject userToDBObject(UserDB userDB) {
-        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp());
+        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed());
     }
 
     public UserDB dbObjectToUser(DBObject dbObject) {
@@ -58,10 +56,12 @@ public class DatabaseUser {
         int level = Integer.parseInt(dbObject.get("level").toString());
         int xp = Integer.parseInt(dbObject.get("xp").toString());
 
-        UserDB userDB = new UserDB(userID);
-        userDB.setLevel(level);
-        userDB.setXp(xp);
+        UserDB userDB = new UserDB(userID, level, xp);
         userDB.calculateXpForLevelUp();
+
+        if (dbObject.get("isBotModerator") != null) userDB.setBotModerator(Boolean.parseBoolean(dbObject.get("isBotModerator").toString()));
+        if (dbObject.get("isBlackListed") != null) userDB.setBlackListed(Boolean.parseBoolean(dbObject.get("isBlackListed").toString()));
+
         return userDB;
     }
 
@@ -69,11 +69,24 @@ public class DatabaseUser {
         user.insert(userToDBObject(userDB));
     }
 
-    public void addRandomXPToUserInDB(String userID) {
+    public void updateUserInDB(UserDB userDB) {
+        DBObject query = new BasicDBObject("userID", userDB.getUserID());
+        user.findAndModify(query, userToDBObject(userDB));
+    }
+
+    public String addRandomXPToUserInDB(String userID) {
+        String returnValue;
+
         UserDB userDB = getUserFromDBToUserDB(userID);
         userDB.addRandomXp();
+
         DBObject query = new BasicDBObject("userID", userID);
+
+        returnValue = userDB.calculateLevel() ? userDB.getLevel() + "" : "";
+
         user.findAndModify(query, userToDBObject(userDB));
+
+        return returnValue;
     }
 
     public boolean checkLevelUserInDB(String userID) {
@@ -88,20 +101,10 @@ public class DatabaseUser {
         return false;
     }
 
-    public int getLevelUserInDB(String userID) {
-        UserDB userDB = getUserFromDBToUserDB(userID);
-        return userDB.getLevel();
-    }
-
-    public UserDB createStanderdUserDB(String userID) {
-        return new UserDB(userID);
-    }
-
     public EmbedBuilder topTenLeaderboard(CommandReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder();
-        Colors colors = new Colors();
 
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
         eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
         eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());
@@ -115,20 +118,19 @@ public class DatabaseUser {
         return eb;
     }
 
-    public String addXpToUser(String userId) {
-        UserDB userDB = new UserDB(userId);
-        userDB.addRandomXp();
+    public void setBotModerator(String userId, boolean botModerator) {
+        UserDB userDB = getUserFromDBToUserDB(userId);
 
-        if (!userExistsInDB(userId)) {
-            user.insert(userToDBObject(userDB));
-        }
+        userDB.setBotModerator(botModerator);
 
-        userDB = getUserFromDBToUserDB(userId);
-        userDB.addRandomXp();
-        if (userDB.calculateLevel()) {
-            addUserToDB(userDB);
-            return userDB.getLevel() + "";
-        }
-        return "";
+        updateUserInDB(userDB);
+    }
+
+    public void setBlacklisted(String userId, boolean blacklisted) {
+        UserDB userDB = getUserFromDBToUserDB(userId);
+
+        userDB.setBlackListed(blacklisted);
+
+        updateUserInDB(userDB);
     }
 }

@@ -68,6 +68,7 @@ public class WhoIs implements ICommand {
         if (member.getTimeBoosted() != null) eb.addField("Time boosted:", userInfo.getTimeBoosted(), true);
 
         eb.addField("Roles:", userInfo.getRoles(), true);
+        eb.addField("User ID:", member.getId(), true);
 
         eb.addBlankField(true);
         eb.setThumbnail(member.getUser().getEffectiveAvatarUrl());

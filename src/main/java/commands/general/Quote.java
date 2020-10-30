@@ -2,16 +2,16 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
+import static functions.Colors.getCurrentColor;
+
 public class Quote implements ICommand {
     CommandReceivedEvent e;
-    Colors colors = new Colors();
 
     TextChannel textChannel;
     String[] args;
@@ -91,7 +91,7 @@ public class Quote implements ICommand {
 
     public void createEmbed(Message message) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         if (isSunTzu()) {
             eb.setTitle("Quote from: Sun Tzu");
@@ -109,7 +109,7 @@ public class Quote implements ICommand {
 
     public void createPersonalEmbed() {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         if (isSunTzu()) {
             eb.setTitle("Quote from: Sun Tzu");

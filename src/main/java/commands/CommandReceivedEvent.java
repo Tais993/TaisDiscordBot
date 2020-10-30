@@ -1,5 +1,7 @@
 package commands;
 
+import database.user.DatabaseUser;
+import database.user.UserDB;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -20,17 +22,20 @@ public class CommandReceivedEvent {
     boolean hasArgs;
     boolean isBotModerator;
     boolean mentionsEveryone;
+    boolean hasUserMentions;
 
     String[] args;
     String messageAsString;
     String messageWithoutCommand = "";
 
     String prefix;
-
     String command;
 
-    public CommandReceivedEvent(MessageReceivedEvent e, String prefix) {
+    UserDB userDB;
 
+    User firstUserMentioned;
+
+    public CommandReceivedEvent(MessageReceivedEvent e, String prefix) {
         isFromGuild = e.isFromGuild();
         messageChannel = e.getChannel();
         user = e.getAuthor();
@@ -44,6 +49,11 @@ public class CommandReceivedEvent {
             member = e.getMember();
             guild = e.getGuild();
             textChannel = e.getTextChannel();
+            hasUserMentions = e.getMessage().getMentionedMembers().size() >= 1;
+
+            if (hasUserMentions) {
+                firstUserMentioned = e.getMessage().getMentionedMembers().get(0).getUser();
+            }
         }
 
         args = messageAsString.split(" ");
@@ -68,9 +78,11 @@ public class CommandReceivedEvent {
 
         command = messageAsString.replace(prefix, "").split(" ")[0];
 
-        isBotModerator = e.getAuthor().getId().equalsIgnoreCase("257500867568205824");
-
         JDA = e.getJDA();
+
+        DatabaseUser databaseUser = new DatabaseUser();
+        userDB = databaseUser.getUserFromDBToUserDB(e.getAuthor().getId());
+        isBotModerator = userDB.isBotModerator();
     }
 
     public TextChannel getTextChannel() {
@@ -125,6 +137,10 @@ public class CommandReceivedEvent {
         return isBotModerator;
     }
 
+    public UserDB getUserDB() {
+        return userDB;
+    }
+
     public String getPrefix() {
         return prefix;
     }
@@ -135,5 +151,13 @@ public class CommandReceivedEvent {
 
     public boolean mentionsEveryone() {
         return mentionsEveryone;
+    }
+
+    public boolean hasUserMentions() {
+        return hasUserMentions;
+    }
+
+    public User getFirstUserMentioned() {
+        return firstUserMentioned;
     }
 }

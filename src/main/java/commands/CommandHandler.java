@@ -4,7 +4,6 @@ import commands.general.BotPrefix;
 import database.guild.DatabaseGuild;
 import database.guild.GuildHandler;
 import database.user.UserHandler;
-import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -12,7 +11,6 @@ public class CommandHandler extends ListenerAdapter {
     CommandReceivedEvent e;
 
     String prefix;
-    String messageSent;
 
     CommandEnum commandEnum = new CommandEnum();
     UserHandler userHandler = new UserHandler();
@@ -30,29 +28,29 @@ public class CommandHandler extends ListenerAdapter {
             prefix = "!";
         }
 
-        if (event.getMessage().getContentRaw().startsWith(prefix)) {
-            e = new CommandReceivedEvent(event, prefix);
+        e = new CommandReceivedEvent(event, prefix);
 
-            if (command()) return;
+        if (e.getUserDB().isBlackListed()) {
+            e.getMessageChannel().sendMessage("You suck.").queue();
+            return;
         }
 
-        if (event.getMessage().getMentionedUsers().contains(event.getJDA().getSelfUser())) botPrefix.command(e);
+        if (e.getMessage().getContentRaw().startsWith(prefix)) {
+            if (commandEnum.checkCommand(e)) return;
+        }
 
-        if (event.isFromGuild()) {
+        if (e.getMessage().getMentionedUsers().contains(e.getJDA().getSelfUser())) botPrefix.command(e);
+
+        if (e.isFromGuild()) {
             userHandler.checkUser(event);
             guildHandler.checkGuild(event);
         }
 
-        if (event.isFromGuild()) {
+        if (e.isFromGuild()) {
             System.out.println(event.getGuild().getName() + " " + event.getAuthor().getAsTag() + " > " + event.getMessage().getContentRaw());
         } else {
             System.out.println("DM's " + event.getAuthor().getAsTag() + " > " + event.getMessage().getContentRaw());
         }
-
-    }
-
-    public boolean command() {
-        return commandEnum.checkCommand(e);
     }
 }
 

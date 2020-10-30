@@ -3,6 +3,7 @@ package commands.bot;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
+import database.user.UserDB;
 
 public class SetBlacklisted implements ICommand {
     DatabaseUser databaseUser = new DatabaseUser();
@@ -12,7 +13,7 @@ public class SetBlacklisted implements ICommand {
 
     String command = "setblacklisted";
     String commandAlias = "setblacklisted";
-    String category = "bot";
+    String category = "botmoderation";
     String exampleCommand = "`!setblacklisted <user id>/<user mention> <true/false>`";
     String shortCommandDescription = "Set someone blacklisted from the bot.";
     String fullCommandDescription = "Set someone blacklisted from the bot.\n" +
@@ -21,11 +22,6 @@ public class SetBlacklisted implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-
-        if (!e.isBotModerator()) {
-            e.getMessageChannel().sendMessage("Requires to be a bot moderator!").queue();
-            return;
-        }
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage("Requires at least 2 arguments!").queue();
@@ -47,6 +43,13 @@ public class SetBlacklisted implements ICommand {
                 e.getMessageChannel().sendMessage(getFullHelp("A user ID should only contain numbers!")).queue();
                 return;
             }
+        }
+
+        UserDB userDB = databaseUser.getUserFromDBToUserDB(userId);
+
+        if (userDB.isBotModerator()) {
+            e.getMessageChannel().sendMessage(getFullHelp("This command doesn't work on bot moderators!")).queue();
+            return;
         }
 
         databaseUser.setBlacklisted(userId, Boolean.parseBoolean(args[1]));

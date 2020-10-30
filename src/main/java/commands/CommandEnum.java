@@ -99,8 +99,10 @@ public class CommandEnum {
                 if (c.getCategory().equalsIgnoreCase("botmoderation")) {
                     if (e.isBotModerator()) {
                         c.command(e);
+                        return true;
                     }
-                    return true;
+                    e.getMessageChannel().sendMessage("Requires to be a bot moderator!").queue();
+                    return false;
                 }
                 c.command(e);
                 return true;
@@ -128,26 +130,28 @@ public class CommandEnum {
         PrivateChannel privateChannel = e.getAuthor().openPrivateChannel().complete();
 
         categories.forEach(category -> {
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(getCurrentColor());
-            eb.setTitle("Help " + category);
+            if (!(category.equals("botmoderation") && !e.isBotModerator())) {
 
-            eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
-            eb.setFooter("Made by Tijs ");
-            eb.setTimestamp(Instant.now());
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setColor(getCurrentColor());
+                eb.setTitle("Help " + category);
 
-            for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
-                ICommand c = value.getCommand();
+                eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+                eb.setTimestamp(Instant.now());
 
-                if (c.getCategory().equals(category)) {
-                    if (eb.getFields().size() == 24) {
-                        privateChannel.sendMessage(eb.build()).queue();
-                        eb.clearFields();
+                for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {
+                    ICommand c = value.getCommand();
+
+                    if (c.getCategory().equals(category)) {
+                        if (eb.getFields().size() == 24) {
+                            privateChannel.sendMessage(eb.build()).queue();
+                            eb.clearFields();
+                        }
+                        eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
                     }
-                    eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
                 }
+                privateChannel.sendMessage(eb.build()).queue();
             }
-            privateChannel.sendMessage(eb.build()).queue();
         });
     }
 
@@ -159,7 +163,6 @@ public class CommandEnum {
                 EmbedBuilder eb = new EmbedBuilder();
 
                 eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
-                eb.setFooter("Made by Tijs ");
                 eb.setTimestamp(Instant.now());
 
                 eb.setTitle("Help " + c.getCommand());
@@ -191,7 +194,6 @@ public class CommandEnum {
 
         eb.setTitle("Help " + category);
         eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
-        eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());
 
         for (CommandEnum.AllMyCommands value : CommandEnum.AllMyCommands.values()) {

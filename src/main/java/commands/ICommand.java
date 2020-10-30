@@ -25,7 +25,6 @@ public interface ICommand {
 
         eb.setColor(getCurrentColor());
         eb.setAuthor("Tais", "https://github.com/Tais993/TaisDiscordBot", bot.getAvatarUrl());
-        eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());
 
         return eb;

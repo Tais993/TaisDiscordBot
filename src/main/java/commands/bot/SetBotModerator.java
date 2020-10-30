@@ -12,7 +12,7 @@ public class SetBotModerator implements ICommand {
 
     String command = "setbotmoderator";
     String commandAlias = "setbotmoderator";
-    String category = "bot";
+    String category = "botmoderation";
     String exampleCommand = "`!setbotmoderator <user id>/<user mention> <true/false>`";
     String shortCommandDescription = "Make someone bot moderator or remove it from someone.";
     String fullCommandDescription = "Make someone bot moderator or remove it from someone.\n" +
@@ -21,11 +21,6 @@ public class SetBotModerator implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-
-        if (!e.isBotModerator()) {
-            e.getMessageChannel().sendMessage("Requires to be a bot moderator!").queue();
-            return;
-        }
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage("Requires at least 2 arguments!").queue();

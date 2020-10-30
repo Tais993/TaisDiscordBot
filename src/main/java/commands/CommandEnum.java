@@ -1,10 +1,7 @@
 package commands;
 
 import commands.amongus.StartGame;
-import commands.bot.AddJoke;
-import commands.bot.BotStats;
-import commands.bot.RemoveJoke;
-import commands.bot.Shutdown;
+import commands.bot.*;
 import commands.fun.*;
 import commands.general.*;
 import commands.music.*;
@@ -19,6 +16,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;
+
+import static functions.Colors.getCurrentColor;
 
 public class CommandEnum {
     enum AllMyCommands {
@@ -74,7 +73,9 @@ public class CommandEnum {
         TEST(new Test()),
         JOKE(new Joke()),
         ADDJOKE(new AddJoke()),
-        REMOVEJOKE(new RemoveJoke());
+        REMOVEJOKE(new RemoveJoke()),
+        SETBLACKLISTED(new SetBlacklisted()),
+        SETBOTMODERATOR(new SetBotModerator());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -88,8 +89,6 @@ public class CommandEnum {
 
     public static SelfUser bot;
 
-    Colors colors = new Colors();
-
     static ArrayList<String> categories = new ArrayList<>();
 
     public boolean checkCommand(CommandReceivedEvent e) {
@@ -97,6 +96,12 @@ public class CommandEnum {
             ICommand c = value.getCommand();
 
             if (e.getCommand().equalsIgnoreCase(c.getCommand()) || e.getCommand().equalsIgnoreCase(c.getCommandAlias())) {
+                if (c.getCategory().equalsIgnoreCase("botmoderation")) {
+                    if (e.isBotModerator()) {
+                        c.command(e);
+                    }
+                    return true;
+                }
                 c.command(e);
                 return true;
             }
@@ -104,11 +109,14 @@ public class CommandEnum {
         return false;
     }
 
-    public boolean checkOrValidCommand(String arg) {
+    public boolean checkOrValidCommand(String arg, boolean isBotModerator) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
             if (arg.equalsIgnoreCase(c.getCommand())) {
+                if (c.getCategory().equalsIgnoreCase("botmoderation")) {
+                    return isBotModerator;
+                }
                 return true;
             }
         }
@@ -121,7 +129,7 @@ public class CommandEnum {
 
         categories.forEach(category -> {
             EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(colors.getCurrentColor());
+            eb.setColor(getCurrentColor());
             eb.setTitle("Help " + category);
 
             eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
@@ -159,7 +167,7 @@ public class CommandEnum {
                         "<option> is required");
                 eb.addField(c.getExampleCommand(),  c.getFullCommandDescription(), true);
 
-                eb.setColor(colors.getCurrentColor());
+                eb.setColor(getCurrentColor());
                 return eb;
             }
         }
@@ -179,7 +187,7 @@ public class CommandEnum {
 
     public void getHelpCategory(String category, CommandReceivedEvent e) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         eb.setTitle("Help " + category);
         eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
@@ -206,6 +214,7 @@ public class CommandEnum {
         categories.add("util");
         categories.add("general");
         categories.add("music");
+        categories.add("botmoderation");
     }
 
     public int getTotalCommands() {

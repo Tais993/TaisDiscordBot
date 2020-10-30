@@ -47,14 +47,8 @@ public class DatabaseUser {
         return dbObjectToUser(cursor.one());
     }
 
-    public boolean userExistsInDB(String userID) {
-        DBObject query = new BasicDBObject("userID", userID);
-        DBCursor cursor = user.find(query);
-        return cursor.one() != null;
-    }
-
     public DBObject userToDBObject(UserDB userDB) {
-        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("isBotModerator", userDB.isBotModerator());
+        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed());
     }
 
     public UserDB dbObjectToUser(DBObject dbObject) {
@@ -62,17 +56,22 @@ public class DatabaseUser {
         int level = Integer.parseInt(dbObject.get("level").toString());
         int xp = Integer.parseInt(dbObject.get("xp").toString());
 
-        UserDB userDB = new UserDB(userID);
-        userDB.setLevel(level);
-        userDB.setXp(xp);
+        UserDB userDB = new UserDB(userID, level, xp);
         userDB.calculateXpForLevelUp();
-        userDB.setBotModerator(Boolean.parseBoolean(dbObject.get("isBotModerator").toString()));
+
+        if (dbObject.get("isBotModerator") != null) userDB.setBotModerator(Boolean.parseBoolean(dbObject.get("isBotModerator").toString()));
+        if (dbObject.get("isBlackListed") != null) userDB.setBlackListed(Boolean.parseBoolean(dbObject.get("isBlackListed").toString()));
 
         return userDB;
     }
 
     public void addUserToDB(UserDB userDB) {
         user.insert(userToDBObject(userDB));
+    }
+
+    public void updateUserInDB(UserDB userDB) {
+        DBObject query = new BasicDBObject("userID", userDB.getUserID());
+        user.findAndModify(query, userToDBObject(userDB));
     }
 
     public String addRandomXPToUserInDB(String userID) {
@@ -117,5 +116,21 @@ public class DatabaseUser {
         });
 
         return eb;
+    }
+
+    public void setBotModerator(String userId, boolean botModerator) {
+        UserDB userDB = getUserFromDBToUserDB(userId);
+
+        userDB.setBotModerator(botModerator);
+
+        updateUserInDB(userDB);
+    }
+
+    public void setBlacklisted(String userId, boolean blacklisted) {
+        UserDB userDB = getUserFromDBToUserDB(userId);
+
+        userDB.setBlackListed(blacklisted);
+
+        updateUserInDB(userDB);
     }
 }

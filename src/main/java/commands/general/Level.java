@@ -49,7 +49,7 @@ public class Level implements ICommand {
 
     public void levelCommandPrivate() {
         if (e.hasArgs()) {
-                userGiven = e.getJDA().retrieveUserById(e.getArgs()[0]).complete();
+            userGiven = e.getJDA().retrieveUserById(e.getArgs()[0]).complete();
         } else {
             userGiven = e.getAuthor();
         }
@@ -58,10 +58,9 @@ public class Level implements ICommand {
     public void createEmbed(UserDB userDB) {
         userDB.calculateXpForLevelUp();
 
-        UserInfo userInfo = new UserInfo(userGiven);
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setThumbnail(userInfo.getAvatar());
+        eb.setThumbnail(userGiven.getAsTag());
         eb.setAuthor(userGiven.getAsTag());
         eb.appendDescription("Level: " + userDB.getLevel() + "\n");
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());

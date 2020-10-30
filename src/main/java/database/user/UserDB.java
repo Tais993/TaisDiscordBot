@@ -8,6 +8,8 @@ public class UserDB {
     int xp = 0;
     int xpForLevelUp = 100;
 
+    int reps = 0;
+
     boolean isBotModerator = false;
     boolean isBlackListed = false;
 
@@ -15,10 +17,11 @@ public class UserDB {
         this.userID = userID;
     }
 
-    public UserDB(String userID, int level, int xp) {
+    public UserDB(String userID, int level, int xp, int reps) {
         this.userID = userID;
         this.level = level;
         this.xp = xp;
+        this.reps = reps;
     }
 
     public UserDB(String userID, int level, int xp, boolean isBotModerator, boolean isBlackListed) {
@@ -89,5 +92,17 @@ public class UserDB {
 
     public void setBlackListed(boolean blackListed) {
         isBlackListed = blackListed;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public void addRep() {
+        reps++;
     }
 }

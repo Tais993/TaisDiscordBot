@@ -2,11 +2,11 @@ package database.user;
 
 import com.mongodb.*;
 import commands.CommandReceivedEvent;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Instant;
+import java.util.HashMap;
 
 import static commands.CommandEnum.bot;
 import static functions.Colors.getCurrentColor;
@@ -15,6 +15,8 @@ public class DatabaseUser {
     public static MongoClient mongoClient;
     public static DB database;
     public static DBCollection user;
+
+    static HashMap<String, UserDB> cachedUsers = new HashMap<>();
 
     public DatabaseUser() {
         mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
@@ -36,27 +38,41 @@ public class DatabaseUser {
     }
 
     public UserDB getUserFromDBToUserDB(String userID) {
-        DBObject query = new BasicDBObject("userID", userID);
-        DBCursor cursor = user.find(query);
-        if (cursor.one() == null){
-            UserDB userDB = new UserDB(userID);
-            user.insert(userToDBObject(userDB));
 
-            return new UserDB(userID);
+        UserDB cachedUserDB = cachedUsers.get(userID);
+
+        if (cachedUserDB != null) {
+            return cachedUserDB;
+        } else {
+            DBObject query = new BasicDBObject("userID", userID);
+            DBCursor cursor = user.find(query);
+            if (cursor.one() == null) {
+                UserDB userDB = new UserDB(userID);
+                user.insert(userToDBObject(userDB));
+
+                cachedUsers.put(userDB.getUserID(), userDB);
+
+                return new UserDB(userID);
+            }
+            UserDB userDB = dbObjectToUser(cursor.one());
+            cachedUsers.put(userDB.getUserID(), userDB);
+            return userDB;
         }
-        return dbObjectToUser(cursor.one());
     }
 
     public DBObject userToDBObject(UserDB userDB) {
-        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed());
+        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("reps", userDB.getReps()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed());
     }
 
     public UserDB dbObjectToUser(DBObject dbObject) {
         String userID = dbObject.get("userID").toString();
         int level = Integer.parseInt(dbObject.get("level").toString());
         int xp = Integer.parseInt(dbObject.get("xp").toString());
+        int reps = 0;
 
-        UserDB userDB = new UserDB(userID, level, xp);
+        if (dbObject.get("reps") != null) reps = Integer.parseInt(dbObject.get("reps").toString());
+
+        UserDB userDB = new UserDB(userID, level, xp, reps);
         userDB.calculateXpForLevelUp();
 
         if (dbObject.get("isBotModerator") != null) userDB.setBotModerator(Boolean.parseBoolean(dbObject.get("isBotModerator").toString()));
@@ -70,8 +86,18 @@ public class DatabaseUser {
     }
 
     public void updateUserInDB(UserDB userDB) {
-        DBObject query = new BasicDBObject("userID", userDB.getUserID());
+        String userId = userDB.getUserID();
+
+        DBObject query = new BasicDBObject("userID", userId);
         user.findAndModify(query, userToDBObject(userDB));
+
+        UserDB cachedUserDB = cachedUsers.get(userDB.getUserID());
+
+        if (cachedUserDB != null) {
+            cachedUsers.replace(userId, userDB);
+        } else {
+            cachedUsers.put(userId, userDB);
+        }
     }
 
     public String addRandomXPToUserInDB(String userID) {
@@ -130,6 +156,14 @@ public class DatabaseUser {
         UserDB userDB = getUserFromDBToUserDB(userId);
 
         userDB.setBlackListed(blacklisted);
+
+        updateUserInDB(userDB);
+    }
+
+    public void addRep(String userId) {
+        UserDB userDB = getUserFromDBToUserDB(userId);
+
+        userDB.addRep();
 
         updateUserInDB(userDB);
     }

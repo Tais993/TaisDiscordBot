@@ -4,7 +4,6 @@ public class GuildDB {
     String guildID;
     String prefix = "!";
 
-
     public GuildDB(String guildID) {
         this.guildID = guildID;
     }

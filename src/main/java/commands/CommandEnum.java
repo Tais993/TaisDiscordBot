@@ -75,7 +75,9 @@ public class CommandEnum {
         ADDJOKE(new AddJoke()),
         REMOVEJOKE(new RemoveJoke()),
         SETBLACKLISTED(new SetBlacklisted()),
-        SETBOTMODERATOR(new SetBotModerator());
+        SETBOTMODERATOR(new SetBotModerator()),
+        REP(new Rep()),
+        REPS(new Reps());
         ICommand c;
 
         AllMyCommands(ICommand c) {

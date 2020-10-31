@@ -2,7 +2,6 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import database.guild.DatabaseGuild;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import static functions.Colors.getCurrentColor;

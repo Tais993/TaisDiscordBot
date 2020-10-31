@@ -3,6 +3,7 @@ package commands.general;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
+import database.user.UserDB;
 import net.dv8tion.jda.api.entities.User;
 
 public class Rep implements ICommand {
@@ -24,31 +25,39 @@ public class Rep implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        UserDB userdB = e.getUserDB();
+
+        if ((userdB.getLastTimeRepGiven() - System.currentTimeMillis()) <= 3600000) {
+            if (userdB.getLastTimeRepGiven() != 0) {
+                e.getMessageChannel().sendMessage(getFullHelp("Already given a rep in the last hour!")).queue();
+                return;
+            }
+        }
+
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
             return;
         }
 
-        String[] args = e.getArgs();
+        user = e.getFirstArgAsUser();
 
-        if (e.hasUserMentions()) {
-            userId = e.getFirstUserMentioned().getId();
-        } else {
-            if (args[0].matches("[0-9]+")) {
-                user = e.getJDA().retrieveUserById(args[0]).complete();
-                if (user == null) {
-                    e.getMessageChannel().sendMessage(getFullHelp("That is not a valid user ID!")).queue();
-                    return;
-                }
-                userId = args[0];
-
-            } else {
-                e.getMessageChannel().sendMessage(getFullHelp("A user ID should only contain numbers!")).queue();
-                return;
-            }
+        if (user == null) {
+            e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!")).queue();
+            return;
         }
 
+        userId = user.getId();
+
+        if (userId.equals(e.getAuthor().getId())) {
+            e.getMessageChannel().sendMessage(getFullHelp("You can't give a rep to yourself!")).queue();
+            return;
+        }
+
+        UserDB userDB = e.getUserDB();
+        userDB.setLastTimeRepGiven();
+
         databaseUser.addRep(userId);
+        databaseUser.updateUserInDB(userDB);
 
         e.getMessageChannel().sendMessage("A rep has been given to " + user.getName()).queue();
     }

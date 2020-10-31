@@ -23,6 +23,7 @@ public class CommandReceivedEvent {
     boolean isBotModerator;
     boolean mentionsEveryone;
     boolean hasUserMentions;
+    boolean hasChannelMentions;
 
     String[] args;
     String messageAsString;
@@ -34,6 +35,7 @@ public class CommandReceivedEvent {
     UserDB userDB;
 
     User firstUserMentioned;
+    TextChannel firstChannelMentioned;
 
     public CommandReceivedEvent(MessageReceivedEvent e, String prefix) {
         isFromGuild = e.isFromGuild();
@@ -159,5 +161,27 @@ public class CommandReceivedEvent {
 
     public User getFirstUserMentioned() {
         return firstUserMentioned;
+    }
+
+    public User getFirstArgAsUser() {
+        if (hasUserMentions()) {
+            return getFirstUserMentioned();
+        } else {
+            if (args[0].matches("[0-9]+")) {
+                User userInArg = getJDA().retrieveUserById(args[0]).complete();
+                if (!(userInArg == null)) {
+                    return userInArg;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean hasChannelMentions() {
+        return hasChannelMentions;
+    }
+
+    public TextChannel getFirstChannelMentioned() {
+        return firstChannelMentioned;
     }
 }

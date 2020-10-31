@@ -1,4 +1,6 @@
+import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import commands.CommandEnum;
 import commands.CommandHandler;
 import music.spotify.SearchSpotify;
@@ -9,12 +11,9 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.slf4j.LoggerFactory;
 import reactionshandler.OnReactionAdded;
 import reactionshandler.OnReactionRemove;
-
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.BufferedReader;

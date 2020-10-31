@@ -11,7 +11,7 @@ public class StartGame implements ICommand {
     CommandReceivedEvent e;
     DatabaseReactions databaseReactions = new DatabaseReactions();
 
-    String time = "16:00";
+    String time;
     Role role;
 
     String command = "startgame";
@@ -37,7 +37,7 @@ public class StartGame implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("startgame").setDescription("Error: Requires a time").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Requires a time")).queue();
             return;
         }
 

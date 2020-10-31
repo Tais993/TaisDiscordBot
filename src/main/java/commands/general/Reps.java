@@ -32,26 +32,14 @@ public class Reps implements ICommand {
             user = e.getAuthor();
             userDB = e.getUserDB();
         } else {
-            String[] args = e.getArgs();
+            user = e.getFirstArgAsUser();
 
-            if (e.hasUserMentions()) {
-                user = e.getFirstUserMentioned();
-                userId = e.getFirstUserMentioned().getId();
-            } else {
-                if (args[0].matches("[0-9]+")) {
-                    user = e.getJDA().retrieveUserById(args[0]).complete();
-                    if (user == null) {
-                        e.getMessageChannel().sendMessage(getFullHelp("That is not a valid user ID!")).queue();
-                        return;
-                    }
-                    userId = args[0];
-
-                } else {
-                    e.getMessageChannel().sendMessage(getFullHelp("A user ID should only contain numbers!")).queue();
-                    return;
-                }
+            if (user == null) {
+                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!")).queue();
+                return;
             }
 
+            userId = user.getId();
             userDB = databaseUser.getUserFromDBToUserDB(userId);
         }
 
@@ -61,7 +49,6 @@ public class Reps implements ICommand {
             eb.setDescription(user.getName() + " has 0 reps.. Please rep him!");
         } else {
             eb.setDescription(user.getName() + " has a total of " + userDB.getReps() + ((userDB.getReps() == 1) ? " rep!" : " reps!"));
-
         }
 
         eb.setAuthor(user.getAsTag(), user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());

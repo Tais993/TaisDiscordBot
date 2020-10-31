@@ -8,6 +8,8 @@ public class UserDB {
     int xp = 0;
     int xpForLevelUp = 100;
 
+    long lastTimeRepGiven;
+
     int reps = 0;
 
     boolean isBotModerator = false;
@@ -104,5 +106,13 @@ public class UserDB {
 
     public void addRep() {
         reps++;
+    }
+
+    public long getLastTimeRepGiven() {
+        return lastTimeRepGiven;
+    }
+
+    public void setLastTimeRepGiven() {
+        this.lastTimeRepGiven = System.currentTimeMillis();
     }
 }

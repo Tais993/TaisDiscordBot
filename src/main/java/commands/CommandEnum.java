@@ -1,6 +1,7 @@
 package commands;
 
 import commands.amongus.StartGame;
+import commands.bot.Shutdown;
 import commands.bot.*;
 import commands.fun.*;
 import commands.general.*;
@@ -8,11 +9,9 @@ import commands.music.*;
 import commands.util.*;
 import commands.util.ban.TempBan;
 import commands.util.invitecommand.InviteMain;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -77,7 +76,9 @@ public class CommandEnum {
         SETBLACKLISTED(new SetBlacklisted()),
         SETBOTMODERATOR(new SetBotModerator()),
         REP(new Rep()),
-        REPS(new Reps());
+        REPS(new Reps()),
+        SAY(new Say()),
+        AVATAR(new Avatar());
         ICommand c;
 
         AllMyCommands(ICommand c) {

@@ -1,5 +1,6 @@
 package commands;
 
+import commands.amongus.SetAmongUsRole;
 import commands.amongus.StartGame;
 import commands.bot.Shutdown;
 import commands.bot.*;
@@ -78,7 +79,9 @@ public class CommandEnum {
         REP(new Rep()),
         REPS(new Reps()),
         SAY(new Say()),
-        AVATAR(new Avatar());
+        AVATAR(new Avatar()),
+        DM(new Dm()),
+        SETAMONGUSROLE(new SetAmongUsRole());
         ICommand c;
 
         AllMyCommands(ICommand c) {

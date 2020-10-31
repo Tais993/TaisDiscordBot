@@ -60,22 +60,24 @@ public class DatabaseGuild {
     }
 
     public DBObject guildDBToDBObject(GuildDB guildDB) {
-        return new BasicDBObject("guildID", guildDB.getGuildID()).append("prefix", guildDB.getPrefix());
+        return new BasicDBObject("guildID", guildDB.getGuildID()).append("prefix", guildDB.getPrefix()).append("amongUsRoleId", guildDB.getAmongUsRoleId());
     }
 
     public GuildDB dbObjectToGuildDB(DBObject dbObject) {
         String guildID = dbObject.get("guildID").toString();
         String prefix = dbObject.get("prefix").toString();
 
-        GuildDB guildDB = new GuildDB(guildID);
-        guildDB.setPrefix(prefix);
+        GuildDB guildDB = new GuildDB(guildID, prefix);
+
+        if (dbObject.get("amongUsRoleId") != null) guildDB.setAmongUsRoleId(dbObject.get("amongUsRoleId").toString());
+
         return guildDB;
     }
 
     public void updateGuildInDB(GuildDB guildDB) {
         String guildId = guildDB.getGuildID();
 
-        DBObject query = new BasicDBObject("guildID", guildDB);
+        DBObject query = new BasicDBObject("guildID", guildDB.getGuildID());
         guild.findAndModify(query, guildDBToDBObject(guildDB));
 
         GuildDB cachedGuildDB = cachedGuilds.get(guildDB.getGuildID());

@@ -1,5 +1,6 @@
 package database.user;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class UserDB {
@@ -14,6 +15,8 @@ public class UserDB {
 
     boolean isBotModerator = false;
     boolean isBlackListed = false;
+
+    HashMap<Integer, String> todo = new HashMap<>();
 
     public UserDB(String userID) {
         this.userID = userID;

@@ -51,6 +51,7 @@ public class Level implements ICommand {
         eb.setAuthor(userGiven.getAsTag());
         eb.appendDescription("Level: " + userDB.getLevel() + "\n");
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
+        eb.setFooter(userDB.getReps() + " total reps");
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

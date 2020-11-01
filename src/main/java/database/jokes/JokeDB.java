@@ -1,7 +1,7 @@
 package database.jokes;
 
 public class JokeDB {
-    int jokeId = 0;
+    String jokeId = "0";
     String setup;
     String punchline;
 
@@ -11,13 +11,13 @@ public class JokeDB {
         this.punchline = punchline;
     }
 
-    public JokeDB(int jokeId, String setup, String punchline) {
+    public JokeDB(String jokeId, String setup, String punchline) {
         this.jokeId = jokeId;
         this.setup = setup;
         this.punchline = punchline;
     }
 
-    public void setJokeId(int jokeId) {
+    public void setJokeId(String jokeId) {
         this.jokeId = jokeId;
     }
 
@@ -29,7 +29,7 @@ public class JokeDB {
         this.setup = setup;
     }
 
-    public int getJokeId() {
+    public String getJokeId() {
         return jokeId;
     }
 

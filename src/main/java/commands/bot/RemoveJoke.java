@@ -3,6 +3,8 @@ package commands.bot;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.jokes.DatabaseJokes;
+import database.jokes.JokeDB;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 public class RemoveJoke implements ICommand {
     DatabaseJokes databaseJokes = new DatabaseJokes();
@@ -12,8 +14,8 @@ public class RemoveJoke implements ICommand {
     String commandAlias = "deletejoke";
     String category = "botmoderation";
     String exampleCommand = "`!deletejoke `";
-    String shortCommandDescription = "Add a funny joke";
-    String fullCommandDescription = "Add a funny joke that actually, isn't funny at all.";
+    String shortCommandDescription = "Remove a funny joke";
+    String fullCommandDescription = "Remove a funny joke that actually, isn't funny at all.";
 
     @Override
     public void command(CommandReceivedEvent event) {
@@ -25,7 +27,28 @@ public class RemoveJoke implements ICommand {
         }
 
         String[] args = e.getArgs();
-        databaseJokes.removeJokeById(Integer.parseInt(args[0]));
+
+        if (!args[0].matches("[0-9]+")) {
+            e.getMessageChannel().sendMessage("Give a valid ID!").queue();
+            return;
+        }
+
+        JokeDB jokeDB = databaseJokes.getJokeAsJokeDB(args[0]);
+        databaseJokes.removeJokeById(args[0]);
+
+        if (args.length >= 2 && Boolean.parseBoolean(args[1])) {
+            EmbedBuilder eb = getEmbed();
+
+            eb.setDescription("We will miss you..");
+            eb.appendDescription(jokeDB.getSetup() + "\n");
+            eb.appendDescription("*" + jokeDB.getPunchline() + "*");
+            eb.setFooter("Joke Id: " + jokeDB.getJokeId());
+
+            e.getMessageChannel().sendMessage(eb.build()).queue();
+
+        } else {
+            e.getMessageChannel().sendMessage(jokeDB.getJokeId() +  " has been removed.").queue();
+        }
     }
 
     @Override

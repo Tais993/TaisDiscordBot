@@ -6,18 +6,14 @@ import commands.ICommand;
 public class Shutdown implements ICommand {
     String command = "shutdown";
     String commandAlias = "sd";
-    String category = "general";
+    String category = "botmoderation";
     String exampleCommand = "`!shutdown`";
     String shortCommandDescription = "Stop the bot";
     String fullCommandDescription = "Stop the bot";
 
     @Override
     public void command(CommandReceivedEvent event) {
-        if (event.isBotModerator()) {
-            System.exit(1);
-        } else {
-            event.getMessageChannel().sendMessage(getFullHelp("Imagine not being bot moderator, kinda cringe ngl.")).queue();
-        }
+        System.exit(1);
     }
 
     @Override

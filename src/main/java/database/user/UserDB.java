@@ -1,5 +1,6 @@
 package database.user;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class UserDB {
@@ -8,17 +9,24 @@ public class UserDB {
     int xp = 0;
     int xpForLevelUp = 100;
 
+    long lastTimeRepGiven;
+
+    int reps = 0;
+
     boolean isBotModerator = false;
     boolean isBlackListed = false;
+
+    HashMap<Integer, String> todo = new HashMap<>();
 
     public UserDB(String userID) {
         this.userID = userID;
     }
 
-    public UserDB(String userID, int level, int xp) {
+    public UserDB(String userID, int level, int xp, int reps) {
         this.userID = userID;
         this.level = level;
         this.xp = xp;
+        this.reps = reps;
     }
 
     public UserDB(String userID, int level, int xp, boolean isBotModerator, boolean isBlackListed) {
@@ -89,5 +97,25 @@ public class UserDB {
 
     public void setBlackListed(boolean blackListed) {
         isBlackListed = blackListed;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public void addRep() {
+        reps++;
+    }
+
+    public long getLastTimeRepGiven() {
+        return lastTimeRepGiven;
+    }
+
+    public void setLastTimeRepGiven() {
+        this.lastTimeRepGiven = System.currentTimeMillis();
     }
 }

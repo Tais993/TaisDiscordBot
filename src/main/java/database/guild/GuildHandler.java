@@ -11,9 +11,6 @@ public class GuildHandler {
         e = event;
         guildID = e.getGuild().getId();
 
-        if (!databaseGuild.guildExistsInDB(guildID)){
-            GuildDB guildDB = new GuildDB(guildID);
-            databaseGuild.addGuildToDB(guildDB);
-        }
+        databaseGuild.getGuildFromDBToGuildDB(guildID);
     }
 }

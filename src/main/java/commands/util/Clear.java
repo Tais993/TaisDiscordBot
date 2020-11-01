@@ -2,7 +2,7 @@ package commands.util;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Permissions;
+import util.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 

@@ -4,7 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Backward implements ICommand {
     CommandReceivedEvent e;

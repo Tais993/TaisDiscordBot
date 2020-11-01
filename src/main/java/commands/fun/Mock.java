@@ -2,7 +2,7 @@ package commands.fun;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Permissions;
+import util.Permissions;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.Random;

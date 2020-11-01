@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class Quote implements ICommand {
     CommandReceivedEvent e;

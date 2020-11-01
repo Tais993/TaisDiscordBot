@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.HashMap;
 
 import static commands.CommandEnum.bot;
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class DatabaseUser {
     public static MongoClient mongoClient;

@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.SelfUser;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class CommandEnum {
     enum AllMyCommands {
@@ -81,7 +81,8 @@ public class CommandEnum {
         SAY(new Say()),
         AVATAR(new Avatar()),
         DM(new Dm()),
-        SETAMONGUSROLE(new SetAmongUsRole());
+        SETAMONGUSROLE(new SetAmongUsRole()),
+        ROLEINFO(new RoleInfo());
         ICommand c;
 
         AllMyCommands(ICommand c) {

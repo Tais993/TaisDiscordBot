@@ -4,7 +4,7 @@ import commands.CommandReceivedEvent;
 import database.guild.DatabaseGuild;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class BotPrefix {
 

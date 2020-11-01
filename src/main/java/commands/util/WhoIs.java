@@ -3,18 +3,20 @@ package commands.util;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.entities.UserInfo;
+import net.dv8tion.jda.api.entities.User;
+import util.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
 import java.time.Instant;
 
+import static util.Time.getDateFromOffset;
+
 public class WhoIs implements ICommand {
     CommandReceivedEvent e;
-    Member member;
-    CommandEnum commandEnum = new CommandEnum();
 
-    String userId;
+    Member member;
+    User user;
 
     String command = "userinfo";
     String commandAlias = "whois";
@@ -33,38 +35,31 @@ public class WhoIs implements ICommand {
             return;
         }
 
+
         if (e.hasArgs()) {
-            userId = e.getArgs()[0];
-        } else {
-            userId = e.getAuthor().getId();
-        }
+            user = e.getFirstArgAsUser();
 
-        if (!getMember()) return;
+            if (user == null) {
+                e.getMessageChannel().sendMessage(getFullHelp("Invalid user ID!")).queue();
+                return;
+            }
 
-        sendEmbed();
-    }
-
-    public boolean getMember() {
-        if (e.getMessage().getMentionedMembers().size() > 0) {
-            member = e.getMessage().getMentionedMembers().get(0);
-        } else {
-            member = e.getGuild().retrieveMemberById(userId).complete();
+            member = e.getGuild().getMemberById(user.getId());
 
             if (member == null) {
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: ID given isn't valid.").build()).queue();
-                return false;
+                e.getMessageChannel().sendMessage(getFullHelp("User isn't in this guild!")).queue();
+                return;
             }
+        } else {
+            member = e.getMember();
         }
-        return true;
-    }
 
-    public void sendEmbed() {
         EmbedBuilder eb = new EmbedBuilder();
         UserInfo userInfo = new UserInfo(member);
 
         eb.setTitle(member.getUser().getAsTag());
-        eb.addField("Time joined:", userInfo.getJoinedServerDate(), false);
-        eb.addField("Time created:", userInfo.getDateCreated(), false);
+        eb.addField("Time joined:", getDateFromOffset(member.getTimeJoined()), false);
+        eb.addField("Time created:", getDateFromOffset(member.getTimeCreated()), false);
         if (member.getTimeBoosted() != null) eb.addField("Time boosted:", userInfo.getTimeBoosted(), true);
 
         eb.addField("Roles:", userInfo.getRoles(), true);
@@ -73,7 +68,6 @@ public class WhoIs implements ICommand {
         eb.addBlankField(true);
         eb.setThumbnail(member.getUser().getEffectiveAvatarUrl());
         eb.setColor(member.getColor());
-        eb.setFooter("Made by Tijs ");
         eb.setTimestamp(Instant.now());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();

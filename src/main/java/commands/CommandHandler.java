@@ -1,6 +1,5 @@
 package commands;
 
-import commands.general.BotPrefix;
 import database.guild.DatabaseGuild;
 import database.guild.GuildDB;
 import database.guild.GuildHandler;

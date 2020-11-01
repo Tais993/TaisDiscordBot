@@ -1,24 +1,25 @@
 package commands.util.invitecommand;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class InviteMain implements ICommand {
-    CommandEnum commandEnum = new CommandEnum();
+    CommandReceivedEvent e;
 
     InviteTime inviteTime = new InviteTime();
     InviteUses inviteUses = new InviteUses();
 
-    CommandReceivedEvent e;
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("invite"));
     String category = "util";
-    String command = "invite";
-    String commandAlias = "invite";
-    String exampleCommand = "`!invite time <time>s/m/h/d`\n`!invite uses <uses>`";
+    String exampleCommand = "invite time <time>s/m/h/d";
     String shortCommandDescription = "Create server invites";
     String fullCommandDescription = "Create server invites for a period of time or uses the link has\n" +
             "<time> is amount of seconds, minutes, hours or days. (1 day is max, longer then a day is permanent)\n" +
-            "<uses> is amount of uses the invite has.";
+            "<uses> is amount of uses the invite has.\n" +
+            "`!invite uses <uses>` works if you want it to last for a specific amount of uses.";
 
     @Override
     public void command(CommandReceivedEvent event) {
@@ -36,21 +37,11 @@ public class InviteMain implements ICommand {
             } else if (args[1].equals("uses")) {
                 inviteUses.inviteUses(event, args[2]);
             } else {
-                e.getMessageChannel().sendMessage(getFullHelp("invite")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("invite", e.getPrefix())).queue();
             }
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("invite")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("invite", e.getPrefix())).queue();
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -71,5 +62,10 @@ public class InviteMain implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

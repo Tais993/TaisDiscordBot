@@ -7,16 +7,18 @@ import database.guild.GuildDB;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class SetAmongUsRole implements ICommand {
     DatabaseGuild databaseGuild = new DatabaseGuild();
     CommandReceivedEvent e;
 
     Role role;
 
-    String command = "setamongusrole";
-    String commandAlias = "setamongusrole";
-    String category = "fun";
-    String exampleCommand = "!setamongusrole <role as mention>/<role ID>";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("setamongusrole"));
+    String category = "util";
+    String exampleCommand = "setamongusrole <role as mention>/<role ID>";
     String shortCommandDescription = "Sets the among us role ID to the correct role.";
     String fullCommandDescription = "Sets the among us role ID to the correct role.\n" +
             "When using the startgame command it will ping the correct role.";
@@ -26,13 +28,12 @@ public class SetAmongUsRole implements ICommand {
         e = event;
 
         if (!e.getMember().getPermissions().contains(Permission.MANAGE_ROLES)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires manage roles permission!")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires manage roles permission!", e.getPrefix())).queue();
             return;
         }
 
-
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument!")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument!", e.getPrefix())).queue();
             return;
         }
 
@@ -42,7 +43,7 @@ public class SetAmongUsRole implements ICommand {
             if (e.getArgs()[0].matches("[0-9]+")) {
                 role = e.getGuild().getRoleById(e.getArgs()[0]);
                 if (role == null)  {
-                    e.getMessageChannel().sendMessage(getFullHelp("Give a valid role ID!")).queue();
+                    e.getMessageChannel().sendMessage(getFullHelp("Give a valid role ID!", e.getPrefix())).queue();
                     return;
                 }
             }
@@ -58,13 +59,8 @@ public class SetAmongUsRole implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 
     @Override

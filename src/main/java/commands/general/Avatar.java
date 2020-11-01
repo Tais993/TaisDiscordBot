@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static util.Colors.getCurrentColor;
 
@@ -14,10 +16,9 @@ public class Avatar implements ICommand {
 
     User user;
 
-    String command = "avatar";
-    String commandAlias = "avatar";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("avatar"));
     String category = "general";
-    String exampleCommand = "`!avatar (user Id)/(user as mention)`";
+    String exampleCommand = "avatar (user Id)/(user as mention)";
     String shortCommandDescription = "Get someone's avatar";
     String fullCommandDescription = "Get someone's avatar";
 
@@ -43,16 +44,6 @@ public class Avatar implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -70,5 +61,10 @@ public class Avatar implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

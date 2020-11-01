@@ -1,28 +1,25 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import database.guild.DatabaseGuild;
 import music.PlayerManager;
 import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Play implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
-    DatabaseGuild databaseGuild = new DatabaseGuild();
 
     String url;
 
-    String command = "play";
-    String commandAlias = "p";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("play", "p"));
     String category = "music";
-    String exampleCommand = "`!play <URL>`";
+    String exampleCommand = "play <URL>";
     String shortCommandDescription = "Plays music.";
     String fullCommandDescription = "Plays music.";
 
@@ -31,7 +28,7 @@ public class Play implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -69,22 +66,12 @@ public class Play implements ICommand {
         String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("play").setDescription(videoUrl).build()).queue();
+            e.getMessageChannel().sendMessage("Unknown error: " + videoUrl).queue();
             return false;
         }
 
         url = videoUrl;
         return true;
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -105,5 +92,10 @@ public class Play implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

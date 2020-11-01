@@ -1,20 +1,20 @@
 package commands.util.ban;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import util.Permissions;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import util.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TempBan implements ICommand {
-    CommandEnum commandEnum = new CommandEnum();
+    CommandReceivedEvent e;
 
     Member memberToBan;
 
-    CommandReceivedEvent e;
-    String command = "tempban";
-    String commandAlias = "tempban";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("tempban"));
     String category = "util";
     String exampleCommand = "`!tempban <@user> <time in days>`";
     String shortCommandDescription = "Temporarily ban a user.";
@@ -37,11 +37,11 @@ public class TempBan implements ICommand {
                 if (args.length > 2){
                     banUser(args);
                 } else {
-                    e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: requires at least 2 arguments.").build()).queue();
+                    e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 2 arguments.", e.getPrefix())).queue();
                 }
             }
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: requires a mentioned user.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires a mentioned user.", e.getPrefix())).queue();
         }
     }
 
@@ -49,16 +49,16 @@ public class TempBan implements ICommand {
         Permissions permissions = new Permissions(e.getGuild());
 
         if (!(permissions.botHasPermission(Permission.BAN_MEMBERS))) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: Bot requires the ban members permission.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Bot requires the ban members permission.", e.getPrefix())).queue();
             return false;
         } else if (!(permissions.userHasPermission(e.getAuthor(), Permission.BAN_MEMBERS))) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: User requires the ban members permission to run the command.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: User requires the ban members permission to run the command.", e.getPrefix())).queue();
             return false;
         } else if (!(permissions.botCanInteract(memberToBan))) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: Bot is a lower or the same level as the user given.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Bot is a lower or the same level as the user given.", e.getPrefix())).queue();
             return false;
         } else if (!permissions.userCanInteract(e.getAuthor(), memberToBan)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("tempban").setDescription("Error: User is a lower or the same level as the user given.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: User is a lower or the same level as the user given.", e.getPrefix())).queue();
             return false;
         }
         return true;
@@ -70,16 +70,6 @@ public class TempBan implements ICommand {
 
     public boolean mentionsUser() {
         return e.getMessage().getMentionedUsers().size() > 0;
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -100,5 +90,10 @@ public class TempBan implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

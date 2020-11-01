@@ -7,6 +7,9 @@ import database.reactions.ReactionDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class StartGame implements ICommand {
     CommandReceivedEvent e;
     DatabaseReactions databaseReactions = new DatabaseReactions();
@@ -14,10 +17,9 @@ public class StartGame implements ICommand {
     String time;
     Role role;
 
-    String command = "startgame";
-    String commandAlias = "startgame";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("startgame", "startamongusgame"));
     String category = "fun";
-    String exampleCommand = "`!startgame <time>`";
+    String exampleCommand = "startgame <time>";
     String shortCommandDescription = "Start a game of among us";
     String fullCommandDescription = "Start a game of among us, set amount of imposters, and more.\n" +
             "You can see how many people will join, and what their name is.";
@@ -37,7 +39,7 @@ public class StartGame implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Requires a time")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Requires a time", e.getPrefix())).queue();
             return;
         }
 
@@ -78,16 +80,6 @@ public class StartGame implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -105,5 +97,10 @@ public class StartGame implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

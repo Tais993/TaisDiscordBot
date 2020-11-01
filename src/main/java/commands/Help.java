@@ -1,13 +1,14 @@
 package commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Help implements ICommand{
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
 
-    String command = "help";
-    String commandAlias = "help";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("help"));
     String category = "util";
-    String exampleCommand = "!help <item/category>";
+    String exampleCommand = "help <item/category>";
     String shortCommandDescription = "Get some help";
     String fullCommandDescription = "Get help for a item or category, but you already know that. Right?";
 
@@ -25,22 +26,12 @@ public class Help implements ICommand{
                     break;
                 default:
                     if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())){
-                        e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0]).build()).queue();
+                        e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0], e.getPrefix()).build()).queue();
                     }
             }
         } else {
             commandEnum.getHelpAllByCategory(e);
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -61,5 +52,10 @@ public class Help implements ICommand{
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Replay implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "replay";
-    String commandAlias = "replay";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("replay"));
     String category = "music";
-    String exampleCommand = "!replay";
+    String exampleCommand = "replay";
     String shortCommandDescription = "Replay the current playing track.";
 
     @Override
@@ -25,16 +27,6 @@ public class Replay implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.replayTrack(e.getGuild());
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -55,5 +47,10 @@ public class Replay implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

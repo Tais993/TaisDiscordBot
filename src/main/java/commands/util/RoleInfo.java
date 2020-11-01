@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static util.Time.getDateFromOffset;
 
@@ -14,10 +16,9 @@ public class RoleInfo implements ICommand {
 
     Role role;
 
-    String command = "roleinfo";
-    String commandAlias = "roleinfo";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("roleinfo"));
     String category = "util";
-    String exampleCommand = "!roleinfo <@role>/<role id>";
+    String exampleCommand = "roleinfo <@role>/<role id>";
     String shortCommandDescription = "Get information about a role.";
     String fullCommandDescription = "Get information about a role.";
 
@@ -34,10 +35,6 @@ public class RoleInfo implements ICommand {
             role = e.getFirstArgAsRole();
         }
 
-        sendEmbed();
-    }
-
-    public void sendEmbed() {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle(role.getName());
@@ -59,16 +56,6 @@ public class RoleInfo implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -86,5 +73,10 @@ public class RoleInfo implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

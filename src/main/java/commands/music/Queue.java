@@ -5,11 +5,14 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Queue implements ICommand {
-    String command = "queue";
-    String commandAlias = "q";
+
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("queue", "q"));
     String category = "music";
-    String exampleCommand = "`!queue`";
+    String exampleCommand = "queue";
     String shortCommandDescription = "Get the queue of the music.";
     String fullCommandDescription = "Get the queue of the music.";
 
@@ -20,16 +23,6 @@ public class Queue implements ICommand {
         EmbedBuilder eb = manager.getQueue(event.getGuild(), getEmbed());
 
         event.getMessageChannel().sendMessage(eb.build()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -50,5 +43,10 @@ public class Queue implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -1,22 +1,22 @@
 package commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.GuildMusicManager;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Loop implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
 
-    String command = "loop";
-    String commandAlias = "loop";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("loop"));
     String category = "music";
-    String exampleCommand = "`!loop all/1`";
+    String exampleCommand = "loop all/1";
     String shortCommandDescription = "Loop the current queue / current song.";
     String fullCommandDescription = "Loop the current queue / current song.\n" +
             "`!loop all` to loop the current queue. \n" +
@@ -29,7 +29,7 @@ public class Loop implements ICommand {
         if (!allowedToPlayMusic(e, "loop")) return;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("loop").setDescription("Requires at least 1 argument").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -53,19 +53,9 @@ public class Loop implements ICommand {
                 manager.loopOff(e.getGuild());
                 break;
             default:
-                e.getMessageChannel().sendMessage(getFullHelp("Error: either give 1 or all as input")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Error: either give 1 or all as input", e.getPrefix())).queue();
                 break;
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -86,5 +76,10 @@ public class Loop implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

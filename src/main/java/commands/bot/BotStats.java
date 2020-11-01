@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class BotStats implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "botstats";
-    String commandAlias = "stats";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("botstats", "stats"));
     String category = "general";
-    String exampleCommand = "!serverinfo / !serverstats";
-    String shortCommandDescription = "Get info about the server.";
-    String fullCommandDescription = "Get information about the server.";
+    String exampleCommand = "botstats";
+    String shortCommandDescription = "Get info about the bot.";
+    String fullCommandDescription = "Get information about the bot.";
 
     @Override
     public void command(CommandReceivedEvent event) {
@@ -27,16 +29,6 @@ public class BotStats implements ICommand {
         eb.setThumbnail(e.getJDA().getSelfUser().getAvatarUrl());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -57,5 +49,10 @@ public class BotStats implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

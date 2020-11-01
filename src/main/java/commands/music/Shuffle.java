@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Shuffle implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "shuffle";
-    String commandAlias = "shuffle";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("shuffle"));
     String category = "music";
-    String exampleCommand = "`!shuffle`";
+    String exampleCommand = "shuffle";
     String shortCommandDescription = "Shuffle the queue.";
     String fullCommandDescription = "Shuffle the queue.";
 
@@ -26,16 +28,6 @@ public class Shuffle implements ICommand {
         manager.shuffleQueue(e.getGuild());
 
         e.getMessageChannel().sendMessage("Queue has been shuffeled").queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -56,5 +48,10 @@ public class Shuffle implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

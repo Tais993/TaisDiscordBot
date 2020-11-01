@@ -4,6 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
 import database.guild.GuildDB;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
 public class SetAmongUsRole implements ICommand {
@@ -24,6 +25,11 @@ public class SetAmongUsRole implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
+        if (!e.getMember().getPermissions().contains(Permission.MANAGE_ROLES)) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires manage roles permission!")).queue();
+            return;
+        }
+
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument!")).queue();
@@ -35,7 +41,7 @@ public class SetAmongUsRole implements ICommand {
         } else {
             if (e.getArgs()[0].matches("[0-9]+")) {
                 role = e.getGuild().getRoleById(e.getArgs()[0]);
-                if (!(role == null)) {
+                if (role == null)  {
                     e.getMessageChannel().sendMessage(getFullHelp("Give a valid role ID!")).queue();
                     return;
                 }

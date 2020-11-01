@@ -12,7 +12,7 @@ public class SetBlacklisted implements ICommand {
     String userId;
 
     String command = "setblacklisted";
-    String commandAlias = "setblacklisted";
+    String commandAlias = "setblacklist";
     String category = "botmoderation";
     String exampleCommand = "`!setblacklisted <user id>/<user mention> <true/false>`";
     String shortCommandDescription = "Set someone blacklisted from the bot.";

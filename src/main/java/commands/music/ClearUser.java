@@ -5,6 +5,9 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class ClearUser implements ICommand {
@@ -12,10 +15,9 @@ public class ClearUser implements ICommand {
 
     boolean isAllowed;
 
-    String command = "clearuser";
-    String commandAlias = "clearuser";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("clearuser"));
     String category = "music";
-    String exampleCommand = "`!clearuser (userId/userTag)`";
+    String exampleCommand = "clearuser (userId/userTag)";
     String shortCommandDescription = "Queue gets cleared from a user's songs.";
     String fullCommandDescription = "Queue gets cleared from a user's songs.";
 
@@ -26,7 +28,7 @@ public class ClearUser implements ICommand {
         if (!allowedToPlayMusic(e, "clearuser")) return;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -39,7 +41,7 @@ public class ClearUser implements ICommand {
         }
 
         if (isAllowed) {
-            e.getMessageChannel().sendMessage(getFullHelp("Member is still in channel!")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Member is still in channel!", e.getPrefix())).queue();
             return;
         }
 
@@ -47,16 +49,6 @@ public class ClearUser implements ICommand {
         manager.clearQueueFromUser(e.getGuild(), e.getArgs()[0]);
 
         e.getMessageChannel().sendMessage("Queue has been cleared from user").queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -77,5 +69,10 @@ public class ClearUser implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

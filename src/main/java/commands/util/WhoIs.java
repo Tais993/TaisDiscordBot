@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.User;
 import util.entities.UserInfo;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static util.Time.getDateFromOffset;
 
@@ -17,11 +19,9 @@ public class WhoIs implements ICommand {
     User user;
     Member member;
 
-    String command = "userinfo";
-    String commandAlias = "whois";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("whois", "userinfo"));
     String category = "util";
-    String exampleCommand = "!userinfo <@user>/<userID>\n" +
-            "!whois <@user>/<userID>";
+    String exampleCommand = "whois <@user>/<userID>";
     String shortCommandDescription = "Get information about a user.";
     String fullCommandDescription = "Get information about a user.";
 
@@ -39,14 +39,14 @@ public class WhoIs implements ICommand {
             user = e.getFirstArgAsUser();
 
             if (user == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
                 return;
             }
 
             member = e.getGuild().getMemberById(user.getId());
 
             if (member == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("That isn't a member of this guild!")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("That isn't a member of this guild!", e.getPrefix())).queue();
                 return;
             }
         } else {
@@ -73,16 +73,6 @@ public class WhoIs implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -100,5 +90,10 @@ public class WhoIs implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

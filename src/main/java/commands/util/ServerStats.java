@@ -2,18 +2,20 @@ package commands.util;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import util.entities.GuildInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import util.entities.GuildInfo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static util.Colors.getCurrentColor;
 
 public class ServerStats implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "serverinfo";
-    String commandAlias = "serverstats";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("serverstats", "serverinfo"));
     String category = "util";
-    String exampleCommand = "!serverinfo / !serverstats";
+    String exampleCommand = "serverinfo";
     String shortCommandDescription = "Get info about the server.";
     String fullCommandDescription = "Get information about the server.";
 
@@ -45,16 +47,6 @@ public class ServerStats implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -72,5 +64,10 @@ public class ServerStats implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

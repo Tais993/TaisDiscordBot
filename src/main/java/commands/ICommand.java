@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.time.Instant;
+import java.util.ArrayList;
 
 import static commands.CommandEnum.bot;
 import static util.Colors.getCurrentColor;
@@ -11,8 +12,7 @@ import static util.Colors.getCurrentColor;
 public interface ICommand {
     CommandReceivedEvent e = null;
     CommandEnum commandEnum = new CommandEnum();
-    String command = "";
-    String commandAlias = "";
+    ArrayList<String> commandAliases = new ArrayList<>();
     String category = "";
     String exampleCommand = "";
     String shortCommandDescription = "";
@@ -30,16 +30,12 @@ public interface ICommand {
         return eb;
     }
 
-    default MessageEmbed getFullHelp(String error) {
+    default MessageEmbed getFullHelp(String error, String prefix) {
         if (error.isEmpty()) {
-            return commandEnum.getFullHelpItem(getCommand()).build();
+            return commandEnum.getFullHelpItem(commandAliases.get(0), prefix).build();
         }
-        return commandEnum.getFullHelpItem(getCommand()).setDescription(error).build();
+        return commandEnum.getFullHelpItem(commandAliases.get(0), prefix).setDescription(error).build();
     }
-
-    String getCommand();
-
-    String getCommandAlias();
 
     String getCategory();
 
@@ -48,4 +44,6 @@ public interface ICommand {
     String getShortCommandDescription();
 
     String getFullCommandDescription();
+
+    ArrayList<String> getCommandAliases();
 }

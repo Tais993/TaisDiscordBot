@@ -1,6 +1,5 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.Permission;
@@ -9,15 +8,16 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Join implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
     AudioManager audioManager;
 
-    String command = "join";
-    String commandAlias = "join";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("join"));
     String category = "music";
-    String exampleCommand = "`!join`";
+    String exampleCommand = "join";
     String shortCommandDescription = "Joins the bot in a voice channel.";
     String fullCommandDescription = "Joins the bot in a voice channel.";
 
@@ -28,7 +28,7 @@ public class Join implements ICommand {
         audioManager = e.getGuild().getAudioManager();
 
         if (audioManager.isConnected()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("join").setDescription("Error: Already connected to a channel.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: already connected to a channel", e.getPrefix())).queue();
             return;
         }
 
@@ -45,7 +45,7 @@ public class Join implements ICommand {
         GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()){
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: Join a voice channel before running this command.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Join a voice channel before running this command.", e.getPrefix())).queue();
             return false;
         }
 
@@ -53,22 +53,12 @@ public class Join implements ICommand {
         Member selfMember = e.getGuild().getSelfMember();
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("userinfo").setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Missing VOICE_CONNECT permission", e.getPrefix())).queue();
             return false;
         }
 
         audioManager.openAudioConnection(voiceChannel);
         return true;
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -89,5 +79,10 @@ public class Join implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

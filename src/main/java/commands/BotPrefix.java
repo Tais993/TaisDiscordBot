@@ -1,6 +1,5 @@
-package commands.general;
+package commands;
 
-import commands.CommandReceivedEvent;
 import database.guild.DatabaseGuild;
 import net.dv8tion.jda.api.EmbedBuilder;
 

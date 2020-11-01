@@ -1,24 +1,25 @@
 package commands.util;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.reactionroles.DatabaseReactionRoles;
 import database.reactionroles.ReactionRoleDB;
 import database.reactionroles.RoleEmojiObject;
-import util.Colors;
-import util.Permissions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Role;
+import util.Permissions;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.Colors.getCurrentColor;
 
 public class ReactionRole implements ICommand {
     CommandReceivedEvent e;
 
     DatabaseReactionRoles databaseReactionRoles = new DatabaseReactionRoles();
-    CommandEnum commandEnum = new CommandEnum();
-    Colors colors = new Colors();
 
     RoleEmojiObject[] roleEmojiObject;
 
@@ -31,11 +32,9 @@ public class ReactionRole implements ICommand {
 
     int rolesToBeAdded;
 
-    String command = "reactionrole";
-    String commandAlias = "reactionrole";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("reactionrole"));
     String category = "util";
-    String exampleCommand = "!reactionrole bot <emoji> <roleId>\n" +
-            "!reactionrole message <messageId> <emoji> <roleId>";
+    String exampleCommand = "reactionrole message <messageId> <emoji> <roleId>";
     String shortCommandDescription = "Set reaction roles on a message, or let the bot create a basic message.";
     String fullCommandDescription = "Set reaction roles on a message, or let the bot create a basic message.\n" +
             "`!reactionrole bot` to let the bot create a message, if you want multiple roles do it like:\n" +
@@ -55,7 +54,7 @@ public class ReactionRole implements ICommand {
         Permissions permissions = new Permissions(e.getGuild());
 
         if (!permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_ROLES)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("reactionrole").setDescription("Error: requires manage roles permission.").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires manage roles permission.", e.getPrefix())).queue();
         }
 
        switch (args[1]) {
@@ -83,7 +82,7 @@ public class ReactionRole implements ICommand {
             emojiId = e.getMessage().getEmotes().get(i).getId();
 
             if (e.getGuild().getEmoteById(emojiId) == null) {
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("reactionrole").setDescription("Error: emoji not available in this guild").build()).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Error: emoji not available in this guild", e.getPrefix())).queue();
                 return;
             }
             Emote emote = e.getGuild().getEmoteById(emojiId);
@@ -93,7 +92,7 @@ public class ReactionRole implements ICommand {
             roleEmojiObject[i] = new RoleEmojiObject(roleId, emojiId);
         }
 
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
         eb.setTitle("Roles: ");
 
         e.getMessageChannel().sendMessage(eb.build()).queue(m -> {
@@ -117,7 +116,7 @@ public class ReactionRole implements ICommand {
             emojiId = e.getMessage().getEmotes().get(i).getId();
 
             if (e.getGuild().getEmoteById(emojiId) == null) {
-                e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("reactionrole").setDescription("Error: emoji not available in this guild").build()).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Error: emoji not available in this guild", e.getPrefix())).queue();
                 return;
             }
 
@@ -138,16 +137,6 @@ public class ReactionRole implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -165,5 +154,10 @@ public class ReactionRole implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

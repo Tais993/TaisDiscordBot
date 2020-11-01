@@ -6,6 +6,9 @@ import database.user.DatabaseUser;
 import database.user.UserDB;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Rep implements ICommand {
     CommandReceivedEvent e;
 
@@ -14,10 +17,9 @@ public class Rep implements ICommand {
     String userId;
     User user;
 
-    String command = "rep";
-    String commandAlias = "rep";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("rep"));
     String category = "general";
-    String exampleCommand = "`!rep <user id>/<user mention>`";
+    String exampleCommand = "rep <user id>/<user mention>";
     String shortCommandDescription = "Rep someone";
     String fullCommandDescription = "Give someone a internet point with no value at all.";
 
@@ -29,27 +31,27 @@ public class Rep implements ICommand {
 
         if ((userdB.getLastTimeRepGiven() - System.currentTimeMillis()) <= 3600000) {
             if (userdB.getLastTimeRepGiven() != 0) {
-                e.getMessageChannel().sendMessage(getFullHelp("Already given a rep in the last hour!")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Already given a rep in the last hour!", e.getPrefix())).queue();
                 return;
             }
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
         user = e.getFirstArgAsUser();
 
         if (user == null) {
-            e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
             return;
         }
 
         userId = user.getId();
 
         if (userId.equals(e.getAuthor().getId())) {
-            e.getMessageChannel().sendMessage(getFullHelp("You can't give a rep to yourself!")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("You can't give a rep to yourself!", e.getPrefix())).queue();
             return;
         }
 
@@ -60,16 +62,6 @@ public class Rep implements ICommand {
         databaseUser.updateUserInDB(userDB);
 
         e.getMessageChannel().sendMessage("A rep has been given to " + user.getName()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -90,5 +82,10 @@ public class Rep implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

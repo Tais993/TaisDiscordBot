@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Dm implements ICommand {
     CommandReceivedEvent e;
 
     User user;
 
-    String command = "dm";
-    String commandAlias = "directmessage";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("dm", "directmessage", "pm", "privatemessage"));
     String category = "botmoderation";
-    String exampleCommand = "`!dm <user id>/<user as mention> <text>`";
+    String exampleCommand = "dm <user id>/<user as mention> <text>";
     String shortCommandDescription = "Send someone a DM.";
     String fullCommandDescription = "Send a user you want some text.\n" +
             "Abuse = bad.";
@@ -38,16 +40,6 @@ public class Dm implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -65,5 +57,10 @@ public class Dm implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

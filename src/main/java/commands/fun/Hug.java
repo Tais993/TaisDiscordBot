@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.Member;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Hug implements ICommand {
@@ -21,10 +23,9 @@ public class Hug implements ICommand {
     static File file = new File(filePath);
 
     CommandReceivedEvent e;
-    String command = "hug";
-    String commandAlias = "hug";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("hug"));
     String category = "fun";
-    String exampleCommand = "`!hug <@user>/<userID>`";
+    String exampleCommand = "hug <@user>/<userID>";
     String shortCommandDescription = "Love you too";
     String fullCommandDescription = "*No homo* lets hug each other!";
 
@@ -33,17 +34,17 @@ public class Hug implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Run this command in a Discord guild/server")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Run this command in a Discord guild/server", e.getPrefix())).queue();
             return;
         }
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires a argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires a argument", e.getPrefix())).queue();
             return;
         }
 
@@ -54,11 +55,11 @@ public class Hug implements ICommand {
             if (member != null) {
                 userToHugMentioned = member.getAsMention();
             } else {
-                e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid userId")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid userId", e.getPrefix())).queue();
                 return;
             }
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: either mention a user or give a user ID")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: either mention a user or give a user ID", e.getPrefix())).queue();
             return;
         }
 
@@ -102,16 +103,6 @@ public class Hug implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -129,5 +120,10 @@ public class Hug implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

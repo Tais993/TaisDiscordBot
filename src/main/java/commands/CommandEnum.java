@@ -80,8 +80,8 @@ public class CommandEnum {
         REPS(new Reps()),
         SAY(new Say()),
         AVATAR(new Avatar()),
-        DM(new Dm()),
         SETAMONGUSROLE(new SetAmongUsRole()),
+        DM(new Dm()),
         ROLEINFO(new RoleInfo());
         ICommand c;
 
@@ -102,7 +102,9 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (e.getCommand().equalsIgnoreCase(c.getCommand()) || e.getCommand().equalsIgnoreCase(c.getCommandAlias())) {
+            String commandFound = c.getCommandAliases().stream().filter(command -> e.getCommand().equalsIgnoreCase(command)).findFirst().orElse(null);
+
+            if (commandFound != null) {
                 if (c.getCategory().equalsIgnoreCase("botmoderation")) {
                     if (e.isBotModerator()) {
                         c.command(e);
@@ -122,7 +124,9 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (arg.equalsIgnoreCase(c.getCommand())) {
+            String commandFound = c.getCommandAliases().stream().filter(arg::equalsIgnoreCase).findFirst().orElse(null);
+
+            if (commandFound != null) {
                 if (c.getCategory().equalsIgnoreCase("botmoderation")) {
                     return isBotModerator;
                 }
@@ -133,7 +137,6 @@ public class CommandEnum {
     }
 
     public void getHelpAllByCategory(CommandReceivedEvent e) {
-
         PrivateChannel privateChannel = e.getAuthor().openPrivateChannel().complete();
 
         categories.forEach(category -> {
@@ -154,7 +157,7 @@ public class CommandEnum {
                             privateChannel.sendMessage(eb.build()).queue();
                             eb.clearFields();
                         }
-                        eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
+                        eb.addField(c.getCommandAliases().get(0), c.getShortCommandDescription(), true);
                     }
                 }
                 privateChannel.sendMessage(eb.build()).queue();
@@ -162,20 +165,24 @@ public class CommandEnum {
         });
     }
 
-    public EmbedBuilder getFullHelpItem(String item) {
+    public EmbedBuilder getFullHelpItem(String item, String prefix) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (item.equals(c.getCommand())) {
+            String commandFound = c.getCommandAliases().stream().filter(item::equalsIgnoreCase).findFirst().orElse(null);
+
+            if (commandFound != null) {
                 EmbedBuilder eb = new EmbedBuilder();
+                ArrayList<String> commandAliases = c.getCommandAliases();
 
                 eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
                 eb.setTimestamp(Instant.now());
 
-                eb.setTitle("Help " + c.getCommand());
-                eb.setDescription("(option) means optional\n" +
-                        "<option> is required");
-                eb.addField(c.getExampleCommand(),  c.getFullCommandDescription(), true);
+                eb.setTitle("Help " + commandFound);
+
+                commandAliases.forEach(commandAlias -> eb.appendDescription(prefix + commandAlias + "\n"));
+
+                eb.addField("`" + prefix + c.getExampleCommand() + "`",  c.getFullCommandDescription(), true);
 
                 eb.setColor(getCurrentColor());
                 return eb;
@@ -188,7 +195,7 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (item.equals(c.getCommand())) {
+            if (item.equals(c.getCommandAliases().get(0))) {
                 return c.getShortCommandDescription();
             }
         }
@@ -211,7 +218,7 @@ public class CommandEnum {
                     e.getMessageChannel().sendMessage(eb.build()).queue();
                     eb.clearFields();
                 }
-                eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
+                eb.addField(c.getCommandAliases().get(0), c.getShortCommandDescription(), true);
             }
         }
 
@@ -220,8 +227,8 @@ public class CommandEnum {
 
     public void getListsReady() {
         categories.add("fun");
-        categories.add("util");
         categories.add("general");
+        categories.add("util");
         categories.add("music");
         categories.add("botmoderation");
     }

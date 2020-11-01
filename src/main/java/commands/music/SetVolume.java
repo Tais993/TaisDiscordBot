@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class SetVolume implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "setvolume";
-    String commandAlias = "volume";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("setvolume", "volume"));
     String category = "music";
-    String exampleCommand = "`!setvolume (volume)`";
+    String exampleCommand = "setvolume (volume)";
     String shortCommandDescription = "Set the volume of the bot. Ranged between 1 and 200.";
     String fullCommandDescription = "Set the volume of the bot. Ranged between 1 and 200.";
 
@@ -32,12 +34,12 @@ public class SetVolume implements ICommand {
         try {
             volume = Integer.parseInt(e.getArgs()[0]);
         } catch (NumberFormatException exception) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid number.")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid number.", e.getPrefix())).queue();
             return;
         }
 
         if (!(volume >= 1 && volume <= 200)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: give a number between 1 and 200.")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: give a number between 1 and 200.", e.getPrefix())).queue();
             return;
         }
 
@@ -48,16 +50,6 @@ public class SetVolume implements ICommand {
         } else {
             e.getMessageChannel().sendMessage("Error unknown.").queue();
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -78,5 +70,10 @@ public class SetVolume implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

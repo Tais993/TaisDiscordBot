@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Skip implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "skip";
-    String commandAlias = "s";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("skip", "s"));
     String category = "music";
-    String exampleCommand = "`!skip`";
+    String exampleCommand = "skip";
     String shortCommandDescription = "Skips the currently running song.";
     String fullCommandDescription = "Skips the currently running song.";
 
@@ -25,16 +27,6 @@ public class Skip implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
 
         manager.skip(e.getGuild());
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -55,5 +47,10 @@ public class Skip implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

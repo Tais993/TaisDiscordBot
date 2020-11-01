@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Say implements ICommand {
     CommandReceivedEvent e;
 
     TextChannel channel;
 
-    String command = "say";
-    String commandAlias = "say";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("say"));
     String category = "botmoderation";
-    String exampleCommand = "`!say <channel id>/<channel as mention> <text>`";
+    String exampleCommand = "say <channel id>/<channel as mention> <text>";
     String shortCommandDescription = "Say some text.";
     String fullCommandDescription = "Say some text in a channel you want.\n" +
             "Abuse = bad.";
@@ -40,16 +42,6 @@ public class Say implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -67,5 +59,10 @@ public class Say implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

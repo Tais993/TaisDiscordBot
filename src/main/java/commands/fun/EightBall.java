@@ -3,16 +3,17 @@ package commands.fun;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class EightBall implements ICommand {
     Random r = new Random();
 
     CommandReceivedEvent e;
-    String command = "8ball";
-    String commandAlias = "eightball";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("8ball", "eightball"));
     String category = "fun";
-    String exampleCommand = "`!8ball <question>?`";
+    String exampleCommand = "8ball <question>?";
     String shortCommandDescription = "Ask 8ball a question";
     String fullCommandDescription = "Ask 8ball a question, and get a totally real answer.\n" +
             "**Question mark is required.**";
@@ -41,18 +42,8 @@ public class EightBall implements ICommand {
                     break;
             }
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("You're supposed to ask a question, so it should contain a question mark!")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("You're supposed to ask a question, so it should contain a question mark!", e.getPrefix())).queue();
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -73,5 +64,10 @@ public class EightBall implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -4,13 +4,15 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Pause implements ICommand {
-    String command = "pause";
-    String commandAlias = "pause";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("pause"));
     String category = "music";
-    String exampleCommand = "`!pause`";
+    String exampleCommand = "pause";
     String shortCommandDescription = "Pause the music.";
     String fullCommandDescription = "Pause the currently playing music.";
 
@@ -22,16 +24,6 @@ public class Pause implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
 
         manager.pause(event.getGuild());
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -52,5 +44,10 @@ public class Pause implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -5,11 +5,13 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class NowPlaying implements ICommand {
-    String command = "nowplaying";
-    String commandAlias = "np";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("nowplaying", "np"));
     String category = "music";
-    String exampleCommand = "!nowplaying";
+    String exampleCommand = "nowplaying";
     String shortCommandDescription = "Get the current playing song";
     String fullCommandDescription = "Get the current playing song";
 
@@ -18,16 +20,6 @@ public class NowPlaying implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         EmbedBuilder eb = manager.getNowPlaying(event.getGuild(), getEmbed());
         event.getMessageChannel().sendMessage(eb.build()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -48,5 +40,10 @@ public class NowPlaying implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

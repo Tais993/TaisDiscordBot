@@ -2,19 +2,20 @@ package commands.fun;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import util.Permissions;
 import net.dv8tion.jda.api.Permission;
+import util.Permissions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Mock implements ICommand {
     Random r = new Random();
 
     CommandReceivedEvent e;
-    String command = "mock";
-    String commandAlias = "m";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("mock", "m"));
     String category = "fun";
-    String exampleCommand = "`!mock <text>`";
+    String exampleCommand = "mock <text>";
     String shortCommandDescription = "Mocks the text";
     String fullCommandDescription = "Give some input, the text will then be converted to a mocked text.\n" +
             " example: `!mock testing` output: `tEsTiNg`";
@@ -24,7 +25,7 @@ public class Mock implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Don't mention people! Not nice >.<")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention people! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
@@ -55,7 +56,7 @@ public class Mock implements ICommand {
 
             e.getMessageChannel().sendMessage(output.toString()).queue();
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("mock").setDescription("Requires a argument").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires a argument!", e.getPrefix())).queue();
         }
     }
 
@@ -64,16 +65,6 @@ public class Mock implements ICommand {
         if (permissions.botHasPermission(Permission.MESSAGE_MANAGE)){
             e.getMessage().delete().complete();
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -94,5 +85,10 @@ public class Mock implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

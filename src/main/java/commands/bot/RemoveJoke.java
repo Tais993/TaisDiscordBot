@@ -6,14 +6,16 @@ import database.jokes.DatabaseJokes;
 import database.jokes.JokeDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RemoveJoke implements ICommand {
     DatabaseJokes databaseJokes = new DatabaseJokes();
 
     CommandReceivedEvent e;
-    String command = "removejoke";
-    String commandAlias = "deletejoke";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("removejoke", "deletejoke"));
     String category = "botmoderation";
-    String exampleCommand = "`!deletejoke `";
+    String exampleCommand = "deletejoke";
     String shortCommandDescription = "Remove a funny joke";
     String fullCommandDescription = "Remove a funny joke that actually, isn't funny at all.";
 
@@ -22,7 +24,7 @@ public class RemoveJoke implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument (the joke ID)")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument (the joke ID)", e.getPrefix())).queue();
             return;
         }
 
@@ -52,16 +54,6 @@ public class RemoveJoke implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -79,5 +71,10 @@ public class RemoveJoke implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

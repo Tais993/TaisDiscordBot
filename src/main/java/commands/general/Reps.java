@@ -7,6 +7,9 @@ import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Reps implements ICommand {
     CommandReceivedEvent e;
 
@@ -17,10 +20,9 @@ public class Reps implements ICommand {
 
     UserDB userDB;
 
-    String command = "reps";
-    String commandAlias = "reps";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("reps"));
     String category = "general";
-    String exampleCommand = "`!reps (user id)/(user mention)`";
+    String exampleCommand = "reps (user id)/(user mention)";
     String shortCommandDescription = "Get amount of reps user has.";
     String fullCommandDescription = "See how many pointless internet points a user has";
 
@@ -35,7 +37,7 @@ public class Reps implements ICommand {
             user = e.getFirstArgAsUser();
 
             if (user == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
                 return;
             }
 
@@ -57,16 +59,6 @@ public class Reps implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -84,5 +76,10 @@ public class Reps implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

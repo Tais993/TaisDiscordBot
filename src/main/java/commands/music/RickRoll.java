@@ -1,19 +1,19 @@
 package commands.music;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RickRoll implements ICommand {
     CommandReceivedEvent e;
-    CommandEnum commandEnum = new CommandEnum();
 
-    String command = "rickroll";
-    String commandAlias = "dQw";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("rickroll", "dQw"));
     String category = "music";
-    String exampleCommand = "`!rickroll`";
+    String exampleCommand = "rickroll";
     String shortCommandDescription = "Good one";
     String fullCommandDescription = "IMAGINE GETTING RICKROLLED LOLLL";
 
@@ -22,11 +22,13 @@ public class RickRoll implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("rickroll").setDescription("You can only run this comand in a Discord server/guild!").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("You can only run this comand in a Discord server/guild!", e.getPrefix())).queue();
             return;
         }
 
-        if (e.getArgs()[0].equalsIgnoreCase("dqw")) {
+
+
+        if (e.getCommand().equalsIgnoreCase("dqw")) {
             if (!e.getArgs()[0].equals("dQw")) {
                 return;
             }
@@ -49,16 +51,6 @@ public class RickRoll implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -76,5 +68,10 @@ public class RickRoll implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

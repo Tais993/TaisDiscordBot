@@ -4,6 +4,9 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Skunk implements ICommand {
@@ -11,10 +14,9 @@ public class Skunk implements ICommand {
 
     String url = "https://www.youtube.com/playlist?list=PL7tOllzEIb0Eaej-wj-KqGSerKXb1t-Dy";
 
-    String command = "skunk";
-    String commandAlias = "skunk";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("skunk", "skunkseconds"));
     String category = "music";
-    String exampleCommand = "`!skunk`";
+    String exampleCommand = "skunk";
     String shortCommandDescription = "Skunk.";
     String fullCommandDescription = "Skunk, and skunk.";
 
@@ -29,16 +31,6 @@ public class Skunk implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
 
         manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -59,5 +51,10 @@ public class Skunk implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -7,6 +7,9 @@ import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Level implements ICommand {
     DatabaseUser databaseUser = new DatabaseUser();
     CommandReceivedEvent e;
@@ -14,10 +17,9 @@ public class Level implements ICommand {
     User userGiven;
     UserDB userDB;
 
-    String command = "level";
-    String commandAlias = "rank";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("level", "rank"));
     String category = "general";
-    String exampleCommand = "!level <@user>/<userID>";
+    String exampleCommand = "level <@user>/<userID>";
     String shortCommandDescription = "Get the level of someone in this server.";
     String fullCommandDescription = "Get the level of someone in this server.";
 
@@ -32,7 +34,7 @@ public class Level implements ICommand {
             userGiven = e.getFirstArgAsUser();
 
             if (userGiven == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!")).queue();
+                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
                 return;
             }
 
@@ -57,16 +59,6 @@ public class Level implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -84,5 +76,10 @@ public class Level implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

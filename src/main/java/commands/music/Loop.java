@@ -7,7 +7,7 @@ import commands.ICommand;
 import music.GuildMusicManager;
 import music.PlayerManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Loop implements ICommand {
     CommandReceivedEvent e;

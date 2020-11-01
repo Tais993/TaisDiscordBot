@@ -195,6 +195,20 @@ public class CommandReceivedEvent {
         return null;
     }
 
+    public Role getFirstArgAsRole() {
+        if (hasRoleMentions()) {
+            return getFirstRoleMentioned();
+        } else {
+            if (args[0].matches("[0-9]+")) {
+                Role roleInArg = getGuild().getRoleById(args[0]);
+                if (!(roleInArg == null)) {
+                    return roleInArg;
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean hasChannelMentions() {
         return hasChannelMentions;
     }

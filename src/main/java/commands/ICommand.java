@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import java.time.Instant;
 
 import static commands.CommandEnum.bot;
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public interface ICommand {
     CommandReceivedEvent e = null;

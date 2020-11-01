@@ -2,10 +2,10 @@ package commands.util;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.entities.GuildInfo;
+import util.entities.GuildInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class ServerStats implements ICommand {
     CommandReceivedEvent e;

@@ -8,7 +8,7 @@ import music.youtube.SearchYouTube;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class PlayNow implements ICommand {
     CommandReceivedEvent e;

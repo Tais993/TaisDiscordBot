@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.time.Instant;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class Avatar implements ICommand {
     CommandReceivedEvent e;

@@ -5,7 +5,7 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class ClearUser implements ICommand {
     CommandReceivedEvent e;

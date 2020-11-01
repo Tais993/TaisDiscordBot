@@ -4,11 +4,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
+import util.Colors;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 import static music.TrackScheduler.videoDurationToYoutube;
 
 public class SkipTo implements ICommand {

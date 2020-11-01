@@ -1,4 +1,4 @@
-package functions;
+package util;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;

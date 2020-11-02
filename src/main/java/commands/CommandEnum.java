@@ -33,7 +33,7 @@ public class CommandEnum {
         WHOIS(new WhoIs()),
         BOTSTATS(new BotStats()),
         LEVEL(new Level()),
-        CHANGEBOTPREFIX(new ChangeBotPrefix()),
+        CHANGEBOTPREFIXGUILD(new ChangeBotPrefixGuild()),
         PLAY(new Play()),
         JOIN(new Join()),
         LEAVE(new Leave()),
@@ -82,7 +82,8 @@ public class CommandEnum {
         AVATAR(new Avatar()),
         SETAMONGUSROLE(new SetAmongUsRole()),
         DM(new Dm()),
-        ROLEINFO(new RoleInfo());
+        ROLEINFO(new RoleInfo()),
+        CHANGEBOTPREFIXUSER(new ChangeBotPrefixUser());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -191,12 +192,23 @@ public class CommandEnum {
         return null;
     }
 
-    public String getShortHelpItem(String item) {
+    public EmbedBuilder getShortHelpItem(String item, String prefix) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (item.equals(c.getCommandAliases().get(0))) {
-                return c.getShortCommandDescription();
+            String commandFound = c.getCommandAliases().stream().filter(item::equalsIgnoreCase).findFirst().orElse(null);
+
+            if (commandFound != null) {
+                EmbedBuilder eb = new EmbedBuilder();
+
+                eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+                eb.setTimestamp(Instant.now());
+
+                eb.setTitle("Error " + commandFound);
+                eb.addField("`" + prefix + c.getExampleCommand() + "`",  c.getShortCommandDescription(), true);
+
+                eb.setColor(getCurrentColor());
+                return eb;
             }
         }
         return null;

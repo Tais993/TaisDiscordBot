@@ -3,6 +3,7 @@ package commands.bot;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ public class SetBotModerator implements ICommand {
     DatabaseUser databaseUser = new DatabaseUser();
     CommandReceivedEvent e;
 
+    User user;
     String userId;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("setbotmoderator", "setbotmoderator", "addbotmoderator"));
@@ -29,24 +31,16 @@ public class SetBotModerator implements ICommand {
             return;
         }
 
-        String[] args = e.getArgs();
+        user = e.getFirstArgAsUser();
 
-        if (e.hasUserMentions()) {
-            userId = e.getFirstUserMentioned().getId();
-        } else {
-            if (args[0].matches("[0-9]+")) {
-                e.getJDA().retrieveUserById(args[0]).queue(user -> userId = args[0]);
-                if (userId.isEmpty()) {
-                    e.getMessageChannel().sendMessage(getFullHelp("That is not a valid user ID!", e.getPrefix())).queue();
-                    return;
-                }
-            } else {
-                e.getMessageChannel().sendMessage(getFullHelp("A user ID should only contain numbers!", e.getPrefix())).queue();
-                return;
-            }
+        if (user == null) {
+            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid user ID!", e.getPrefix())).queue();
+            return;
         }
 
-        databaseUser.setBotModerator(userId, Boolean.parseBoolean(args[1]));
+        userId = user.getId();
+
+        databaseUser.setBotModerator(userId, Boolean.parseBoolean(e.getArgs()[1]));
     }
 
     @Override

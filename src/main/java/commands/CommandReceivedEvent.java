@@ -92,13 +92,17 @@ public class CommandReceivedEvent {
 
         mentionsEveryone = message.mentionsEveryone();
 
-        command = messageAsString.replace(prefix, "").split(" ")[0];
-
         JDA = e.getJDA();
 
         DatabaseUser databaseUser = new DatabaseUser();
         userDB = databaseUser.getUserFromDBToUserDB(e.getAuthor().getId());
         isBotModerator = userDB.isBotModerator();
+
+        if (!userDB.getPrefix().equals("")) {
+            prefix = userDB.getPrefix();
+        }
+
+        command = messageAsString.replace(prefix, "").split(" ")[0];
     }
 
     public TextChannel getTextChannel() {
@@ -186,9 +190,13 @@ public class CommandReceivedEvent {
             return getFirstUserMentioned();
         } else {
             if (args[0].matches("[0-9]+")) {
-                User userInArg = getJDA().retrieveUserById(args[0]).complete();
-                if (!(userInArg == null)) {
-                    return userInArg;
+                try {
+                    User userInArg = getJDA().retrieveUserById(args[0]).complete();
+                    if (!(userInArg == null)) {
+                        return userInArg;
+                    }
+                } catch (NumberFormatException e) {
+                    return null;
                 }
             }
         }

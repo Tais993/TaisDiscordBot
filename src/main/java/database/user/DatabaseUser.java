@@ -25,18 +25,6 @@ public class DatabaseUser {
 
     }
 
-    public DBObject getUserFromDB(String userID) {
-        DBObject query = new BasicDBObject("userID", userID);
-        DBCursor cursor = user.find(query);
-        return cursor.one();
-    }
-
-    public void allUsersInDb(GuildMessageReceivedEvent e, String userID) {
-        DBObject query = new BasicDBObject("userID", userID);
-        DBCursor cursor = user.find(query);
-        cursor.forEach((value -> e.getChannel().sendMessage(value + "").queue()));
-    }
-
     public UserDB getUserFromDBToUserDB(String userID) {
 
         UserDB cachedUserDB = cachedUsers.get(userID);
@@ -61,7 +49,7 @@ public class DatabaseUser {
     }
 
     public DBObject userToDBObject(UserDB userDB) {
-        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("reps", userDB.getReps()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed());
+        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("reps", userDB.getReps()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed()).append("prefix", userDB.getPrefix());
     }
 
     public UserDB dbObjectToUser(DBObject dbObject) {
@@ -69,20 +57,20 @@ public class DatabaseUser {
         int level = Integer.parseInt(dbObject.get("level").toString());
         int xp = Integer.parseInt(dbObject.get("xp").toString());
         int reps = 0;
+        boolean isBotModerator = false;
+        boolean isBlackListed = false;
+        String prefix = "";
 
         if (dbObject.get("reps") != null) reps = Integer.parseInt(dbObject.get("reps").toString());
 
-        UserDB userDB = new UserDB(userID, level, xp, reps);
+        if (dbObject.get("isBotModerator") != null) isBlackListed = Boolean.parseBoolean(dbObject.get("isBotModerator").toString());
+        if (dbObject.get("isBlackListed") != null) isBotModerator = Boolean.parseBoolean(dbObject.get("isBlackListed").toString());
+        if (dbObject.get("prefix") != null) prefix = dbObject.get("prefix").toString();
+
+        UserDB userDB = new UserDB(userID, level, xp, reps, isBlackListed, isBotModerator, prefix);
         userDB.calculateXpForLevelUp();
 
-        if (dbObject.get("isBotModerator") != null) userDB.setBotModerator(Boolean.parseBoolean(dbObject.get("isBotModerator").toString()));
-        if (dbObject.get("isBlackListed") != null) userDB.setBlackListed(Boolean.parseBoolean(dbObject.get("isBlackListed").toString()));
-
         return userDB;
-    }
-
-    public void addUserToDB(UserDB userDB) {
-        user.insert(userToDBObject(userDB));
     }
 
     public void updateUserInDB(UserDB userDB) {
@@ -113,18 +101,6 @@ public class DatabaseUser {
         user.findAndModify(query, userToDBObject(userDB));
 
         return returnValue;
-    }
-
-    public boolean checkLevelUserInDB(String userID) {
-        UserDB userDB = getUserFromDBToUserDB(userID);
-        userDB.calculateXpForLevelUp();
-        DBObject query = new BasicDBObject("userID", userID);
-        if (userDB.calculateLevel()) {
-            user.findAndModify(query, userToDBObject(userDB));
-            return true;
-        }
-        user.findAndModify(query, userToDBObject(userDB));
-        return false;
     }
 
     public EmbedBuilder topTenLeaderboard(CommandReceivedEvent e) {

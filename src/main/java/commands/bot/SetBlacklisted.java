@@ -4,6 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
 import database.user.UserDB;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,9 +13,10 @@ public class SetBlacklisted implements ICommand {
     DatabaseUser databaseUser = new DatabaseUser();
     CommandReceivedEvent e;
 
+    User user;
     String userId;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("setblacklisted", "setblacklist"));
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("setblacklisted", "setblacklist", "addblacklisted"));
     String category = "botmoderation";
     String exampleCommand = "setblacklisted <user id>/<user mention> <true/false>";
     String shortCommandDescription = "Set someone blacklisted from the bot.";
@@ -30,22 +32,14 @@ public class SetBlacklisted implements ICommand {
             return;
         }
 
-        String[] args = e.getArgs();
+        user = e.getFirstArgAsUser();
 
-        if (e.hasUserMentions()) {
-            userId = e.getFirstUserMentioned().getId();
-        } else {
-            if (args[0].matches("[0-9]+")) {
-                e.getJDA().retrieveUserById(args[0]).queue(user -> userId = args[0]);
-                if (userId.isEmpty()) {
-                    e.getMessageChannel().sendMessage(getFullHelp("That is not a valid user ID!", e.getPrefix())).queue();
-                    return;
-                }
-            } else {
-                e.getMessageChannel().sendMessage(getFullHelp("A user ID should only contain numbers!", e.getPrefix())).queue();
-                return;
-            }
+        if (user == null) {
+            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid user ID!", e.getPrefix())).queue();
+            return;
         }
+
+        userId = user.getId();
 
         UserDB userDB = databaseUser.getUserFromDBToUserDB(userId);
 
@@ -54,7 +48,7 @@ public class SetBlacklisted implements ICommand {
             return;
         }
 
-        databaseUser.setBlacklisted(userId, Boolean.parseBoolean(args[1]));
+        databaseUser.setBlacklisted(userId, Boolean.parseBoolean(e.getArgs()[1]));
     }
 
     @Override

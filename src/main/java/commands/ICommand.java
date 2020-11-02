@@ -32,9 +32,16 @@ public interface ICommand {
 
     default MessageEmbed getFullHelp(String error, String prefix) {
         if (error.isEmpty()) {
-            return commandEnum.getFullHelpItem(commandAliases.get(0), prefix).build();
+            return commandEnum.getFullHelpItem(getCommandAliases().get(0), prefix).build();
         }
-        return commandEnum.getFullHelpItem(commandAliases.get(0), prefix).setDescription(error).build();
+        return commandEnum.getFullHelpItem(getCommandAliases().get(0), prefix).setDescription(error).build();
+    }
+
+    default MessageEmbed getShortHelp(String error, String prefix) {
+        if (error.isEmpty()) {
+            return commandEnum.getShortHelpItem(getCommandAliases().get(0), prefix).build();
+        }
+        return commandEnum.getShortHelpItem(getCommandAliases().get(0), prefix).setDescription("**" + error + "**").build();
     }
 
     String getCategory();

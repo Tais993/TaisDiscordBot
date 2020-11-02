@@ -1,6 +1,5 @@
 package database.user;
 
-import java.util.HashMap;
 import java.util.Random;
 
 public class UserDB {
@@ -11,47 +10,39 @@ public class UserDB {
 
     long lastTimeRepGiven;
 
-    int reps = 0;
-
     boolean isBotModerator = false;
     boolean isBlackListed = false;
 
-    HashMap<Integer, String> todo = new HashMap<>();
+    int reps = 0;
+
+    String prefix = "";
 
     public UserDB(String userID) {
         this.userID = userID;
     }
 
-    public UserDB(String userID, int level, int xp, int reps) {
+    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed) {
         this.userID = userID;
         this.level = level;
         this.xp = xp;
         this.reps = reps;
-    }
-
-    public UserDB(String userID, int level, int xp, boolean isBotModerator, boolean isBlackListed) {
-        this.userID = userID;
-        this.level = level;
-        this.xp = xp;
         this.isBotModerator = isBotModerator;
         this.isBlackListed = isBlackListed;
     }
 
-    public void addXp(int xp) {
-        this.xp += xp;
+    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix) {
+        this.userID = userID;
+        this.level = level;
+        this.xp = xp;
+        this.reps = reps;
+        this.isBotModerator = isBotModerator;
+        this.isBlackListed = isBlackListed;
+        this.prefix = prefix;
     }
 
     public void addRandomXp() {
         Random random = new Random();
         xp = xp + random.nextInt(20);
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
     }
 
     public String getUserID() {
@@ -117,5 +108,13 @@ public class UserDB {
 
     public void setLastTimeRepGiven() {
         this.lastTimeRepGiven = System.currentTimeMillis();
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 }

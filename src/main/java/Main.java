@@ -3,7 +3,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import commands.CommandEnum;
 import commands.CommandHandler;
-import music.spotify.SearchSpotify;
 import music.youtube.SearchYouTube;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -43,9 +42,6 @@ public class Main extends ListenerAdapter {
 
         SearchYouTube searchYouTube = new SearchYouTube();
         searchYouTube.setYtApiKey();
-
-        SearchSpotify searchSpotify = new SearchSpotify();
-        searchSpotify.setSpotifyApiKey();
 
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");

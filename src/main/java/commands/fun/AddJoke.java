@@ -1,4 +1,4 @@
-package commands.bot;
+package commands.fun;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;

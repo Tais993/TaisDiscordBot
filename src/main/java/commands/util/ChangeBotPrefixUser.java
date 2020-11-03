@@ -2,7 +2,6 @@ package commands.util;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import database.guild.DatabaseGuild;
 import database.user.DatabaseUser;
 import database.user.UserDB;
 

@@ -18,7 +18,6 @@ public class Test implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-
     }
 
     @Override

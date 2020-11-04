@@ -3,7 +3,6 @@ package database.user;
 import com.mongodb.*;
 import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.Instant;
 import java.util.HashMap;

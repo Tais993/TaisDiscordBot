@@ -3,7 +3,6 @@ package commands.fun;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.Permission;
-import util.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,37 +32,27 @@ public class Mock implements ICommand {
             String toMock = e.getMessageWithoutCommand();
             StringBuilder output = new StringBuilder();
 
-            int numberCount = r.nextInt(2);
+            boolean toLower = r.nextBoolean();
 
             for (int i = 0; i < toMock.length(); i++) {
                 String currentChar = toMock.charAt(i) + "";
-                if (!(currentChar.equals(" "))) {
-                    if (numberCount == 0) {
-                        output.append(currentChar.toLowerCase());
-                        numberCount++;
-                    } else {
-                        output.append(currentChar.toUpperCase());
-                        numberCount = 0;
-                    }
+                if (currentChar.equals(" ")) output.append(' ');
+                if (toLower) {
+                    output.append(currentChar.toLowerCase());
+                    toLower = false;
                 } else {
-                    output.append(" ");
+                    output.append(currentChar.toUpperCase());
+                    toLower = true;
                 }
             }
 
-            if (e.isFromGuild()) {
-                removeMessage();
+            if (e.isFromGuild() && e.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
+                e.getMessage().delete().complete();
             }
 
             e.getMessageChannel().sendMessage(output.toString()).queue();
         } else {
             e.getMessageChannel().sendMessage(getFullHelp("Requires a argument!", e.getPrefix())).queue();
-        }
-    }
-
-    public void removeMessage() {
-        Permissions permissions = new Permissions(e.getGuild());
-        if (permissions.botHasPermission(Permission.MESSAGE_MANAGE)){
-            e.getMessage().delete().complete();
         }
     }
 

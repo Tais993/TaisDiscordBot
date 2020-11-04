@@ -23,7 +23,7 @@ public class AllowedToPlayMusic {
 
         if (e.isBotModerator()) {
             if (e.getMember().getVoiceState().inVoiceChannel()) {
-                if (audioManager.isConnected()) audioManager.openAudioConnection(e.getMember().getVoiceState().getChannel());
+                audioManager.openAudioConnection(e.getMember().getVoiceState().getChannel());
             }
             return true;
         }

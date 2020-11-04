@@ -7,8 +7,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import commands.music.objects.AudioPlayerO;
 import commands.music.objects.AudioTrackO;
 import commands.music.objects.RadioO;
-import util.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
+import util.Colors;
 
 import java.util.Collections;
 import java.util.LinkedList;

@@ -2,7 +2,6 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import music.spotify.SearchSpotify;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,8 +18,6 @@ public class Test implements ICommand {
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
-        SearchSpotify searchSpotify = new SearchSpotify();
-        e.getMessageChannel().sendMessage(searchSpotify.getSongUrl()).queue();
     }
 
     @Override

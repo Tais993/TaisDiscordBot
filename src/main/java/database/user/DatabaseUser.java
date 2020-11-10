@@ -3,8 +3,10 @@ package database.user;
 import com.mongodb.*;
 import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
+import org.bson.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static commands.CommandEnum.bot;
@@ -48,7 +50,7 @@ public class DatabaseUser {
     }
 
     public DBObject userToDBObject(UserDB userDB) {
-        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("reps", userDB.getReps()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed()).append("prefix", userDB.getPrefix());
+        return new BasicDBObject("userID", userDB.getUserID()).append("level", userDB.getLevel()).append("xp", userDB.getXp()).append("reps", userDB.getReps()).append("isBotModerator", userDB.isBotModerator()).append("isBlackListed", userDB.isBlackListed()).append("prefix", userDB.getPrefix()).append("playlists", playlistsToDocument(userDB.getPlaylists()));
     }
 
     public UserDB dbObjectToUser(DBObject dbObject) {
@@ -59,14 +61,16 @@ public class DatabaseUser {
         boolean isBotModerator = false;
         boolean isBlackListed = false;
         String prefix = "";
+        HashMap<String, ArrayList<String>> playlists = new HashMap<>();
 
         if (dbObject.get("reps") != null) reps = Integer.parseInt(dbObject.get("reps").toString());
 
         if (dbObject.get("isBotModerator") != null) isBlackListed = Boolean.parseBoolean(dbObject.get("isBotModerator").toString());
         if (dbObject.get("isBlackListed") != null) isBotModerator = Boolean.parseBoolean(dbObject.get("isBlackListed").toString());
         if (dbObject.get("prefix") != null) prefix = dbObject.get("prefix").toString();
+        if (dbObject.get("playlists") != null) playlists = documentToPlaylists(Document.parse(dbObject.get("playlists").toString()));
 
-        UserDB userDB = new UserDB(userID, level, xp, reps, isBlackListed, isBotModerator, prefix);
+        UserDB userDB = new UserDB(userID, level, xp, reps, isBlackListed, isBotModerator, prefix, playlists);
         userDB.calculateXpForLevelUp();
 
         return userDB;
@@ -141,5 +145,20 @@ public class DatabaseUser {
         userDB.addRep();
 
         updateUserInDB(userDB);
+    }
+
+    public HashMap<String, ArrayList<String>> documentToPlaylists(Document document) {
+        HashMap<String, ArrayList<String>> playlists = new HashMap<>();
+
+        document.forEach((key, value) -> playlists.put(key, (ArrayList<String>) value));
+
+        return playlists;
+    }
+
+    public Document playlistsToDocument(HashMap<String, ArrayList<String>> playlists) {
+        Document document = new Document();
+        playlists.forEach((document::append));
+
+        return document;
     }
 }

@@ -12,7 +12,7 @@ import static util.AllowedToPlayMusic.allowedToPlayMusic;
 public class Seek implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("seek"));
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("seek", "goto"));
     String category = "music";
     String exampleCommand = "seek (time in seconds)";
     String shortCommandDescription = "Set the current playing track to a specific time.";

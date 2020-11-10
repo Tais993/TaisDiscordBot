@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Mock implements ICommand {
     Random r = new Random();
@@ -29,31 +30,36 @@ public class Mock implements ICommand {
         }
 
         if (e.hasArgs()) {
-            String toMock = e.getMessageWithoutCommand();
-            StringBuilder output = new StringBuilder();
-
-            boolean toLower = r.nextBoolean();
-
-            for (int i = 0; i < toMock.length(); i++) {
-                String currentChar = toMock.charAt(i) + "";
-                if (currentChar.equals(" ")) output.append(' ');
-                if (toLower) {
-                    output.append(currentChar.toLowerCase());
-                    toLower = false;
-                } else {
-                    output.append(currentChar.toUpperCase());
-                    toLower = true;
-                }
-            }
-
             if (e.isFromGuild() && e.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
                 e.getMessage().delete().complete();
             }
 
-            e.getMessageChannel().sendMessage(output.toString()).queue();
+            e.getMessageChannel().sendMessage(stringToMocked(e.getMessageWithoutCommand())).queue();
         } else {
             e.getMessageChannel().sendMessage(getFullHelp("Requires a argument!", e.getPrefix())).queue();
         }
+    }
+
+    private String stringToMocked(String toMock) {
+        StringBuilder output = new StringBuilder();
+
+        AtomicBoolean toUpper = new AtomicBoolean(r.nextBoolean());
+
+        toMock.chars()
+                .mapToObj(i -> (char) i)
+                .forEach(currentChar -> {
+                    if (!Character.isLetter(currentChar)) {
+                        output.append(currentChar);
+                    } else if (toUpper.get()) {
+                        output.append(Character.toUpperCase(currentChar));
+                        toUpper.set(false);
+                    } else {
+                        output.append(currentChar);
+                        toUpper.set(true);
+                    }
+                });
+
+        return output.toString();
     }
 
     @Override

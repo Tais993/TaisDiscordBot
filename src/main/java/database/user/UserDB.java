@@ -1,5 +1,7 @@
 package database.user;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class UserDB {
@@ -17,17 +19,10 @@ public class UserDB {
 
     String prefix = "";
 
+    HashMap<String, ArrayList<String>> playlists = new HashMap<>();
+
     public UserDB(String userID) {
         this.userID = userID;
-    }
-
-    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed) {
-        this.userID = userID;
-        this.level = level;
-        this.xp = xp;
-        this.reps = reps;
-        this.isBotModerator = isBotModerator;
-        this.isBlackListed = isBlackListed;
     }
 
     public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix) {
@@ -38,6 +33,17 @@ public class UserDB {
         this.isBotModerator = isBotModerator;
         this.isBlackListed = isBlackListed;
         this.prefix = prefix;
+    }
+
+    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix, HashMap<String, ArrayList<String>> playlists) {
+        this.userID = userID;
+        this.level = level;
+        this.xp = xp;
+        this.reps = reps;
+        this.isBotModerator = isBotModerator;
+        this.isBlackListed = isBlackListed;
+        this.prefix = prefix;
+        this.playlists = playlists;
     }
 
     public void addRandomXp() {
@@ -116,5 +122,17 @@ public class UserDB {
 
     public void setPrefix(String prefix) {
         this.prefix = prefix;
+    }
+
+    public HashMap<String, ArrayList<String>> getPlaylists() {
+        return playlists;
+    }
+
+    public void addPlayList(String playlistName) {
+        playlists.put(playlistName, new ArrayList<>());
+    }
+
+    public void addSong(String playlistName, String songName) {
+        playlists.get(playlistName).add(songName);
     }
 }

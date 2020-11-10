@@ -36,7 +36,7 @@ public class Say implements ICommand {
 
         String messageToSay = e.getMessageWithoutCommand();
 
-        messageToSay = messageToSay.replaceFirst(e.getArgs()[0], "");
+        messageToSay = messageToSay.replaceFirst(e.getArgs()[0] + " ", "");
 
         channel.sendMessage(messageToSay).queue();
     }

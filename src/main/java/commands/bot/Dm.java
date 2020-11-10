@@ -32,7 +32,7 @@ public class Dm implements ICommand {
 
         String messageToSay = e.getMessageWithoutCommand();
 
-        messageToSay = messageToSay.replaceFirst(e.getArgs()[0], "");
+        messageToSay = messageToSay.replaceFirst(e.getArgs()[0] + "", "");
 
         user.openPrivateChannel().complete().sendMessage(messageToSay).queue();
 

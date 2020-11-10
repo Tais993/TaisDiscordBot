@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static music.TrackScheduler.videoDurationToYoutube;
+import static util.Colors.getCurrentColor;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;
@@ -50,12 +51,11 @@ public class PlayerManager {
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                Colors colors = new Colors();
 
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setTitle("Adding to queue ");
                 eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
-                eb.setColor(colors.getCurrentColor());
+                eb.setColor(getCurrentColor());
 
                 channel.sendMessage(eb.build()).queue();
 
@@ -184,7 +184,7 @@ public class PlayerManager {
 
         EmbedBuilder eb = new EmbedBuilder();
         Colors colors = new Colors();
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         if (audioTrack == null) {
             eb.setTitle("Error removing track from queue");
@@ -214,7 +214,7 @@ public class PlayerManager {
 
     public void pause(Guild g) {
         GuildMusicManager musicManager = getGuildMusicManager(g);
-        musicManager.player.setPaused(true);
+        musicManager.player.setPaused(!musicManager.player.isPaused());
     }
 
     public void resume(Guild g) {

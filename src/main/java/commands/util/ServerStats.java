@@ -39,7 +39,6 @@ public class ServerStats implements ICommand {
         eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
         eb.addField("Server owner:", guildInfo.getOwnerName(), true);
         eb.setThumbnail(e.getGuild().getIconUrl());
-        eb.setFooter("Made by Tijs");
 
         eb.setColor(getCurrentColor());
 

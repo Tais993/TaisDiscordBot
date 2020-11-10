@@ -12,9 +12,9 @@ import java.net.URL;
 public class SearchYouTube {
 
     static String ytApiKey;
-    JSONParser parser = new JSONParser();
+    static JSONParser parser = new JSONParser();
 
-    public String getVideoUrl(String input) {
+    public static String getVideoUrl(String input) {
         input = input.replaceAll(" ", "%20");
 
         String fullUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=" + input + "&key=" + ytApiKey;
@@ -35,7 +35,7 @@ public class SearchYouTube {
         return "https://www.youtube.com/watch?v=" + videoId;
     }
 
-    public String getVideoIdUsingString(String toJson) {
+    public static String getVideoIdUsingString(String toJson) {
         JSONObject json;
         try {
             json = (JSONObject) parser.parse(toJson);
@@ -51,7 +51,7 @@ public class SearchYouTube {
         return (String) id.getOrDefault("videoId", "");
     }
 
-    public String getStringFromBufferedReader(BufferedReader in) {
+    public static String getStringFromBufferedReader(BufferedReader in) {
         String nextLine;
         StringBuilder fullJsonStringBuilder = new StringBuilder();
 
@@ -68,7 +68,7 @@ public class SearchYouTube {
         return fullJsonStringBuilder.toString();
     }
 
-    public void setYtApiKey() {
+    public static void setYtApiKey() {
         InputStream isYtApi;
         try {
             isYtApi = new FileInputStream(FileSystemView.getFileSystemView().getDefaultDirectory().getPath() + "\\Discord bot\\token\\ytapi.key");

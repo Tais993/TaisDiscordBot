@@ -28,7 +28,7 @@ public class Remove implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[1]));
+        EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[0]));
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
     }

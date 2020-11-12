@@ -47,7 +47,7 @@ public class PlayNow implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getTextChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag(), true);
         manager.skip(e.getGuild());
     }
 

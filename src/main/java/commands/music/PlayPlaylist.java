@@ -35,7 +35,7 @@ public class PlayPlaylist implements ICommand {
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        manager.loadAndPlayUserPlaylist (e.getTextChannel(), e.getAuthor().getAsTag(), e.getAuthor().getId(), e.getUserDB().getPlaylist(e.getArgs()[0]));
+        e.getUserDB().getPlaylist(e.getArgs()[0]).forEach((song -> manager.loadAndPlay(e.getTextChannel(), song.getSongUrl(), false, e.getAuthor().getAsTag(), e.getAuthor().getId(), false)));
     }
 
     @Override

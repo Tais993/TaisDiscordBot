@@ -30,7 +30,7 @@ public class Skunk implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag(), true);
     }
 
     @Override

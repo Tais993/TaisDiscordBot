@@ -3,6 +3,7 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.user.DatabaseUser;
+import database.user.Song;
 import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -45,9 +46,15 @@ public class Playlist implements ICommand {
             case "view" -> {
                 eb.setTitle(e.getAuthor().getAsTag() + "'s playlist " + args[1]);
                 if (userDB.getPlaylist(args[1]) != null) for (int i = 0; i < userDB.getPlaylist(args[1]).size(); i++) {
-                    ArrayList<String> songs = userDB.getPlaylist(args[1]);
+                    ArrayList<Song> songs = userDB.getPlaylist(args[1]);
                     eb.appendDescription("\nSong URL: " + songs.get(i) + "\n *Number " + i + "*\n");
                 }
+            }
+            case "add" -> {
+                UserDB userDB = e.getUserDB();
+                userDB.addPlayList(args[1]);
+                databaseUser.updateUserInDB(userDB);
+                return;
             }
         }
 
@@ -61,7 +68,7 @@ public class Playlist implements ICommand {
                 e.getMessageChannel().sendMessage("Removed 1 song from " + args[1]).queue();
             }
             case "add" -> {
-                userDB.addSong(args[1], args[3]);
+                userDB.addSong(args[1], args[3], e.getGuild());
                 e.getMessageChannel().sendMessage("Added 1 song in " + args[1]).queue();
             }
         }

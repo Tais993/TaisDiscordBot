@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class ClearQueue implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "clearqueue";
-    String commandAlias = "removeall";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("clearqueue"));
     String category = "music";
-    String exampleCommand = "`!clearqueue`";
+    String exampleCommand = "clearqueue";
     String shortCommandDescription = "Queue gets cleared.";
     String fullCommandDescription = "Queue gets cleared";
 
@@ -26,16 +28,6 @@ public class ClearQueue implements ICommand {
         manager.clearQueue(e.getGuild());
 
         e.getMessageChannel().sendMessage("Queue has been cleared.").queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -56,5 +48,10 @@ public class ClearQueue implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

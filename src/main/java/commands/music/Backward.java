@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Backward implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "backward";
-    String commandAlias = "backwards";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("backwards"));
     String category = "music";
-    String exampleCommand = "`!backward (seconds)`";
+    String exampleCommand = "backward (seconds)";
     String shortCommandDescription = "Backward the current playing song a amount of seconds.";
     String fullCommandDescription = "Backward the current playing song a amount of seconds.";
 
@@ -24,22 +26,12 @@ public class Backward implements ICommand {
 
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.backwardsTrack(e.getGuild(), Long.parseLong(e.getArgs()[0]));
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -60,5 +52,10 @@ public class Backward implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

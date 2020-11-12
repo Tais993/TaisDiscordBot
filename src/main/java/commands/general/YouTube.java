@@ -1,24 +1,22 @@
 package commands.general;
 
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import database.guild.DatabaseGuild;
 import music.youtube.SearchYouTube;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class YouTube implements ICommand {
     CommandReceivedEvent e;
 
     String url;
 
-    CommandEnum commandEnum = new CommandEnum();
-    DatabaseGuild databaseGuild = new DatabaseGuild();
     SearchYouTube searchYouTube = new SearchYouTube();
 
-    String command = "youtube";
-    String commandAlias = "youtube";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("youtube"));
     String category = "general";
-    String exampleCommand = "`!youtube <gifurl>`";
+    String exampleCommand = "youtube <gifurl>";
     String shortCommandDescription = "Search for a YouTube video.";
     String fullCommandDescription = "Search for a YouTube video.";
 
@@ -32,7 +30,7 @@ public class YouTube implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires something to search, I can't search nothing.")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires something to search, I can't search nothing.", e.getPrefix())).queue();
             return;
         }
 
@@ -41,7 +39,7 @@ public class YouTube implements ICommand {
         String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage(getFullHelp(videoUrl)).queue();
+            e.getMessageChannel().sendMessage(getFullHelp(videoUrl, e.getPrefix())).queue();
             return;
         }
 
@@ -52,16 +50,6 @@ public class YouTube implements ICommand {
         } else {
             e.getMessageChannel().sendMessage(url).queue();
         }
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -82,5 +70,10 @@ public class YouTube implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

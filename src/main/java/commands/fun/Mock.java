@@ -2,19 +2,20 @@ package commands.fun;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Permissions;
 import net.dv8tion.jda.api.Permission;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Mock implements ICommand {
     Random r = new Random();
 
     CommandReceivedEvent e;
-    String command = "mock";
-    String commandAlias = "m";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("mock", "m"));
     String category = "fun";
-    String exampleCommand = "`!mock <text>`";
+    String exampleCommand = "mock <text>";
     String shortCommandDescription = "Mocks the text";
     String fullCommandDescription = "Give some input, the text will then be converted to a mocked text.\n" +
             " example: `!mock testing` output: `tEsTiNg`";
@@ -24,56 +25,41 @@ public class Mock implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Don't mention people! Not nice >.<")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Don't mention people! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
         if (e.hasArgs()) {
-            String toMock = e.getMessageWithoutCommand();
-            StringBuilder output = new StringBuilder();
-
-            int numberCount = r.nextInt(2);
-
-            for (int i = 0; i < toMock.length(); i++) {
-                String currentChar = toMock.charAt(i) + "";
-                if (!(currentChar.equals(" "))) {
-                    if (numberCount == 0) {
-                        output.append(currentChar.toLowerCase());
-                        numberCount++;
-                    } else {
-                        output.append(currentChar.toUpperCase());
-                        numberCount = 0;
-                    }
-                } else {
-                    output.append(" ");
-                }
+            if (e.isFromGuild() && e.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE)) {
+                e.getMessage().delete().complete();
             }
 
-            if (e.isFromGuild()) {
-                removeMessage();
-            }
-
-            e.getMessageChannel().sendMessage(output.toString()).queue();
+            e.getMessageChannel().sendMessage(stringToMocked(e.getMessageWithoutCommand())).queue();
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("mock").setDescription("Requires a argument").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires a argument!", e.getPrefix())).queue();
         }
     }
 
-    public void removeMessage() {
-        Permissions permissions = new Permissions(e.getGuild());
-        if (permissions.botHasPermission(Permission.MESSAGE_MANAGE)){
-            e.getMessage().delete().complete();
-        }
-    }
+    private String stringToMocked(String toMock) {
+        StringBuilder output = new StringBuilder();
 
-    @Override
-    public String getCommand() {
-        return command;
-    }
+        AtomicBoolean toUpper = new AtomicBoolean(r.nextBoolean());
 
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
+        toMock.chars()
+                .mapToObj(i -> (char) i)
+                .forEach(currentChar -> {
+                    if (!Character.isLetter(currentChar)) {
+                        output.append(currentChar);
+                    } else if (toUpper.get()) {
+                        output.append(Character.toUpperCase(currentChar));
+                        toUpper.set(false);
+                    } else {
+                        output.append(currentChar);
+                        toUpper.set(true);
+                    }
+                });
+
+        return output.toString();
     }
 
     @Override
@@ -94,5 +80,10 @@ public class Mock implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

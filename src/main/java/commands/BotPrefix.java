@@ -1,11 +1,9 @@
-package commands.general;
+package commands;
 
-import commands.CommandReceivedEvent;
 import database.guild.DatabaseGuild;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class BotPrefix {
 

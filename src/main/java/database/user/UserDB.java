@@ -1,5 +1,7 @@
 package database.user;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class UserDB {
@@ -8,45 +10,35 @@ public class UserDB {
     int xp = 0;
     int xpForLevelUp = 100;
 
-    int reps = 0;
+    long lastTimeRepGiven;
 
     boolean isBotModerator = false;
     boolean isBlackListed = false;
+
+    int reps = 0;
+
+    String prefix = "";
+
+    HashMap<String, ArrayList<Song>> playlists = new HashMap<>();
 
     public UserDB(String userID) {
         this.userID = userID;
     }
 
-    public UserDB(String userID, int level, int xp, int reps) {
+    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix, HashMap<String, ArrayList<Song>> playlists) {
         this.userID = userID;
         this.level = level;
         this.xp = xp;
         this.reps = reps;
-    }
-
-    public UserDB(String userID, int level, int xp, boolean isBotModerator, boolean isBlackListed) {
-        this.userID = userID;
-        this.level = level;
-        this.xp = xp;
         this.isBotModerator = isBotModerator;
         this.isBlackListed = isBlackListed;
-    }
-
-    public void addXp(int xp) {
-        this.xp += xp;
+        this.prefix = prefix;
+        this.playlists = playlists;
     }
 
     public void addRandomXp() {
         Random random = new Random();
         xp = xp + random.nextInt(20);
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
     }
 
     public String getUserID() {
@@ -104,5 +96,41 @@ public class UserDB {
 
     public void addRep() {
         reps++;
+    }
+
+    public long getLastTimeRepGiven() {
+        return lastTimeRepGiven;
+    }
+
+    public void setLastTimeRepGiven() {
+        this.lastTimeRepGiven = System.currentTimeMillis();
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public HashMap<String, ArrayList<Song>> getPlaylists() {
+        return playlists;
+    }
+
+    public ArrayList<Song> getPlaylist(String playlistName) {
+        return playlists.get(playlistName);
+    }
+
+    public void addPlayList(String playlistName) {
+        playlists.put(playlistName, new ArrayList<>());
+    }
+
+    public void addSong(String playlistName, String songName) {
+        playlists.get(playlistName).add(songName);
+    }
+
+    public void removeSong(String playlistName, int index) {
+        playlists.get(playlistName).remove(index);
     }
 }

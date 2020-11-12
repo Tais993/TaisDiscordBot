@@ -2,23 +2,24 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
+import database.user.DatabaseUser;
 import database.user.UserDB;
-import functions.entities.UserInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
-import java.time.Instant;
-
-import static functions.Colors.getCurrentColor;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Level implements ICommand {
+    DatabaseUser databaseUser = new DatabaseUser();
     CommandReceivedEvent e;
-    User userGiven;
 
-    String command = "level";
-    String commandAlias = "rank";
+    User userGiven;
+    UserDB userDB;
+
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("level", "rank"));
     String category = "general";
-    String exampleCommand = "!level <@user>/<userID>";
+    String exampleCommand = "level <@user>/<userID>";
     String shortCommandDescription = "Get the level of someone in this server.";
     String fullCommandDescription = "Get the level of someone in this server.";
 
@@ -26,60 +27,35 @@ public class Level implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!e.isFromGuild()) {
-            levelCommandPrivate();
+        if (!e.hasArgs()) {
+            userGiven = e.getAuthor();
+            userDB = e.getUserDB();
         } else {
-            levelCommandGuild();
-        }
+            userGiven = e.getFirstArgAsUser();
 
-        createEmbed(e.getUserDB());
-    }
-
-    public void levelCommandGuild() {
-        if (e.hasArgs()) {
-            if (e.getMessage().getMentionedMembers().size() > 0) {
-                userGiven = e.getMessage().getMentionedMembers().get(0).getUser();
-            } else if (e.getGuild().getMemberById(e.getArgs()[0]) != null) {
-                userGiven = e.getJDA().getUserById(e.getArgs()[0]);
+            if (userGiven == null) {
+                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
+                return;
             }
-        } else {
-            userGiven = e.getAuthor();
+
+            userDB = databaseUser.getUserFromDBToUserDB(userGiven.getId());
         }
+
+        createEmbed();
     }
 
-    public void levelCommandPrivate() {
-        if (e.hasArgs()) {
-            userGiven = e.getJDA().retrieveUserById(e.getArgs()[0]).complete();
-        } else {
-            userGiven = e.getAuthor();
-        }
-    }
-
-    public void createEmbed(UserDB userDB) {
+    public void createEmbed() {
         userDB.calculateXpForLevelUp();
 
-        EmbedBuilder eb = new EmbedBuilder();
+        EmbedBuilder eb = getEmbed();
 
-        eb.setThumbnail(userGiven.getAsTag());
+        eb.setThumbnail(userGiven.getAvatarUrl());
         eb.setAuthor(userGiven.getAsTag());
         eb.appendDescription("Level: " + userDB.getLevel() + "\n");
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
-        eb.setFooter("Made by Tijs ");
-
-        eb.setTimestamp(Instant.now());
-        eb.setColor(getCurrentColor());
+        eb.setFooter(userDB.getReps() + " total reps");
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -100,5 +76,10 @@ public class Level implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

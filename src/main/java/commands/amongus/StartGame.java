@@ -7,17 +7,19 @@ import database.reactions.ReactionDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Role;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class StartGame implements ICommand {
     CommandReceivedEvent e;
     DatabaseReactions databaseReactions = new DatabaseReactions();
 
-    String time = "16:00";
+    String time;
     Role role;
 
-    String command = "startgame";
-    String commandAlias = "startgame";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("startgame", "startamongusgame"));
     String category = "fun";
-    String exampleCommand = "`!startgame <time>`";
+    String exampleCommand = "startgame <time>";
     String shortCommandDescription = "Start a game of among us";
     String fullCommandDescription = "Start a game of among us, set amount of imposters, and more.\n" +
             "You can see how many people will join, and what their name is.";
@@ -37,7 +39,7 @@ public class StartGame implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("startgame").setDescription("Error: Requires a time").build()).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: Requires a time", e.getPrefix())).queue();
             return;
         }
 
@@ -47,7 +49,7 @@ public class StartGame implements ICommand {
 
         EmbedBuilder eb = getEmbed();
 
-        eb.setAuthor("Among Us Game", "https://cdn.discordapp.com/icons/705908114406506517/0929283dd126725f7c11ee6a0edb56cc.webp", "https://cdn.discordapp.com/icons/705908114406506517/0929283dd126725f7c11ee6a0edb56cc.webp");
+        eb.setAuthor("Among Us Game", "https://www.iphoned.nl/wp-content/uploads/2020/10/among-us-1.jpg", "https://www.iphoned.nl/wp-content/uploads/2020/10/among-us-1.jpg");
         eb.setTitle("Wil jij ook meedoen? Druk op het vinkje onder dit bericht!");
         eb.setDescription("*Microfoon is nodig!*\n" +
                 "Maximaal 10 spelers.");
@@ -56,24 +58,25 @@ public class StartGame implements ICommand {
 
         eb.addField("Mensen die al meespelen:", "*Druk opnieuw op het vinkje om van de lijst af te worden gehaald.*", false);
 
+        String roleId = e.getGuildDB().getAmongUsRoleId();
+        
+        if (!roleId.equals("0")) {
+            Role role = e.getGuild().getRoleById(roleId);
+
+            if (!role.isMentionable()) {
+                e.getMessageChannel().sendMessage(role.getName() + " isn't mentionable! Please make it mentionable.").queue();
+                return;
+            } else {
+                e.getMessageChannel().sendMessage(role.getAsMention()).queue();
+            }
+        }
+
         e.getMessageChannel().sendMessage(eb.build()).queue(m -> {
             databaseReactions.addReactionToDB(new ReactionDB(m.getId(), e.getMessageChannel().getId()));
             m.addReaction("U+2705").queue();
         });
 
-        e.getMessageChannel().sendMessage(role.getAsMention() + "^^^").queue();
-
         e.getMessage().delete().queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -94,5 +97,10 @@ public class StartGame implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

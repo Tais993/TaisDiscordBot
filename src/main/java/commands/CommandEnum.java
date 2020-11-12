@@ -1,6 +1,8 @@
 package commands;
 
+import commands.amongus.SetAmongUsRole;
 import commands.amongus.StartGame;
+import commands.bot.Shutdown;
 import commands.bot.*;
 import commands.fun.*;
 import commands.general.*;
@@ -8,16 +10,14 @@ import commands.music.*;
 import commands.util.*;
 import commands.util.ban.TempBan;
 import commands.util.invitecommand.InviteMain;
-import functions.Colors;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.SelfUser;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.time.Instant;
 import java.util.ArrayList;
 
-import static functions.Colors.getCurrentColor;
+import static util.Colors.getCurrentColor;
 
 public class CommandEnum {
     enum AllMyCommands {
@@ -33,7 +33,7 @@ public class CommandEnum {
         WHOIS(new WhoIs()),
         BOTSTATS(new BotStats()),
         LEVEL(new Level()),
-        CHANGEBOTPREFIX(new ChangeBotPrefix()),
+        CHANGEBOTPREFIXGUILD(new ChangeBotPrefixGuild()),
         PLAY(new Play()),
         JOIN(new Join()),
         LEAVE(new Leave()),
@@ -77,7 +77,16 @@ public class CommandEnum {
         SETBLACKLISTED(new SetBlacklisted()),
         SETBOTMODERATOR(new SetBotModerator()),
         REP(new Rep()),
-        REPS(new Reps());
+        REPS(new Reps()),
+        SAY(new Say()),
+        AVATAR(new Avatar()),
+        SETAMONGUSROLE(new SetAmongUsRole()),
+        DM(new Dm()),
+        ROLEINFO(new RoleInfo()),
+        CHANGEBOTPREFIXUSER(new ChangeBotPrefixUser()),
+        CALCULATOR(new Calculator()),
+        PLAYLIST(new Playlist()),
+        PLAYPLAYLIST(new PlayPlaylist());
         ICommand c;
 
         AllMyCommands(ICommand c) {
@@ -97,7 +106,9 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (e.getCommand().equalsIgnoreCase(c.getCommand()) || e.getCommand().equalsIgnoreCase(c.getCommandAlias())) {
+            String commandFound = c.getCommandAliases().stream().filter(command -> e.getCommand().equalsIgnoreCase(command)).findFirst().orElse(null);
+
+            if (commandFound != null) {
                 if (c.getCategory().equalsIgnoreCase("botmoderation")) {
                     if (e.isBotModerator()) {
                         c.command(e);
@@ -117,7 +128,9 @@ public class CommandEnum {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (arg.equalsIgnoreCase(c.getCommand())) {
+            String commandFound = c.getCommandAliases().stream().filter(arg::equalsIgnoreCase).findFirst().orElse(null);
+
+            if (commandFound != null) {
                 if (c.getCategory().equalsIgnoreCase("botmoderation")) {
                     return isBotModerator;
                 }
@@ -128,7 +141,6 @@ public class CommandEnum {
     }
 
     public void getHelpAllByCategory(CommandReceivedEvent e) {
-
         PrivateChannel privateChannel = e.getAuthor().openPrivateChannel().complete();
 
         categories.forEach(category -> {
@@ -149,7 +161,7 @@ public class CommandEnum {
                             privateChannel.sendMessage(eb.build()).queue();
                             eb.clearFields();
                         }
-                        eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
+                        eb.addField(c.getCommandAliases().get(0), c.getShortCommandDescription(), true);
                     }
                 }
                 privateChannel.sendMessage(eb.build()).queue();
@@ -157,20 +169,24 @@ public class CommandEnum {
         });
     }
 
-    public EmbedBuilder getFullHelpItem(String item) {
+    public EmbedBuilder getFullHelpItem(String item, String prefix) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (item.equals(c.getCommand())) {
+            String commandFound = c.getCommandAliases().stream().filter(item::equalsIgnoreCase).findFirst().orElse(null);
+
+            if (commandFound != null) {
                 EmbedBuilder eb = new EmbedBuilder();
+                ArrayList<String> commandAliases = c.getCommandAliases();
 
                 eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
                 eb.setTimestamp(Instant.now());
 
-                eb.setTitle("Help " + c.getCommand());
-                eb.setDescription("(option) means optional\n" +
-                        "<option> is required");
-                eb.addField(c.getExampleCommand(),  c.getFullCommandDescription(), true);
+                eb.setTitle("Help " + commandFound);
+
+                commandAliases.forEach(commandAlias -> eb.appendDescription(prefix + commandAlias + "\n"));
+
+                eb.addField("`" + prefix + c.getExampleCommand() + "`",  c.getFullCommandDescription(), true);
 
                 eb.setColor(getCurrentColor());
                 return eb;
@@ -179,12 +195,23 @@ public class CommandEnum {
         return null;
     }
 
-    public String getShortHelpItem(String item) {
+    public EmbedBuilder getShortHelpItem(String item, String prefix) {
         for (AllMyCommands value : AllMyCommands.values()) {
             ICommand c = value.getCommand();
 
-            if (item.equals(c.getCommand())) {
-                return c.getShortCommandDescription();
+            String commandFound = c.getCommandAliases().stream().filter(item::equalsIgnoreCase).findFirst().orElse(null);
+
+            if (commandFound != null) {
+                EmbedBuilder eb = new EmbedBuilder();
+
+                eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+                eb.setTimestamp(Instant.now());
+
+                eb.setTitle("Error " + commandFound);
+                eb.addField("`" + prefix + c.getExampleCommand() + "`",  c.getShortCommandDescription(), true);
+
+                eb.setColor(getCurrentColor());
+                return eb;
             }
         }
         return null;
@@ -206,7 +233,7 @@ public class CommandEnum {
                     e.getMessageChannel().sendMessage(eb.build()).queue();
                     eb.clearFields();
                 }
-                eb.addField(c.getCommand(), c.getShortCommandDescription(), true);
+                eb.addField(c.getCommandAliases().get(0), c.getShortCommandDescription(), true);
             }
         }
 
@@ -215,8 +242,8 @@ public class CommandEnum {
 
     public void getListsReady() {
         categories.add("fun");
-        categories.add("util");
         categories.add("general");
+        categories.add("util");
         categories.add("music");
         categories.add("botmoderation");
     }

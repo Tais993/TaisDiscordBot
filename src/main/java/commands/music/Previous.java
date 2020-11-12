@@ -4,13 +4,16 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Previous implements ICommand {
-    String command = "previous";
-    String commandAlias = "previous";
+
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("previous"));
     String category = "music";
-    String exampleCommand = "`!previous`";
+    String exampleCommand = "previous ";
     String shortCommandDescription = "Return to the previous song.";
     String fullCommandDescription = "Return to the previous song.";
 
@@ -21,16 +24,6 @@ public class Previous implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.playPreviousTrack(event.getGuild());
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -51,5 +44,10 @@ public class Previous implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -1,25 +1,23 @@
 package commands.music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.CommandEnum;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static music.TrackScheduler.videoDurationToYoutube;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class SkipTo implements ICommand {
     CommandReceivedEvent e;
-    Colors colors = new Colors();
-    CommandEnum commandEnum = new CommandEnum();
 
-    String command = "skipto";
-    String commandAlias = "skipto";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("skipto", "skiptonumber"));
     String category = "music";
-    String exampleCommand = "`!skipto (index song)`";
+    String exampleCommand = "skipto (index song)";
     String shortCommandDescription = "Skip to a certain position in the queue";
     String fullCommandDescription = "Skip to a certain position in the queue";
 
@@ -28,7 +26,7 @@ public class SkipTo implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -51,16 +49,6 @@ public class SkipTo implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -78,5 +66,10 @@ public class SkipTo implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

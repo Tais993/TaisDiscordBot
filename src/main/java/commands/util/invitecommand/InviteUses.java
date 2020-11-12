@@ -14,7 +14,7 @@ public class InviteUses {
             String invite = e.getTextChannel().createInvite().setMaxUses(Integer.valueOf(args)).complete().getUrl();
             e.getMessageChannel().sendMessage("A temporary invite has been created for " + args + " uses! \n" + invite).queue();
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite", e.getPrefix()).build()).queue();
         }
     }
 

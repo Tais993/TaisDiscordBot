@@ -1,4 +1,4 @@
-package functions.entities;
+package util.entities;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -16,16 +16,6 @@ public class UserInfo {
 
     public UserInfo(User userGiven) {
         user = userGiven;
-    }
-
-    public String getDateCreated() {
-        OffsetDateTime offsetDateTime = member.getTimeCreated();
-        return offsetDateTime.getDayOfMonth() + "-" + offsetDateTime.getMonthValue() + "-" + offsetDateTime.getYear() + " " + offsetDateTime.getHour() + ":" + offsetDateTime.getMinute();
-    }
-
-    public String getJoinedServerDate() {
-        OffsetDateTime offsetDateTime = member.getTimeJoined();
-        return offsetDateTime.getDayOfMonth() + "-" + offsetDateTime.getMonthValue() + "-" + offsetDateTime.getYear() + " " + offsetDateTime.getHour() + ":" + offsetDateTime.getMinute();
     }
 
     public String getTimeBoosted() {
@@ -47,19 +37,10 @@ public class UserInfo {
         return Math.round(day) + " days";
     }
 
-    public String getMonthsNitro() {
-        OffsetDateTime offsetDateTime = member.getTimeBoosted();
-        return offsetDateTime.getDayOfMonth() + "-" + offsetDateTime.getMonthValue() + "-" + offsetDateTime.getYear() + " " + offsetDateTime.getHour() + ":" + offsetDateTime.getMinute();
-    }
-
     public String getRoles() {
         StringBuilder allRoles = new StringBuilder();
         member.getRoles().forEach((value -> allRoles.append(value.getAsMention())));
 
         return allRoles.toString();
-    }
-
-    public String getAvatar() {
-        return user.getAvatarUrl();
     }
 }

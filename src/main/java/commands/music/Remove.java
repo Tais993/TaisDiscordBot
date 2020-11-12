@@ -5,15 +5,17 @@ import commands.ICommand;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Remove implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "remove";
-    String commandAlias = "remove";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("remove"));
     String category = "music";
-    String exampleCommand = "`!remove <index>`";
+    String exampleCommand = "remove <index>";
     String shortCommandDescription = "Removes song from queue.";
     String fullCommandDescription = "Removes song from queue.";
 
@@ -26,19 +28,9 @@ public class Remove implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[1]));
+        EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[0]));
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -59,5 +51,10 @@ public class Remove implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

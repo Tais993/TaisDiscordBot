@@ -22,7 +22,7 @@ public class InviteTime {
         } else if (isNumber(args)) {
             checkSeconds(args);
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite").setDescription("Give a valid time").build()).queue();
+            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite", e.getPrefix()).setDescription("Give a valid time").build()).queue();
         }
     }
 

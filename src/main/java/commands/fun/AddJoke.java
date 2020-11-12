@@ -1,18 +1,20 @@
-package commands.bot;
+package commands.fun;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.jokes.DatabaseJokes;
 import database.jokes.JokeDB;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class AddJoke implements ICommand {
     DatabaseJokes databaseJokes = new DatabaseJokes();
-
     CommandReceivedEvent e;
-    String command = "addjoke";
-    String commandAlias = "addjoke";
+
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("addjoke"));
     String category = "fun";
-    String exampleCommand = "`!addjoke`";
+    String exampleCommand = "addjoke";
     String shortCommandDescription = "Add a funny joke";
     String fullCommandDescription = "Add a funny joke that actually, isn't funny at all.";
 
@@ -26,14 +28,14 @@ public class AddJoke implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires 2 arguments")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires 2 arguments", e.getPrefix())).queue();
             return;
         }
 
         String fullMessage = event.getMessageWithoutCommand();
 
         if (!fullMessage.contains(";")) {
-            e.getMessageChannel().sendMessage(getFullHelp("Split the setup and punchline with a `;`")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Split the setup and punchline with a `;`", e.getPrefix())).queue();
             return;
         }
 
@@ -47,16 +49,6 @@ public class AddJoke implements ICommand {
         JokeDB jokeDB = new JokeDB(setup, punchline);
 
         databaseJokes.addJoke(jokeDB);
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -77,5 +69,10 @@ public class AddJoke implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

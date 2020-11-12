@@ -4,15 +4,17 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Resume implements ICommand {
     CommandReceivedEvent e;
 
-    String command = "resume";
-    String commandAlias = "resume";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("resume"));
     String category = "music";
-    String exampleCommand = "`!resume`";
+    String exampleCommand = "resume";
     String shortCommandDescription = "Start the music again";
     String fullCommandDescription = "Get the queue of the music.";
 
@@ -27,16 +29,6 @@ public class Resume implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
 
         manager.resume(e.getGuild());
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -57,5 +49,10 @@ public class Resume implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

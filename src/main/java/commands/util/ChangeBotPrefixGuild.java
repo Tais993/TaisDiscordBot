@@ -3,15 +3,20 @@ package commands.util;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.guild.DatabaseGuild;
+import database.guild.GuildDB;
 
-public class ChangeBotPrefix implements ICommand {
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class ChangeBotPrefixGuild implements ICommand {
     CommandReceivedEvent e;
     DatabaseGuild databaseGuild = new DatabaseGuild();
 
-    String command = "setbotprefix";
-    String commandAlias = "botprefix";
+    GuildDB guildDB;
+
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("changebotprefixguild", "setbotprefixserver", "changebotprefixserver", "botprefixserver"));
     String category = "util";
-    String exampleCommand = "`!setbotprefix <botprefix>`";
+    String exampleCommand = "changebotprefixguild <botprefix>";
     String shortCommandDescription = "Set the prefix of the bot in this guild.";
     String fullCommandDescription = "Set the prefix of the bot in this guild.";
 
@@ -26,30 +31,20 @@ public class ChangeBotPrefix implements ICommand {
             return;
         }
 
-        String guildID = e.getGuild().getId();
-
-        String currentPrefix = databaseGuild.getPrefixGuildInDB(guildID);
-
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
-        String toReplace = currentPrefix + command + " ";
-        String messageRaw = e.getMessage().getContentRaw();
-        prefix = messageRaw.replace(toReplace, "");
-        databaseGuild.setPrefixGuildInDB(guildID, prefix);
+        guildDB = e.getGuildDB();
+
+        prefix = e.getMessageWithoutCommand();
+
+        guildDB.setPrefix(prefix);
+
+        databaseGuild.updateGuildInDB(guildDB);
+
         e.getMessageChannel().sendMessage("Prefix changed to: " + prefix).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -70,5 +65,10 @@ public class ChangeBotPrefix implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

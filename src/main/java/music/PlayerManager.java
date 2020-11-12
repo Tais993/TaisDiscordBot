@@ -7,15 +7,18 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import functions.Colors;
+import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import util.Colors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static music.TrackScheduler.videoDurationToYoutube;
+import static util.Colors.getCurrentColor;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;
@@ -44,18 +47,51 @@ public class PlayerManager {
         return musicManager;
     }
 
+    public void loadAndPlayUserPlaylist(TextChannel channel, String userName, String userId, ArrayList<String> songs) {
+        GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
+
+        songs.forEach(song -> playerManager.loadItemOrdered(musicManager, song, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setTitle("Adding to queue ");
+                eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
+                eb.setColor(getCurrentColor());
+
+                channel.sendMessage(eb.build()).queue();
+
+                play(musicManager, track, userId, userName);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                playlist.getTracks().forEach((audioTrack -> loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName ,true)));
+            }
+
+            @Override
+            public void noMatches() {
+                channel.sendMessage("Nothing found by " + song).queue();
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                channel.sendMessage("Could not play: " + e.getMessage()).queue();
+            }
+        }));
+    }
+
     public void loadAndPlay(TextChannel channel, String trackUrl, boolean addFirst, String userId, String userName) {
         GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
 
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                Colors colors = new Colors();
 
                 EmbedBuilder eb = new EmbedBuilder();
                 eb.setTitle("Adding to queue ");
                 eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
-                eb.setColor(colors.getCurrentColor());
+                eb.setColor(getCurrentColor());
 
                 channel.sendMessage(eb.build()).queue();
 
@@ -68,9 +104,7 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                playlist.getTracks().forEach((audioTrack -> {
-                    loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName ,true);
-                }));
+                playlist.getTracks().forEach((audioTrack -> loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName ,true)));
             }
 
             @Override
@@ -184,7 +218,7 @@ public class PlayerManager {
 
         EmbedBuilder eb = new EmbedBuilder();
         Colors colors = new Colors();
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         if (audioTrack == null) {
             eb.setTitle("Error removing track from queue");
@@ -214,7 +248,7 @@ public class PlayerManager {
 
     public void pause(Guild g) {
         GuildMusicManager musicManager = getGuildMusicManager(g);
-        musicManager.player.setPaused(true);
+        musicManager.player.setPaused(!musicManager.player.isPaused());
     }
 
     public void resume(Guild g) {

@@ -3,10 +3,14 @@ package database.guild;
 import com.mongodb.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
+import java.util.HashMap;
+
 public class DatabaseGuild {
     public static MongoClient mongoClient;
     public static DB database;
     public static DBCollection guild;
+
+    static HashMap<String, GuildDB> cachedGuilds = new HashMap<>();
 
     public DatabaseGuild() {
         mongoClient = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
@@ -27,12 +31,26 @@ public class DatabaseGuild {
     }
 
     public GuildDB getGuildFromDBToGuildDB(String guildID) {
-        DBObject query = new BasicDBObject("guildID", guildID);
-        DBCursor cursor = guild.find(query);
-        if (cursor.one() == null){
-            return new GuildDB(guildID);
+
+        GuildDB cachedGuildDB = cachedGuilds.get(guildID);
+
+        if (cachedGuildDB != null) {
+            return cachedGuildDB;
+        } else {
+            DBObject query = new BasicDBObject("guildID", guildID);
+            DBCursor cursor = guild.find(query);
+            if (cursor.one() == null) {
+                GuildDB guildDB = new GuildDB(guildID);
+                guild.insert(guildDBToDBObject(guildDB));
+
+                cachedGuilds.put(guildID, guildDB);
+
+                return new GuildDB(guildID);
+            }
+            GuildDB guildDB = dbObjectToGuildDB(cursor.one());
+            cachedGuilds.put(guildID, guildDB);
+            return guildDB;
         }
-        return dbObjectToGuildDB(cursor.one());
     }
 
     public boolean guildExistsInDB(String guildID) {
@@ -42,20 +60,33 @@ public class DatabaseGuild {
     }
 
     public DBObject guildDBToDBObject(GuildDB guildDB) {
-        return new BasicDBObject("guildID", guildDB.getGuildID()).append("prefix", guildDB.getPrefix());
+        return new BasicDBObject("guildID", guildDB.getGuildID()).append("prefix", guildDB.getPrefix()).append("amongUsRoleId", guildDB.getAmongUsRoleId());
     }
 
     public GuildDB dbObjectToGuildDB(DBObject dbObject) {
         String guildID = dbObject.get("guildID").toString();
         String prefix = dbObject.get("prefix").toString();
 
-        GuildDB guildDB = new GuildDB(guildID);
-        guildDB.setPrefix(prefix);
+        GuildDB guildDB = new GuildDB(guildID, prefix);
+
+        if (dbObject.get("amongUsRoleId") != null) guildDB.setAmongUsRoleId(dbObject.get("amongUsRoleId").toString());
+
         return guildDB;
     }
 
-    public void addGuildToDB(GuildDB guildDB) {
-        guild.insert(guildDBToDBObject(guildDB));
+    public void updateGuildInDB(GuildDB guildDB) {
+        String guildId = guildDB.getGuildID();
+
+        DBObject query = new BasicDBObject("guildID", guildDB.getGuildID());
+        guild.findAndModify(query, guildDBToDBObject(guildDB));
+
+        GuildDB cachedGuildDB = cachedGuilds.get(guildDB.getGuildID());
+
+        if (cachedGuildDB != null) {
+            cachedGuilds.replace(guildId, guildDB);
+        } else {
+            cachedGuilds.put(guildId, guildDB);
+        }
     }
 
     public String getPrefixGuildInDB(String guildID) {

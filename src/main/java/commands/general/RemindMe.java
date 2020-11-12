@@ -4,16 +4,18 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.remindme.DatabaseRemindMe;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RemindMe implements ICommand {
     CommandReceivedEvent e;
     DatabaseRemindMe databaseRemindMe = new DatabaseRemindMe();
 
     int totalSeconds;
 
-    String command = "remindme";
-    String commandAlias = "remindme";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("remindme"));
     String category = "general";
-    String exampleCommand = "`!remindme <time>s/m/h/d <content to remind you with>`";
+    String exampleCommand = "remindme <time>s/m/h/d <content to remind you with>";
     String shortCommandDescription = "Remind you with something you gave the bot.";
     String fullCommandDescription = "Remind you with something you gave the bot after a specified amount of time.";
 
@@ -51,16 +53,6 @@ public class RemindMe implements ICommand {
     }
 
     @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
-    }
-
-    @Override
     public String getCategory() {
         return category;
     }
@@ -78,6 +70,11 @@ public class RemindMe implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 
     public void minutesToSeconds(int timeGiven) {

@@ -2,21 +2,20 @@ package commands.util;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import functions.Colors;
-import functions.entities.GuildInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
+import util.entities.GuildInfo;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static util.Colors.getCurrentColor;
 
 public class ServerStats implements ICommand {
     CommandReceivedEvent e;
-    Colors colors = new Colors();
 
-    String command = "serverinfo";
-    String commandAlias = "serverstats";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("serverstats", "serverinfo"));
     String category = "util";
-    String exampleCommand = "!serverinfo / !serverstats";
+    String exampleCommand = "serverinfo";
     String shortCommandDescription = "Get info about the server.";
     String fullCommandDescription = "Get information about the server.";
 
@@ -35,27 +34,15 @@ public class ServerStats implements ICommand {
 
         eb.setTitle("Server stats of: " + e.getGuild().getName());
         eb.addField("Total members:", e.getGuild().getMemberCount() + "", true);
-//        eb.addField("Total online/DND members:", guildInfo.getOnlineMemberCount() + "", false);
         eb.addField("Total non animated emojis:", guildInfo.getTotalNonAnimatedEmojis() + "", true);
         eb.addBlankField(true);
         eb.addField("Total animated emojis:", guildInfo.getTotalAnimatedEmojis() + "", true);
         eb.addField("Server owner:", guildInfo.getOwnerName(), true);
         eb.setThumbnail(e.getGuild().getIconUrl());
-        eb.setFooter("Made by Tijs");
 
-        eb.setColor(colors.getCurrentColor());
+        eb.setColor(getCurrentColor());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -76,5 +63,10 @@ public class ServerStats implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

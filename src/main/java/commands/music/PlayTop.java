@@ -7,18 +7,19 @@ import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static functions.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class PlayTop implements ICommand {
     CommandReceivedEvent e;
 
     String url;
 
-    String command = "playtop";
-    String commandAlias = "playtop";
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playtop"));
     String category = "music";
-    String exampleCommand = "`!playtop <URL>`";
+    String exampleCommand = "playtop <URL>";
     String shortCommandDescription = "Plays music, and song goes to top of the queue.";
     String fullCommandDescription = "Plays music, and song goes to the top of the queue.";
 
@@ -27,7 +28,7 @@ public class PlayTop implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 1 argument")).queue();
+            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -62,22 +63,12 @@ public class PlayTop implements ICommand {
         String videoUrl = searchYouTube.getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage(getFullHelp(videoUrl)).queue();
+            e.getMessageChannel().sendMessage("Unknown error: " + videoUrl).queue();
             return false;
         }
 
         url = videoUrl;
         return true;
-    }
-
-    @Override
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String getCommandAlias() {
-        return commandAlias;
     }
 
     @Override
@@ -98,5 +89,10 @@ public class PlayTop implements ICommand {
     @Override
     public String getFullCommandDescription() {
         return fullCommandDescription;
+    }
+
+    @Override
+    public ArrayList<String> getCommandAliases() {
+        return commandAliases;
     }
 }

@@ -25,7 +25,7 @@ public class BotStats implements ICommand {
         eb.addField("Total joined guilds:",  e.getJDA().getSelfUser().getMutualGuilds().size() + "", false);
         eb.addField("Total commands", commandEnum.getTotalCommands() + "", true);
         eb.addField("Created by:", e.getJDA().retrieveUserById("257500867568205824").complete().getAsTag(), true);
-        eb.addField("Github:", "[Click here to get it!](https://github.com/Tais993/taisdiscordbot \"Tais Discord Bot on Githubz\")", true);
+        eb.addField("Github:", "[Click here to get it!](https://github.com/Tais993/taisdiscordbot \"Tais Discord Bot on Github\")", true);
         eb.setThumbnail(e.getJDA().getSelfUser().getAvatarUrl());
 
         e.getMessageChannel().sendMessage(eb.build()).queue();

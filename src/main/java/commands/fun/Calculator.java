@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class Calculator implements ICommand {
     CommandReceivedEvent e;
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("calculate", "calculater"));
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("calculate", "calculator"));
     String category = "fun";
     String exampleCommand = "calculate X operator Y";
     String shortCommandDescription = "Calculate!";

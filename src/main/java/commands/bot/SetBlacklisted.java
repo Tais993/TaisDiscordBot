@@ -39,8 +39,6 @@ public class SetBlacklisted implements ICommand {
             return;
         }
 
-
-
         userId = user.getId();
 
         UserDB userDB = databaseUser.getUserFromDBToUserDB(userId);

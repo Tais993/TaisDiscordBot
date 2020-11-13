@@ -25,24 +25,14 @@ public class EightBall implements ICommand {
             int chance = Math.round(r.nextFloat()*10);
 
             switch (chance) {
-                case 1: case 2:
-                    e.getMessageChannel().sendMessage("For sure!").queue();
-                    break;
-                case 3: case 4:
-                    e.getMessageChannel().sendMessage("Yes.").queue();
-                    break;
-                case 5: case 6:
-                    e.getMessageChannel().sendMessage("Maybe").queue();
-                    break;
-                case 7: case 8:
-                    e.getMessageChannel().sendMessage("No.").queue();
-                    break;
-                case 9: case 10:
-                    e.getMessageChannel().sendMessage("Never...").queue();
-                    break;
+                case 1, 2 -> e.getMessageChannel().sendMessage("For sure!").queue();
+                case 3, 4 -> e.getMessageChannel().sendMessage("Yes.").queue();
+                case 5, 6 -> e.getMessageChannel().sendMessage("Maybe").queue();
+                case 7, 8 -> e.getMessageChannel().sendMessage("No.").queue();
+                case 9, 10 -> e.getMessageChannel().sendMessage("Never...").queue();
             }
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("You're supposed to ask a question, so it should contain a question mark!", e.getPrefix())).queue();
+            e.getMessageChannel().sendMessage(getShortHelp("You're supposed to ask a question, so it should contain a question mark!", e.getPrefix())).queue();
         }
     }
 

@@ -4,6 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.hugs.DatabaseHugs;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
 
 import java.io.*;
 import java.net.URL;
@@ -34,42 +35,27 @@ public class Hug implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Run this command in a Discord guild/server", e.getPrefix())).queue();
-            return;
-        }
-
-        if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
+            e.getMessageChannel().sendMessage(getShortHelp("Run this command in a Discord guild/server", e.getPrefix())).queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires a argument", e.getPrefix())).queue();
+            e.getMessageChannel().sendMessage(getShortHelp("Requires a argument", e.getPrefix())).queue();
             return;
         }
 
-        if (e.getMessage().getMentionedMembers().size() >= 1) {
-            userToHugMentioned = e.getMessage().getMentionedMembers().get(0).getAsMention();
-        } else if (e.hasArgs()) {
-            Member member = e.getGuild().getMemberById(e.getArgs()[0]);
-            if (member != null) {
-                userToHugMentioned = member.getAsMention();
-            } else {
-                e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid userId", e.getPrefix())).queue();
-                return;
-            }
-        } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: either mention a user or give a user ID", e.getPrefix())).queue();
+        if (e.mentionsEveryone()) {
+            e.getMessageChannel().sendMessage(getShortHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
-        int easterEgg = r.nextInt(101);
-
-        if (easterEgg >= 99) {
-            createFile("https://media1.tenor.com/images/4d853211454cb61fa38e308f60c62e28/tenor.gif?itemid=15723089");
-            e.getMessageChannel().sendMessage("KNOLPOWER").addFile(file).queue();
+        User toHug = e.getFirstArgAsUser();
+        if (toHug == null) {
+            e.getMessageChannel().sendMessage("Either mention a user or give a valid user ID!").queue();
             return;
         }
+
+        userToHugMentioned = toHug.getAsMention();
 
         int maxInt = databaseHugs.numberItemsInDB();
         int randomGifIndex = r.nextInt(maxInt);

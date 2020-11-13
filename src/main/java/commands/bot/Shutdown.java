@@ -15,7 +15,6 @@ public class Shutdown implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        e.getJDA().shutdown();
         System.exit(1);
     }
 

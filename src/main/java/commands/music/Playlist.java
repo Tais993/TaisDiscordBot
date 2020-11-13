@@ -5,10 +5,15 @@ import commands.ICommand;
 import database.user.DatabaseUser;
 import database.user.Song;
 import database.user.UserDB;
+import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
+import static util.Colors.getCurrentColor;
 
 public class Playlist implements ICommand {
     DatabaseUser databaseUser = new DatabaseUser();
@@ -19,16 +24,16 @@ public class Playlist implements ICommand {
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playlist", "playlist"));
     String category = "general";
-    String exampleCommand = "playlist <something>";
-    String shortCommandDescription = "Testing.";
-    String fullCommandDescription = "Testing";
+    String exampleCommand = "playlist <edit/view/create/help>";
+    String shortCommandDescription = "Edit, view or create playlists.";
+    String fullCommandDescription = "Edit, view or create playlists.";
 
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!e.hasArgs() || e.getArgs().length < 2) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires at least 2 arguments!", e.getPrefix())).queue();
+        if (!e.hasArgs()) {
+            e.getMessageChannel().sendMessage(getShortHelp("Requires at least 1 arguments!", e.getPrefix())).queue();
             return;
         }
 
@@ -36,44 +41,114 @@ public class Playlist implements ICommand {
 
         userDB = e.getUserDB();
 
-        EmbedBuilder eb = getEmbed();
-
         switch (args[0]) {
-            case "edit" -> {
-                if (userDB.getPlaylist(args[1]) != null) editPlaylist();
-                return;
-            }
-            case "view" -> {
-                eb.setTitle(e.getAuthor().getAsTag() + "'s playlist " + args[1]);
-                if (userDB.getPlaylist(args[1]) != null) for (int i = 0; i < userDB.getPlaylist(args[1]).size(); i++) {
-                    ArrayList<Song> songs = userDB.getPlaylist(args[1]);
-                    eb.appendDescription("\nSong URL: " + songs.get(i) + "\n *Number " + i + "*\n");
-                }
-            }
-            case "add" -> {
-                UserDB userDB = e.getUserDB();
-                userDB.addPlayList(args[1]);
-                databaseUser.updateUserInDB(userDB);
-                return;
-            }
+            case "edit" -> editPlaylist();
+            case "view" -> viewPlaylists();
+            case "create" -> createPlaylist();
+            case "delete" -> deletePlaylist();
+            case "help" -> getFullHelpCommand();
         }
-
-        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     public void editPlaylist() {
+        if (args.length < 2) {
+            customError("edit", "playlist <edit> <playlist name> <add/remove>", "requires 3 arguments!");
+            return;
+        } else if (userDB.getPlaylist(args[1]) == null) {
+            customError("edit", "playlist <edit> <playlist name> <add/remove>", "requires a valid playlist name!");
+            return;
+        }
+
         switch (args[2]) {
             case "remove" -> {
+                if (userDB.getPlaylist(args[1]).size() >= 4 || args.length < 4) {
+                    customError("edit", "playlist <edit> <playlist name> <remove> <song index>", "Requires a valid index!");
+                }
                 userDB.removeSong(args[1], Integer.parseInt(args[3]));
                 e.getMessageChannel().sendMessage("Removed 1 song from " + args[1]).queue();
             }
             case "add" -> {
-                userDB.addSong(args[1], args[3], e.getGuild());
+                if (args.length < 4) {
+                    customError("edit", "playlist <edit> <playlist name> <add> <song url>", "Requires a URL!");
+                }
+                PlayerManager playerManager = PlayerManager.getInstance();
+                playerManager.loadAndAddToPlaylist(args[1], args[3], e.getUserDB(), e.getGuild());
                 e.getMessageChannel().sendMessage("Added 1 song in " + args[1]).queue();
             }
         }
 
         databaseUser.updateUserInDB(userDB);
+    }
+
+    public void viewPlaylists() {
+        EmbedBuilder eb = getEmbed();
+
+        if (e.getArgs().length >= 2) {
+            if (userDB.getPlaylist(args[1]) != null) {
+
+                eb.setTitle(e.getAuthor().getAsTag() + "'s playlist " + args[1]);
+
+                for (int i = 0; i < userDB.getPlaylist(args[1]).size(); i++) {
+                    ArrayList<Song> songs = userDB.getPlaylist(args[1]);
+                    eb.appendDescription("\n" + i + " -> [" + songs.get(i).getTitle() + "](" + songs.get(i).getSongUrl() + ")");
+                }
+
+                e.getMessageChannel().sendMessage(eb.build()).queue();
+
+            } else {
+                e.getMessageChannel().sendMessage("Requires a valid playlist name!").queue();
+            }
+        } else {
+            eb.setTitle(e.getAsTag() + "'s playlists");
+            userDB.getPlaylists().forEach((key, songs) -> eb.appendDescription("\n" + key + " - " + songs.size() + " songs."));
+            e.getMessageChannel().sendMessage(eb.build()).queue();
+        }
+    }
+
+    public void createPlaylist() {
+        if (args.length >= 2) {
+            UserDB userDB = e.getUserDB();
+            userDB.addPlayList(args[1]);
+            databaseUser.updateUserInDB(userDB);
+        } else {
+            e.getMessageChannel().sendMessage("Requires a name!").queue();
+        }
+    }
+
+    public void deletePlaylist() {
+        if (args.length >= 2 && userDB.getPlaylist(args[1]) != null) {
+            userDB.removePlaylist(args[1]);
+            databaseUser.updateUserInDB(userDB);
+        } else {
+            e.getMessageChannel().sendMessage("Requires a valid playlist name!").queue();
+        }
+    }
+
+    public void customError(String commandName, String fullCommandExample, String error) {
+        EmbedBuilder eb = getEmbed();
+        eb.setTitle("Error playlist " + commandName);
+        eb.addField("`" + e.getPrefix() + fullCommandExample + "`",  getShortCommandDescription(), true);
+
+        if (error != null) {
+            eb.setDescription("**" + error + "**");
+        }
+        e.getMessageChannel().sendMessage(eb.build()).queue();
+    }
+
+    public void getFullHelpCommand() {
+        EmbedBuilder eb = getEmbed();
+        eb.setTitle("Full help playlist!");
+
+        eb.addField("`" + e.getPrefix() + "playlist edit <playlist name>`",  "Edit a playlist", false);
+        eb.addField("`" + e.getPrefix() + "playlist edit <playlist name> <remove> <index of song>`",  "Remove a song from a existing, use the index of the song (visible when doing " + e.getPrefix() + "playlist view <playlist name>)", false);
+        eb.addField("`" + e.getPrefix() + "playlist edit <playlist name> <add> <song URL>`",  "Add a song to a existing playlist using a song URL", false);
+        eb.addField("`" + e.getPrefix() + "playlist view (playlist name)`",  "View a specific playlist, wanna see all playlists? Give no playlist name.", false);
+        eb.addField("`" + e.getPrefix() + "playlist create <playlist name>`",  "Creates a playlist by name.", false);
+        eb.addField("`" + e.getPrefix() + "playlist delete <playlist name>`",  "Deletes a playlist by name.", false);
+        eb.addField("`" + e.getPrefix() + "playlist help`",  "Get this message.", false);
+        eb.setColor(getCurrentColor());
+
+        e.getMessageChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

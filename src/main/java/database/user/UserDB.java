@@ -1,8 +1,6 @@
 package database.user;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import music.PlayerManager;
-import net.dv8tion.jda.api.entities.Guild;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -130,10 +128,11 @@ public class UserDB {
         playlists.put(playlistName, new ArrayList<>());
     }
 
-    public void addSong(String playlistName, String songName, Guild guild) {
-        PlayerManager manager = PlayerManager.getInstance();
-        AudioTrack track = manager.loadAndReturn(songName, guild);
+    public void removePlaylist(String playlistName) {
+        playlists.remove(playlistName);
+    }
 
+    public void addSong(String playlistName, AudioTrack track) {
         Song song = new Song(track.getInfo().uri, track.getInfo().author, track.getInfo().title);
         playlists.get(playlistName).add(song);
     }

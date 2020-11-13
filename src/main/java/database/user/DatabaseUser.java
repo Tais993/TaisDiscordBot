@@ -153,7 +153,8 @@ public class DatabaseUser {
         HashMap<String, ArrayList<Song>> playlists = new HashMap<>();
 
         document.forEach((key, value) -> {
-            ArrayList<BasicDBObject> playlistArray = (ArrayList<BasicDBObject>) value;
+            ArrayList<Document> playlistArray = (ArrayList<Document>) value;
+
 
             ArrayList<Song> playlist = new ArrayList<>();
 

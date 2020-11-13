@@ -117,6 +117,10 @@ public class CommandReceivedEvent {
         return user;
     }
 
+    public String getAsTag() {
+        return user.getAsTag();
+    }
+
     public Member getMember() {
         return member;
     }

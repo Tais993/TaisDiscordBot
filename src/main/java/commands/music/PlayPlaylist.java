@@ -15,7 +15,7 @@ public class PlayPlaylist implements ICommand {
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playplaylist", "ppl"));
     String category = "music";
-    String exampleCommand = "playplaylist <@user>/<userID>";
+    String exampleCommand = "playplaylist <playlist name>";
     String shortCommandDescription = "Play a playlist you created.";
     String fullCommandDescription = "Play a playlist you created.";
 
@@ -25,17 +25,12 @@ public class PlayPlaylist implements ICommand {
 
         if (!allowedToPlayMusic(e, "playplaylist")) return;
 
-        if (!e.hasArgs()) {
-            EmbedBuilder eb = getEmbed();
-            eb.setTitle(e.getAuthor().getAsTag() + "'s playlists");
-
-            e.getUserDB().getPlaylists().forEach((key, value) -> eb.appendDescription(key + " - *total: " + value.size() + " songs*\n"));
-
-            e.getMessageChannel().sendMessage(eb.build()).queue();
+        if (!e.hasArgs() || e.getUserDB().getPlaylist(e.getArgs()[0]) == null) {
+            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid playlist name!", e.getPrefix())).queue();
         }
 
         PlayerManager manager = PlayerManager.getInstance();
-        e.getUserDB().getPlaylist(e.getArgs()[0]).forEach((song -> manager.loadAndPlay(e.getTextChannel(), song.getSongUrl(), false, e.getAuthor().getAsTag(), e.getAuthor().getId(), false)));
+        e.getUserDB().getPlaylist(e.getArgs()[0]).forEach((song -> manager.loadAndPlay(e.getTextChannel(), song.getSongUrl(), false, e.getAuthor().getId(), e.getAuthor().getAsTag(), false)));
     }
 
     @Override

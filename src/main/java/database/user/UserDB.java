@@ -128,6 +128,12 @@ public class UserDB {
         playlists.put(playlistName, new ArrayList<>());
     }
 
+    public void renamePlaylist(String oldPlaylistName, String newPlaylistName) {
+        ArrayList<Song> playlist = playlists.get(oldPlaylistName);
+        playlists.remove(oldPlaylistName);
+        playlists.put(newPlaylistName, playlist);
+    }
+
     public void removePlaylist(String playlistName) {
         playlists.remove(playlistName);
     }

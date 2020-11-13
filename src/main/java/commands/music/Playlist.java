@@ -24,9 +24,9 @@ public class Playlist implements ICommand {
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playlist", "playlist"));
     String category = "general";
-    String exampleCommand = "playlist <edit/view/create/help>";
-    String shortCommandDescription = "Edit, view or create playlists.";
-    String fullCommandDescription = "Edit, view or create playlists.";
+    String exampleCommand = "playlist <edit/view/create/delete/help>";
+    String shortCommandDescription = "Edit, view, create or delete playlists.";
+    String fullCommandDescription = "Edit, view, create or delete playlists. Run help to see the full help of this command.";
 
     @Override
     public void command(CommandReceivedEvent event) {
@@ -75,6 +75,13 @@ public class Playlist implements ICommand {
                 playerManager.loadAndAddToPlaylist(args[1], args[3], e.getUserDB(), e.getGuild());
                 e.getMessageChannel().sendMessage("Added 1 song in " + args[1]).queue();
             }
+            case "rename" -> {
+                if (args.length < 4) {
+                    customError("edit", "playlist <edit> <playlist name> <rename> <new playlist name>", "Requires a new name!");
+                }
+                userDB.renamePlaylist(args[1], args[3]);
+                e.getMessageChannel().sendMessage("Renamed " + args[1] + " to " + args[3]).queue();
+            }
         }
 
         databaseUser.updateUserInDB(userDB);
@@ -90,7 +97,9 @@ public class Playlist implements ICommand {
 
                 for (int i = 0; i < userDB.getPlaylist(args[1]).size(); i++) {
                     ArrayList<Song> songs = userDB.getPlaylist(args[1]);
-                    eb.appendDescription("\n" + i + " -> [" + songs.get(i).getTitle() + "](" + songs.get(i).getSongUrl() + ")");
+                    eb.appendDescription("\n*Number in playlist " + i + "*\n");
+                    eb.appendDescription("**" + songs.get(i).getAuthor() + "**\n");
+                    eb.appendDescription("[" + songs.get(i).getTitle() + "](" + songs.get(i).getSongUrl() + ")\n");
                 }
 
                 e.getMessageChannel().sendMessage(eb.build()).queue();
@@ -111,7 +120,7 @@ public class Playlist implements ICommand {
             userDB.addPlayList(args[1]);
             databaseUser.updateUserInDB(userDB);
         } else {
-            e.getMessageChannel().sendMessage("Requires a name!").queue();
+            customError("create", "playlist <create> <playlist name>", "requires 2 arguments!");
         }
     }
 
@@ -120,7 +129,7 @@ public class Playlist implements ICommand {
             userDB.removePlaylist(args[1]);
             databaseUser.updateUserInDB(userDB);
         } else {
-            e.getMessageChannel().sendMessage("Requires a valid playlist name!").queue();
+            customError("delete", "playlist <delete> <playlist name>", "Requires a valid playlist name!");
         }
     }
 

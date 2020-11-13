@@ -1,5 +1,7 @@
 package database.user;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -19,23 +21,13 @@ public class UserDB {
 
     String prefix = "";
 
-    HashMap<String, ArrayList<String>> playlists = new HashMap<>();
+    HashMap<String, ArrayList<Song>> playlists = new HashMap<>();
 
     public UserDB(String userID) {
         this.userID = userID;
     }
 
-    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix) {
-        this.userID = userID;
-        this.level = level;
-        this.xp = xp;
-        this.reps = reps;
-        this.isBotModerator = isBotModerator;
-        this.isBlackListed = isBlackListed;
-        this.prefix = prefix;
-    }
-
-    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix, HashMap<String, ArrayList<String>> playlists) {
+    public UserDB(String userID, int level, int xp, int reps, boolean isBotModerator, boolean isBlackListed, String prefix, HashMap<String, ArrayList<Song>> playlists) {
         this.userID = userID;
         this.level = level;
         this.xp = xp;
@@ -124,15 +116,34 @@ public class UserDB {
         this.prefix = prefix;
     }
 
-    public HashMap<String, ArrayList<String>> getPlaylists() {
+    public HashMap<String, ArrayList<Song>> getPlaylists() {
         return playlists;
+    }
+
+    public ArrayList<Song> getPlaylist(String playlistName) {
+        return playlists.get(playlistName);
     }
 
     public void addPlayList(String playlistName) {
         playlists.put(playlistName, new ArrayList<>());
     }
 
-    public void addSong(String playlistName, String songName) {
-        playlists.get(playlistName).add(songName);
+    public void renamePlaylist(String oldPlaylistName, String newPlaylistName) {
+        ArrayList<Song> playlist = playlists.get(oldPlaylistName);
+        playlists.remove(oldPlaylistName);
+        playlists.put(newPlaylistName, playlist);
+    }
+
+    public void removePlaylist(String playlistName) {
+        playlists.remove(playlistName);
+    }
+
+    public void addSong(String playlistName, AudioTrack track) {
+        Song song = new Song(track.getInfo().uri, track.getInfo().author, track.getInfo().title);
+        playlists.get(playlistName).add(song);
+    }
+
+    public void removeSong(String playlistName, int index) {
+        playlists.get(playlistName).remove(index);
     }
 }

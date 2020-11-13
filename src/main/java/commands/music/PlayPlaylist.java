@@ -3,34 +3,34 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
-public class Skunk implements ICommand {
+public class PlayPlaylist implements ICommand {
     CommandReceivedEvent e;
 
-    String url = "https://www.youtube.com/playlist?list=PL7tOllzEIb0Eaej-wj-KqGSerKXb1t-Dy";
-
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("skunk", "skunkseconds"));
+    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playplaylist", "ppl"));
     String category = "music";
-    String exampleCommand = "skunk";
-    String shortCommandDescription = "Skunk.";
-    String fullCommandDescription = "Skunk, and skunk.";
+    String exampleCommand = "playplaylist <playlist name>";
+    String shortCommandDescription = "Play a playlist you created.";
+    String fullCommandDescription = "Play a playlist you created.";
 
     @Override
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "skunk")) return;
+        if (!allowedToPlayMusic(e, "playplaylist")) return;
 
-        e.getMessageChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
+        if (!e.hasArgs() || e.getUserDB().getPlaylist(e.getArgs()[0]) == null) {
+            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid playlist name!", e.getPrefix())).queue();
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
-
-        manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag(), true);
+        e.getUserDB().getPlaylist(e.getArgs()[0]).forEach((song -> manager.loadAndPlay(e.getTextChannel(), song.getSongUrl(), false, e.getAuthor().getId(), e.getAuthor().getAsTag(), false)));
     }
 
     @Override

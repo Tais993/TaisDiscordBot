@@ -85,7 +85,8 @@ public class CommandEnum {
         ROLEINFO(new RoleInfo()),
         CHANGEBOTPREFIXUSER(new ChangeBotPrefixUser()),
         CALCULATOR(new Calculator()),
-        PLAYLISTS(new Playlists());
+        PLAYLIST(new Playlist()),
+        PLAYPLAYLIST(new PlayPlaylist());
         ICommand c;
 
         AllMyCommands(ICommand c) {

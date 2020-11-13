@@ -7,6 +7,9 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import commands.CommandReceivedEvent;
+import database.user.DatabaseUser;
+import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -14,6 +17,11 @@ import util.Colors;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
 import static music.TrackScheduler.videoDurationToYoutube;
 import static util.Colors.getCurrentColor;
@@ -45,19 +53,20 @@ public class PlayerManager {
         return musicManager;
     }
 
-    public void loadAndPlay(TextChannel channel, String trackUrl, boolean addFirst, String userId, String userName) {
+    public void loadAndPlay(TextChannel channel, String trackUrl, boolean addFirst, String userId, String userName, boolean output) {
         GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
 
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
+                if (output) {
+                    EmbedBuilder eb = new EmbedBuilder();
+                    eb.setTitle("Adding to queue ");
+                    eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
+                    eb.setColor(getCurrentColor());
 
-                EmbedBuilder eb = new EmbedBuilder();
-                eb.setTitle("Adding to queue ");
-                eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
-                eb.setColor(getCurrentColor());
-
-                channel.sendMessage(eb.build()).queue();
+                    channel.sendMessage(eb.build()).queue();
+                }
 
                 if (addFirst) {
                     playTop(musicManager, track, userId, userName);
@@ -68,9 +77,7 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                playlist.getTracks().forEach((audioTrack -> {
-                    loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName ,true);
-                }));
+                playlist.getTracks().forEach((audioTrack -> loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName , false)));
             }
 
             @Override
@@ -85,42 +92,29 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel channel, String trackUrl, boolean addFirst, String userId, String userName, boolean isPlayList) {
-            GuildMusicManager musicManager = getGuildMusicManager(channel.getGuild());
+    public void loadAndAddToPlaylist(String playlistName, String trackUrl, UserDB userDB, Guild guild) {
+        GuildMusicManager musicManager = getGuildMusicManager(guild);
 
-            playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
-                @Override
-                public void trackLoaded(AudioTrack track) {
-                    if (isPlayList) {
-                        play(musicManager, track, userId, userName);
-                        return;
-                    }
+        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                DatabaseUser databaseUser = new DatabaseUser();
+                userDB.addSong(playlistName, track);
+                databaseUser.updateUserInDB(userDB);
+            }
 
-                    if (addFirst) {
-                        playTop(musicManager, track, userId, userName);
-                    } else {
-                        play(musicManager, track, userId, userName);
-                    }
-                }
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+            }
 
-                @Override
-                public void playlistLoaded(AudioPlaylist playlist) {
+            @Override
+            public void noMatches() {
+            }
 
-                    playlist.getTracks().forEach((audioTrack -> {
-                        loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName, true);
-                    }));
-                }
-
-                @Override
-                public void noMatches() {
-                    channel.sendMessage("Nothing found by " + trackUrl).queue();
-                }
-
-                @Override
-                public void loadFailed(FriendlyException e) {
-                    channel.sendMessage("Could not play: " + e.getMessage()).queue();
-                }
-            });
+            @Override
+            public void loadFailed(FriendlyException e) {
+            }
+        });
     }
 
     public void loadAndPlayRadio(TextChannel channel, String radioUrl, String userId, String userName, String radioName) {

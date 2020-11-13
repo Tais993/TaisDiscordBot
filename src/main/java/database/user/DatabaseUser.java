@@ -1,5 +1,6 @@
 package database.user;
 
+import com.google.gson.JsonObject;
 import com.mongodb.*;
 import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -61,7 +62,7 @@ public class DatabaseUser {
         boolean isBotModerator = false;
         boolean isBlackListed = false;
         String prefix = "";
-        HashMap<String, ArrayList<String>> playlists = new HashMap<>();
+        HashMap<String, ArrayList<Song>> playlists = new HashMap<>();
 
         if (dbObject.get("reps") != null) reps = Integer.parseInt(dbObject.get("reps").toString());
 
@@ -69,6 +70,7 @@ public class DatabaseUser {
         if (dbObject.get("isBlackListed") != null) isBotModerator = Boolean.parseBoolean(dbObject.get("isBlackListed").toString());
         if (dbObject.get("prefix") != null) prefix = dbObject.get("prefix").toString();
         if (dbObject.get("playlists") != null) playlists = documentToPlaylists(Document.parse(dbObject.get("playlists").toString()));
+//        if (dbObject.get("playlists") != null) playlists = documentToPlaylists(Document.parse(dbObject.get("playlists").toString()));
 
         UserDB userDB = new UserDB(userID, level, xp, reps, isBlackListed, isBotModerator, prefix, playlists);
         userDB.calculateXpForLevelUp();
@@ -147,17 +149,36 @@ public class DatabaseUser {
         updateUserInDB(userDB);
     }
 
-    public HashMap<String, ArrayList<String>> documentToPlaylists(Document document) {
-        HashMap<String, ArrayList<String>> playlists = new HashMap<>();
+    public HashMap<String, ArrayList<Song>> documentToPlaylists(Document document) {
+        HashMap<String, ArrayList<Song>> playlists = new HashMap<>();
 
-        document.forEach((key, value) -> playlists.put(key, (ArrayList<String>) value));
+        document.forEach((key, value) -> {
+            ArrayList<Document> playlistArray = (ArrayList<Document>) value;
+
+
+            ArrayList<Song> playlist = new ArrayList<>();
+
+            playlistArray.forEach((songObject -> {
+                        playlist.add(new Song((String) songObject.get("songUrl"), (String) songObject.get("author"), (String) songObject.get("title")));
+                    }));
+            playlists.put(key, playlist);
+        });
 
         return playlists;
     }
 
-    public Document playlistsToDocument(HashMap<String, ArrayList<String>> playlists) {
+    public Document playlistsToDocument(HashMap<String, ArrayList<Song>> playlists) {
         Document document = new Document();
-        playlists.forEach((document::append));
+        playlists.forEach((playlistName, playlist) -> {
+            BasicDBList basicDBList = new BasicDBList();
+            playlist.forEach((song -> {
+                BasicDBObject basicDBObject = new BasicDBObject();
+                basicDBObject.append("songUrl", song.getSongUrl()).append("author", song.getAuthor()).append("title", song.getTitle());
+                basicDBList.add(basicDBObject);
+            }));
+
+            document.append(playlistName, basicDBList);
+        });
 
         return document;
     }

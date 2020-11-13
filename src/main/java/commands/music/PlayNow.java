@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static music.youtube.SearchYouTube.getVideoUrl;
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class PlayNow implements ICommand {
@@ -46,7 +47,7 @@ public class PlayNow implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
-        manager.loadAndPlay(e.getTextChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag());
+        manager.loadAndPlay(e.getTextChannel(), url, true, e.getAuthor().getId(), e.getAuthor().getAsTag(), true);
         manager.skip(e.getGuild());
     }
 
@@ -60,9 +61,7 @@ public class PlayNow implements ICommand {
     }
 
     private boolean searchByName(String input) {
-        SearchYouTube searchYouTube = new SearchYouTube();
-
-        String videoUrl = searchYouTube.getVideoUrl(input);
+        String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage("Unknown error: "+ videoUrl).queue();

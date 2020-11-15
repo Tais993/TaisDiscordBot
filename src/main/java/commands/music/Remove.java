@@ -7,13 +7,14 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Remove implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("remove"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("remove"));
     String category = "music";
     String exampleCommand = "remove <index>";
     String shortCommandDescription = "Removes song from queue.";
@@ -24,7 +25,9 @@ public class Remove implements ICommand {
         e = event;
         String[] args = e.getArgs();
 
-        if (!allowedToPlayMusic(e, "remove")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
 

@@ -24,6 +24,10 @@ public class SetVolume implements ICommand {
 
         PlayerManager manager = PlayerManager.getInstance();
 
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
+
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
             return;
@@ -42,8 +46,6 @@ public class SetVolume implements ICommand {
             e.getMessageChannel().sendMessage(getFullHelp("Error: give a number between 1 and 200.", e.getPrefix())).queue();
             return;
         }
-
-        if (!allowedToPlayMusic(e, "setvolume")) return;
 
         if (manager.setVolume(e.getGuild(), volume)) {
             e.getMessageChannel().sendMessage("Volume has been set correctly to " + volume).queue();

@@ -2,19 +2,19 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import music.youtube.SearchYouTube;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+
+import static music.youtube.SearchYouTube.getVideoUrl;
 
 public class YouTube implements ICommand {
     CommandReceivedEvent e;
 
     String url;
 
-    SearchYouTube searchYouTube = new SearchYouTube();
-
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("youtube"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("youtube"));
     String category = "general";
     String exampleCommand = "youtube <gifurl>";
     String shortCommandDescription = "Search for a YouTube video.";
@@ -36,7 +36,7 @@ public class YouTube implements ICommand {
 
         String input = e.getMessageWithoutCommand();
 
-        String videoUrl = searchYouTube.getVideoUrl(input);
+        String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage(getFullHelp(videoUrl, e.getPrefix())).queue();

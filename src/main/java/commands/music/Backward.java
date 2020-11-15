@@ -6,13 +6,14 @@ import music.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Backward implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("backwards"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("backwards"));
     String category = "music";
     String exampleCommand = "backward (seconds)";
     String shortCommandDescription = "Backward the current playing song a amount of seconds.";
@@ -22,8 +23,9 @@ public class Backward implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "backward")) return;
-
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();

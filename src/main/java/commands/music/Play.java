@@ -3,14 +3,13 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
-import music.youtube.SearchYouTube;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static music.youtube.SearchYouTube.getVideoUrl;
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static util.Utils.isUrl;
 
 public class Play implements ICommand {
     CommandReceivedEvent e;
@@ -32,7 +31,9 @@ public class Play implements ICommand {
             return;
         }
 
-        if (!allowedToPlayMusic(e, "play")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         String input = e.getMessageWithoutCommand();
 
@@ -51,19 +52,8 @@ public class Play implements ICommand {
         manager.loadAndPlay(e.getTextChannel(), url, false, e.getAuthor().getId(), e.getAuthor().getAsTag(), true);
     }
 
-    private boolean isUrl(String input) {
-        try {
-            new URL(input);
-            return true;
-        } catch (MalformedURLException malformedURLException) {
-            return false;
-        }
-    }
-
     private boolean searchByName(String input) {
-        SearchYouTube searchYouTube = new SearchYouTube();
-
-        String videoUrl = searchYouTube.getVideoUrl(input);
+        String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage("Unknown error: " + videoUrl).queue();

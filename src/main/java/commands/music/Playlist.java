@@ -8,10 +8,8 @@ import database.user.UserDB;
 import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static util.Colors.getCurrentColor;
 

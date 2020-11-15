@@ -3,12 +3,12 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
-import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static music.youtube.SearchYouTube.getVideoUrl;
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
@@ -18,7 +18,7 @@ public class PlayNow implements ICommand {
 
     String url;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playnow"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("playnow"));
     String category = "music";
     String exampleCommand = "playnow (url/song title)";
     String shortCommandDescription = "Instantly play a song.";
@@ -35,7 +35,9 @@ public class PlayNow implements ICommand {
             return;
         }
 
-        if (!allowedToPlayMusic(e, "playnow")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         String input = e.getMessageWithoutCommand();
 

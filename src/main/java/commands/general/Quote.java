@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.requests.ErrorResponse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.Colors.getCurrentColor;
 
@@ -19,15 +20,16 @@ public class Quote implements ICommand {
     TextChannel textChannel;
     String[] args;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("quote"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("quote"));
     String category = "general";
     String exampleCommand = "quote message <messageID> (channel) (Sun Tzu)`\n`!quote message <messageID> (Sun Tzu)`\n`!quote text <input> (Sun Tzu)";
     String shortCommandDescription = "Create a message quote.";
-    String fullCommandDescription = "Create a message quote, channel and Sun Tzu are optimal.\n" +
-            "Channel should be like `#general`\n" +
-            "Sun Tzu should be `true` to be on\n" +
-            "If you use `!quote text <input>` \n" +
-            "change input to the text you would like to quote.";
+    String fullCommandDescription = """
+            Create a message quote, channel and Sun Tzu are optimal.
+            Channel should be like `#general`
+            Sun Tzu should be `true` to be on
+            If you use `!quote text <input>`\s
+            change input to the text you would like to quote.""";
 
     @Override
     public void command(CommandReceivedEvent event) {
@@ -55,14 +57,9 @@ public class Quote implements ICommand {
     public void quoteCommandPrivate() {
         if (args.length >= 2) {
             switch (args[0]) {
-                case "message":
-                    e.getMessageChannel().sendMessage(getFullHelp("Quoting a message only works in a guild.", e.getPrefix())).queue();
-                    break;
-                case "text":
-                    createPersonalEmbed();
-                    break;
-                default:
-                    e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
+                case "message" -> e.getMessageChannel().sendMessage(getFullHelp("Quoting a message only works in a guild.", e.getPrefix())).queue();
+                case "text" -> createPersonalEmbed();
+                default -> e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
             }
         } else {
             e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 3 arguments.", e.getPrefix())).queue();
@@ -72,19 +69,16 @@ public class Quote implements ICommand {
     public void quoteCommandGuild() {
         if (args.length >= 2) {
             switch (args[0]) {
-                case "message":
-                    if (mentionsTextChannel()){
+                case "message" -> {
+                    if (mentionsTextChannel()) {
                         textChannel = e.getMessage().getMentionedChannels().get(0);
                     } else {
                         textChannel = e.getTextChannel();
                     }
                     getMessage(args[1]);
-                    break;
-                case "text":
-                    createPersonalEmbed();
-                    break;
-                default:
-                    e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
+                }
+                case "text" -> createPersonalEmbed();
+                default -> e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
             }
         } else {
             e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 3 arguments.", e.getPrefix())).queue();
@@ -127,8 +121,7 @@ public class Quote implements ICommand {
 
     public void getMessage(String id) {
         textChannel.retrieveMessageById(id).queue(this::createEmbed, (failure) -> {
-            if (failure instanceof ErrorResponseException) {
-                ErrorResponseException ex = (ErrorResponseException) failure;
+            if (failure instanceof ErrorResponseException ex) {
                 if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
                     e.getMessageChannel().sendMessage("Message doesn't exist!").queue();
                 }

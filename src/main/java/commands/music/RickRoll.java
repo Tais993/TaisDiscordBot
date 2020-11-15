@@ -26,8 +26,6 @@ public class RickRoll implements ICommand {
             return;
         }
 
-
-
         if (e.getCommand().equalsIgnoreCase("dqw")) {
             if (!e.getArgs()[0].equals("dQw")) {
                 return;

@@ -24,8 +24,6 @@ public class CommandHandler extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        System.out.println(System.currentTimeMillis());
-
         if (event.getAuthor().isBot()) return;
 
         e = new CommandReceivedEvent(event);

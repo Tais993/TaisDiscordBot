@@ -1,12 +1,12 @@
 package commands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 
 public class Help implements ICommand{
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("help"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("help"));
     String category = "util";
     String exampleCommand = "help <item/category>";
     String shortCommandDescription = "Get some help";
@@ -18,16 +18,12 @@ public class Help implements ICommand{
         if (e.hasArgs) {
             String[] args = e.getArgs();
             switch (args[0]) {
-                case "fun":
-                case "util":
-                case "general":
-                case "music":
-                    commandEnum.getHelpCategory(args[0], e);
-                    break;
-                default:
-                    if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())){
+                case "fun", "general", "util", "music", "botmoderation" -> commandEnum.getHelpCategory(args[0], e);
+                default -> {
+                    if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())) {
                         e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0], e.getPrefix()).build()).queue();
                     }
+                }
             }
         } else {
             commandEnum.getHelpAllByCategory(e);

@@ -45,7 +45,7 @@ public class StartGame implements ICommand {
 
         time = e.getArgs()[0];
 
-        role = e.getGuild().getRoleById("714049141017149453");
+        role = e.getGuild().getRoleById(e.getGuildDB().getAmongUsRoleId());
 
         EmbedBuilder eb = getEmbed();
 

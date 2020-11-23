@@ -121,7 +121,8 @@ public class Quote implements ICommand {
 
     public void getMessage(String id) {
         textChannel.retrieveMessageById(id).queue(this::createEmbed, (failure) -> {
-            if (failure instanceof ErrorResponseException ex) {
+            if (failure instanceof ErrorResponseException) {
+                ErrorResponseException ex = (ErrorResponseException) failure;
                 if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
                     e.getMessageChannel().sendMessage("Message doesn't exist!").queue();
                 }

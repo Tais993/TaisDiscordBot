@@ -22,7 +22,9 @@ public class Radio538 implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "radio538")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.loadAndPlayRadio(e.getTextChannel(), "http://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3", e.getAuthor().getId(), e.getAuthor().getAsTag(), "Radio538");

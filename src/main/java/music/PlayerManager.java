@@ -7,7 +7,6 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.CommandReceivedEvent;
 import database.user.DatabaseUser;
 import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -17,11 +16,6 @@ import util.Colors;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.function.Supplier;
 
 import static music.TrackScheduler.videoDurationToYoutube;
 import static util.Colors.getCurrentColor;
@@ -128,9 +122,7 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                playlist.getTracks().forEach((audioTrack -> {
-                    loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName, true);
-                }));
+                playlist.getTracks().forEach((audioTrack -> loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName, true)));
             }
 
             @Override
@@ -177,7 +169,6 @@ public class PlayerManager {
         AudioTrack audioTrack = musicManager.scheduler.removeFromQueue(removeAudioTrackIndex);
 
         EmbedBuilder eb = new EmbedBuilder();
-        Colors colors = new Colors();
         eb.setColor(getCurrentColor());
 
         if (audioTrack == null) {

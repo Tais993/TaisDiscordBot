@@ -3,7 +3,6 @@ package commands.fun;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import database.hugs.DatabaseHugs;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 
 import java.io.*;
@@ -11,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Hug implements ICommand {
@@ -24,7 +24,7 @@ public class Hug implements ICommand {
     static File file = new File(filePath);
 
     CommandReceivedEvent e;
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("hug"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("hug"));
     String category = "fun";
     String exampleCommand = "hug <@user>/<userID>";
     String shortCommandDescription = "Love you too";

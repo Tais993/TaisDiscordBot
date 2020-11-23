@@ -5,18 +5,16 @@ import commands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static util.Colors.getCurrentColor;
+import java.util.Collections;
 
 public class Avatar implements ICommand {
     CommandReceivedEvent e;
 
     User user;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("avatar"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("avatar"));
     String category = "general";
     String exampleCommand = "avatar (user Id)/(user as mention)";
     String shortCommandDescription = "Get someone's avatar";
@@ -26,10 +24,7 @@ public class Avatar implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        EmbedBuilder eb = new EmbedBuilder();
-
-        eb.setColor(getCurrentColor());
-        eb.setTimestamp(Instant.now());
+        EmbedBuilder eb = getEmbed().setAuthor("");
 
         if (!e.hasArgs()) {
             user = e.getAuthor();

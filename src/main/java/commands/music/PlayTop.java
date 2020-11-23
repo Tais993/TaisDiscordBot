@@ -9,7 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
+import static music.youtube.SearchYouTube.getVideoUrl;
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class PlayTop implements ICommand {
@@ -17,7 +19,7 @@ public class PlayTop implements ICommand {
 
     String url;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("playtop"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("playtop"));
     String category = "music";
     String exampleCommand = "playtop <URL>";
     String shortCommandDescription = "Plays music, and song goes to top of the queue.";
@@ -32,7 +34,9 @@ public class PlayTop implements ICommand {
             return;
         }
 
-        if (!allowedToPlayMusic(e, "playtop")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
 
         String input = e.getMessageWithoutCommand();
@@ -58,9 +62,7 @@ public class PlayTop implements ICommand {
     }
 
     private boolean searchByName(String input) {
-        SearchYouTube searchYouTube = new SearchYouTube();
-
-        String videoUrl = searchYouTube.getVideoUrl(input);
+        String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
             e.getMessageChannel().sendMessage("Unknown error: " + videoUrl).queue();

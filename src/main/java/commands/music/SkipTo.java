@@ -30,7 +30,9 @@ public class SkipTo implements ICommand {
             return;
         }
 
-        if (!allowedToPlayMusic(e, "skipto")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.skipToTrack(e.getGuild(), Integer.parseInt(e.getArgs()[0]));

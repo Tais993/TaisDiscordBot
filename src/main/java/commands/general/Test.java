@@ -2,19 +2,15 @@ package commands.general;
 
 import commands.CommandReceivedEvent;
 import commands.ICommand;
-import net.dv8tion.jda.api.EmbedBuilder;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class Test implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("test"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("test"));
     String category = "general";
     String exampleCommand = "test";
     String shortCommandDescription = "For testing purposes.";
@@ -22,6 +18,7 @@ public class Test implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
+        System.out.println(System.currentTimeMillis());
         e = event;
     }
 

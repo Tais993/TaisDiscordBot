@@ -24,7 +24,9 @@ public class Skunk implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "skunk")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         e.getMessageChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
 

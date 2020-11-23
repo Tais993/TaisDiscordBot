@@ -6,13 +6,14 @@ import music.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Replay implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("replay"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("replay"));
     String category = "music";
     String exampleCommand = "replay";
     String shortCommandDescription = "Replay the current playing track.";
@@ -21,7 +22,7 @@ public class Replay implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "replay")) {
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
             return;
         }
 

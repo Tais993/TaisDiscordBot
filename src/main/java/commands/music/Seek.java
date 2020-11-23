@@ -27,7 +27,9 @@ public class Seek implements ICommand {
             return;
         }
 
-        if (!allowedToPlayMusic(e, "seek")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         if (e.getArgs()[0].matches("\\d+")) {
             PlayerManager manager = PlayerManager.getInstance();

@@ -3,7 +3,6 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +22,9 @@ public class PlayPlaylist implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "playplaylist")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         if (!e.hasArgs() || e.getUserDB().getPlaylist(e.getArgs()[0]) == null) {
             e.getMessageChannel().sendMessage(getShortHelp("Requires a valid playlist name!", e.getPrefix())).queue();

@@ -1,6 +1,5 @@
 package database.user;
 
-import com.google.gson.JsonObject;
 import com.mongodb.*;
 import commands.CommandReceivedEvent;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -81,8 +80,16 @@ public class DatabaseUser {
     public void updateUserInDB(UserDB userDB) {
         String userId = userDB.getUserID();
 
-        DBObject query = new BasicDBObject("userID", userId);
-        user.findAndModify(query, userToDBObject(userDB));
+        long beforeThread = System.currentTimeMillis();
+
+        Thread thread = new Thread(() -> {
+            DBObject query = new BasicDBObject("userID", userId);
+            user.findAndModify(query, userToDBObject(userDB));
+        });
+
+        thread.start();
+
+        System.out.println(System.currentTimeMillis() - beforeThread);
 
         UserDB cachedUserDB = cachedUsers.get(userDB.getUserID());
 
@@ -158,9 +165,7 @@ public class DatabaseUser {
 
             ArrayList<Song> playlist = new ArrayList<>();
 
-            playlistArray.forEach((songObject -> {
-                        playlist.add(new Song((String) songObject.get("songUrl"), (String) songObject.get("author"), (String) songObject.get("title")));
-                    }));
+            playlistArray.forEach((songObject -> playlist.add(new Song((String) songObject.get("songUrl"), (String) songObject.get("author"), (String) songObject.get("title")))));
             playlists.put(key, playlist);
         });
 

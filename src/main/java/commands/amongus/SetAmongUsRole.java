@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.Role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class SetAmongUsRole implements ICommand {
     DatabaseGuild databaseGuild = new DatabaseGuild();
@@ -16,7 +17,7 @@ public class SetAmongUsRole implements ICommand {
 
     Role role;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("setamongusrole"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("setamongusrole"));
     String category = "util";
     String exampleCommand = "setamongusrole <role as mention>/<role ID>";
     String shortCommandDescription = "Sets the among us role ID to the correct role.";
@@ -27,26 +28,21 @@ public class SetAmongUsRole implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!e.getMember().getPermissions().contains(Permission.MANAGE_ROLES)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires manage roles permission!", e.getPrefix())).queue();
-            return;
-        }
-
         if (!e.hasArgs()) {
             e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument!", e.getPrefix())).queue();
             return;
         }
 
-        if (e.hasRoleMentions()) {
-            role = e.getFirstRoleMentioned();
-        } else {
-            if (e.getArgs()[0].matches("[0-9]+")) {
-                role = e.getGuild().getRoleById(e.getArgs()[0]);
-                if (role == null)  {
-                    e.getMessageChannel().sendMessage(getFullHelp("Give a valid role ID!", e.getPrefix())).queue();
-                    return;
-                }
-            }
+        if (!e.getMember().getPermissions().contains(Permission.MANAGE_ROLES)) {
+            e.getMessageChannel().sendMessage(getFullHelp("Requires manage roles permission!", e.getPrefix())).queue();
+            return;
+        }
+
+        role = e.getFirstArgAsRole();
+
+        if (role == null) {
+            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid role ID!", e.getPrefix())).queue();
+            return;
         }
 
         GuildDB guildDB = e.getGuildDB();

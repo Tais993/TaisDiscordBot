@@ -42,7 +42,7 @@ public class CommandReceivedEvent {
     TextChannel firstChannelMentioned;
     Role firstRoleMentioned;
 
-    public CommandReceivedEvent(MessageReceivedEvent e, GuildDB guildDB) {
+    public CommandReceivedEvent(MessageReceivedEvent e) {
         isFromGuild = e.isFromGuild();
         messageChannel = e.getChannel();
         user = e.getAuthor();
@@ -65,11 +65,6 @@ public class CommandReceivedEvent {
             if (hasRoleMentions) {
                 firstRoleMentioned = e.getMessage().getMentionedRoles().get(0);
             }
-
-            this.guildDB = guildDB;
-            prefix = guildDB.getPrefix();
-        } else {
-            prefix = "!";
         }
 
         args = messageAsString.split(" ");
@@ -93,16 +88,6 @@ public class CommandReceivedEvent {
         mentionsEveryone = message.mentionsEveryone();
 
         JDA = e.getJDA();
-
-        DatabaseUser databaseUser = new DatabaseUser();
-        userDB = databaseUser.getUserFromDBToUserDB(e.getAuthor().getId());
-        isBotModerator = userDB.isBotModerator();
-
-        if (!userDB.getPrefix().equals("")) {
-            prefix = userDB.getPrefix();
-        }
-
-        command = messageAsString.replace(prefix, "").split(" ")[0];
     }
 
     public TextChannel getTextChannel() {
@@ -159,6 +144,21 @@ public class CommandReceivedEvent {
 
     public boolean isBotModerator() {
         return isBotModerator;
+    }
+
+    public void setDBItems(UserDB userDB, GuildDB guildDB) {
+        if (guildDB != null) {
+            this.guildDB = guildDB;
+            prefix = guildDB.getPrefix();
+        }
+        this.userDB = userDB;
+        isBotModerator = userDB.isBotModerator();
+
+        if (!userDB.getPrefix().equals("")) {
+            prefix = userDB.getPrefix();
+        }
+
+        command = messageAsString.replace(prefix, "").split(" ")[0];
     }
 
     public UserDB getUserDB() {

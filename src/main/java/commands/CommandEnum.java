@@ -44,7 +44,6 @@ public class CommandEnum {
         SHUTDOWN(new Shutdown()),
         STARTGAME(new StartGame()),
         REACTIONROLE(new ReactionRole()),
-        KAAS(new Kaas()),
         NOWPLAYING(new NowPlaying()),
         REMOVE(new Remove()),
         LYRICS(new Lyrics()),

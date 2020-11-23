@@ -27,7 +27,7 @@ public class SetBlacklisted implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!e.hasArgs()) {
+        if (!e.hasArgs() || e.getArgs().length < 2) {
             e.getMessageChannel().sendMessage("Requires at least 2 arguments!").queue();
             return;
         }

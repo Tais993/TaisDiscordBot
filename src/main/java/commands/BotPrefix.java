@@ -1,24 +1,21 @@
 package commands;
 
-import database.guild.DatabaseGuild;
+import database.guild.GuildDB;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import static util.Colors.getCurrentColor;
 
 public class BotPrefix {
 
-    DatabaseGuild databaseGuild = new DatabaseGuild();
-
-    public void command (CommandReceivedEvent e) {
-        String guildPrefix = databaseGuild.getPrefixGuildInDB(e.getGuild().getId());
-
+    public void command (MessageReceivedEvent e, GuildDB guildDB) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setAuthor(e.getGuild().getName(), e.getGuild().getIconUrl(), e.getGuild().getIconUrl());
         eb.setTitle("Bot prefix in this guild is:");
-        eb.setDescription("`" + guildPrefix + "`");
+        eb.setDescription("`" + guildDB.getPrefix() + "`");
         eb.setColor(getCurrentColor());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 }

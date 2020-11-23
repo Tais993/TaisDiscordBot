@@ -6,13 +6,14 @@ import music.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Resume implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("resume"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("resume"));
     String category = "music";
     String exampleCommand = "resume";
     String shortCommandDescription = "Start the music again";
@@ -22,7 +23,7 @@ public class Resume implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "resume")) {
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
             return;
         }
 

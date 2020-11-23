@@ -6,12 +6,12 @@ import music.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Previous implements ICommand {
-
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("previous"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("previous"));
     String category = "music";
     String exampleCommand = "previous ";
     String shortCommandDescription = "Return to the previous song.";
@@ -19,8 +19,9 @@ public class Previous implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-
-        if (!allowedToPlayMusic(event, "previous")) return;
+        if (!allowedToPlayMusic(event, commandAliases.get(0))) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.playPreviousTrack(event.getGuild());

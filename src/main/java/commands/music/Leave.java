@@ -25,6 +25,7 @@ public class Leave implements ICommand {
 
         if (e.isBotModerator()) {
             audioManager.closeAudioConnection();
+            return;
         }
 
         if (!audioManager.isConnected()) {

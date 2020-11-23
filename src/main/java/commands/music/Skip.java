@@ -22,7 +22,9 @@ public class Skip implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "skip")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
 

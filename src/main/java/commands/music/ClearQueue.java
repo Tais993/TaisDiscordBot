@@ -6,13 +6,14 @@ import music.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static util.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class ClearQueue implements ICommand {
     CommandReceivedEvent e;
 
-    ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("clearqueue"));
+    ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("clearqueue"));
     String category = "music";
     String exampleCommand = "clearqueue";
     String shortCommandDescription = "Queue gets cleared.";
@@ -22,7 +23,9 @@ public class ClearQueue implements ICommand {
     public void command(CommandReceivedEvent event) {
         e = event;
 
-        if (!allowedToPlayMusic(e, "clearqueue")) return;
+        if (!allowedToPlayMusic(e, commandAliases.get(0))) {
+            return;
+        }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.clearQueue(e.getGuild());

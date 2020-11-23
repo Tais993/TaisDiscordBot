@@ -14,17 +14,13 @@ public class UserInfo {
         user = memberGiven.getUser();
     }
 
-    public UserInfo(User userGiven) {
-        user = userGiven;
-    }
-
     public String getTimeBoosted() {
         OffsetDateTime offsetDateTime = member.getTimeBoosted();
         OffsetDateTime currentOffsetDateTime = OffsetDateTime.now();
 
-        int year = currentOffsetDateTime.getYear() - offsetDateTime.getYear();
-        int month = currentOffsetDateTime.getMonthValue() - offsetDateTime.getMonthValue();
-        double day = currentOffsetDateTime.getDayOfMonth() - offsetDateTime.getDayOfMonth();
+        int year = currentOffsetDateTime.getYear() - (offsetDateTime != null ? offsetDateTime.getYear() : 0);
+        int month = currentOffsetDateTime.getMonthValue() - (offsetDateTime != null ? offsetDateTime.getMonthValue() : 0);
+        double day = currentOffsetDateTime.getDayOfMonth() - (offsetDateTime != null ? offsetDateTime.getDayOfMonth() : 0);
 
         if (year != 0){
             month = month + (year * 12);

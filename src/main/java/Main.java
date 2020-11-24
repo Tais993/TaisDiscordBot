@@ -31,10 +31,7 @@ public class Main extends ListenerAdapter {
         String token = br.readLine();
         br.close();
 
-        JDA jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
-        jda.awaitReady();
-        jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.streaming("lttstore.com", "lttstore.com"));
-
+        JDA jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).setActivity(Activity.of(Activity.ActivityType.STREAMING, "lttstore.com", "lttstore.com")).build().awaitReady();
 
         CommandEnum.bot = jda.getSelfUser();
 

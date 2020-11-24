@@ -3,6 +3,7 @@ package commands.util;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import util.entities.UserInfo;
@@ -55,12 +56,13 @@ public class WhoIs implements ICommand {
 
         EmbedBuilder eb = new EmbedBuilder();
         UserInfo userInfo = new UserInfo(member);
+        GuildVoiceState voiceState = member.getVoiceState();
 
         eb.setTitle(member.getUser().getAsTag());
         eb.addField("Time joined:", getDateFromOffset(member.getTimeJoined()), false);
         eb.addField("Time created:", getDateFromOffset(member.getTimeCreated()), false);
         if (member.getTimeBoosted() != null) eb.addField("Time boosted:", userInfo.getTimeBoosted(), true);
-
+        eb.addField("Voice state", (voiceState.inVoiceChannel()) ? voiceState.getChannel().getName() : "None", false);
         eb.addField("Roles:", userInfo.getRoles(), true);
         eb.addField("User ID:", member.getId(), true);
 

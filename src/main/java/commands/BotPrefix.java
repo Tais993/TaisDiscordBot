@@ -8,7 +8,7 @@ import static util.Colors.getCurrentColor;
 
 public class BotPrefix {
 
-    public void command (MessageReceivedEvent e, GuildDB guildDB) {
+    public static void sendBotPrefixGuild (MessageReceivedEvent e, GuildDB guildDB) {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setAuthor(e.getGuild().getName(), e.getGuild().getIconUrl(), e.getGuild().getIconUrl());

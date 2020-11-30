@@ -29,17 +29,17 @@ public class StartGame implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
+            e.getChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
             return;
         }
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("Command only works in a Discord guild/server").queue();
+            e.getChannel().sendMessage("Command only works in a Discord guild/server").queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Requires a time", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: Requires a time", e.getPrefix())).queue();
             return;
         }
 
@@ -64,15 +64,15 @@ public class StartGame implements ICommand {
             Role role = e.getGuild().getRoleById(roleId);
 
             if (!role.isMentionable()) {
-                e.getMessageChannel().sendMessage(role.getName() + " isn't mentionable! Please make it mentionable.").queue();
+                e.getChannel().sendMessage(role.getName() + " isn't mentionable! Please make it mentionable.").queue();
                 return;
             } else {
-                e.getMessageChannel().sendMessage(role.getAsMention()).queue();
+                e.getChannel().sendMessage(role.getAsMention()).queue();
             }
         }
 
-        e.getMessageChannel().sendMessage(eb.build()).queue(m -> {
-            databaseReactions.addReactionToDB(new ReactionDB(m.getId(), e.getMessageChannel().getId()));
+        e.getChannel().sendMessage(eb.build()).queue(m -> {
+            databaseReactions.addReactionToDB(new ReactionDB(m.getId(), e.getChannel().getId()));
             m.addReaction("U+2705").queue();
         });
 

@@ -30,7 +30,7 @@ public class ClearQueue implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         manager.clearQueue(e.getGuild());
 
-        e.getMessageChannel().sendMessage("Queue has been cleared.").queue();
+        e.getChannel().sendMessage("Queue has been cleared.").queue();
     }
 
     @Override

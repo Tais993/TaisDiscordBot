@@ -3,6 +3,7 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
+import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +28,7 @@ public class Play implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -44,7 +45,7 @@ public class Play implements ICommand {
         }
 
         if (url.isEmpty()) {
-            e.getMessageChannel().sendMessage("Nothing has been found by " + input).queue();
+            e.getChannel().sendMessage("Nothing has been found by " + input).queue();
             return;
         }
 
@@ -56,7 +57,7 @@ public class Play implements ICommand {
         String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage("Unknown error: " + videoUrl).queue();
+            e.getChannel().sendMessage("Unknown error: " + videoUrl).queue();
             return false;
         }
 

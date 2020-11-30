@@ -10,14 +10,15 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.util.Arrays;
 
 public class CommandReceivedEvent {
-    MessageChannel messageChannel;
-    TextChannel textChannel;
-    User user;
-    Member member = null;
-    Guild guild = null;
-    JDA JDA;
+    private final JDA JDA;
 
-    Message message;
+    private final MessageChannel messageChannel;
+    private TextChannel textChannel;
+    private final User user;
+    private Member member;
+    private Guild guild;
+
+    private final Message message;
 
     boolean isFromGuild;
     boolean hasArgs;
@@ -28,19 +29,19 @@ public class CommandReceivedEvent {
     boolean hasChannelMentions;
     boolean hasRoleMentions;
 
-    String[] args;
-    String messageAsString;
-    String messageWithoutCommand = "";
+    private String[] args;
+    private final String messageAsString;
+    private String messageWithoutCommand = "";
 
-    String prefix;
-    String command;
+    private String prefix;
+    private String command;
 
-    UserDB userDB;
-    GuildDB guildDB = null;
+    private UserDB userDB;
+    private GuildDB guildDB = null;
 
-    User firstUserMentioned;
-    TextChannel firstChannelMentioned;
-    Role firstRoleMentioned;
+    private User firstUserMentioned;
+    private TextChannel firstChannelMentioned;
+    private Role firstRoleMentioned;
 
     public CommandReceivedEvent(MessageReceivedEvent e) {
         isFromGuild = e.isFromGuild();
@@ -94,7 +95,7 @@ public class CommandReceivedEvent {
         return textChannel;
     }
 
-    public MessageChannel getMessageChannel() {
+    public MessageChannel getChannel() {
         return messageChannel;
     }
 
@@ -189,14 +190,32 @@ public class CommandReceivedEvent {
         return firstUserMentioned;
     }
 
+    public Member getFirstArgAsMember() {
+        if (hasUserMentions()) {
+            return message.getMentionedMembers().get(0);
+        } else {
+            if (args[0].matches("[0-9]+")) {
+                try {
+                    Member memberInArg = getGuild().retrieveMemberById(args[0]).complete();
+                    if (memberInArg != null) {
+                        return memberInArg;
+                    }
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
     public User getFirstArgAsUser() {
         if (hasUserMentions()) {
-            return getFirstUserMentioned();
+            return message.getMentionedUsers().get(0);
         } else {
             if (args[0].matches("[0-9]+")) {
                 try {
                     User userInArg = getJDA().retrieveUserById(args[0]).complete();
-                    if (!(userInArg == null)) {
+                    if (userInArg != null) {
                         return userInArg;
                     }
                 } catch (NumberFormatException e) {

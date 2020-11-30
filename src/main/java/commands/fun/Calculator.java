@@ -20,7 +20,7 @@ public class Calculator implements ICommand {
         e = event;
 
         if (!e.hasArgs() && e.getArgs().length >= 3) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires at least 3 arguments", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires at least 3 arguments", e.getPrefix())).queue();
             return;
         }
 
@@ -31,7 +31,7 @@ public class Calculator implements ICommand {
         node.constructTree(input);
         node.inorder();
 
-        e.getMessageChannel().sendMessage(node.calculate() + "").queue();
+        e.getChannel().sendMessage(node.calculate() + "").queue();
     }
 
     @Override

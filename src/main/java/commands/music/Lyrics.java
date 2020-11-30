@@ -16,7 +16,7 @@ public class Lyrics implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        event.getMessageChannel().sendMessage("Soon..").queue();
+        event.getChannel().sendMessage("Soon..").queue();
     }
 
     @Override

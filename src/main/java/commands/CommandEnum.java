@@ -113,7 +113,7 @@ public class CommandEnum {
                         c.command(e);
                         return true;
                     }
-                    e.getMessageChannel().sendMessage("Requires to be a bot moderator!").queue();
+                    e.getChannel().sendMessage("Requires to be a bot moderator!").queue();
                     return false;
                 }
                 c.command(e);
@@ -229,14 +229,14 @@ public class CommandEnum {
 
             if (c.getCategory().equals(category)) {
                 if (eb.getFields().size() == 24) {
-                    e.getMessageChannel().sendMessage(eb.build()).queue();
+                    e.getChannel().sendMessage(eb.build()).queue();
                     eb.clearFields();
                 }
                 eb.addField(c.getCommandAliases().get(0), c.getShortCommandDescription(), true);
             }
         }
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     public void getListsReady() {

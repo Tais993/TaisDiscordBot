@@ -23,7 +23,7 @@ public class Seek implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -35,7 +35,7 @@ public class Seek implements ICommand {
             PlayerManager manager = PlayerManager.getInstance();
             manager.setSongPosition(e.getGuild(), Long.parseLong(e.getArgs()[0]));
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Give a valid number", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Give a valid number", e.getPrefix())).queue();
         }
     }
 

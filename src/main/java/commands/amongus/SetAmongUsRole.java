@@ -29,19 +29,19 @@ public class SetAmongUsRole implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument!", e.getPrefix())).queue();
             return;
         }
 
         if (!e.getMember().getPermissions().contains(Permission.MANAGE_ROLES)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires manage roles permission!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires manage roles permission!", e.getPrefix())).queue();
             return;
         }
 
         role = e.getFirstArgAsRole();
 
         if (role == null) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid role ID!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires a valid role ID!", e.getPrefix())).queue();
             return;
         }
 
@@ -51,7 +51,7 @@ public class SetAmongUsRole implements ICommand {
 
         databaseGuild.updateGuildInDB(guildDB);
 
-        e.getMessageChannel().sendMessage("Role has succesfully been changed to " + role.getName() + " (" + role.getId() + ")").queue();
+        e.getChannel().sendMessage("Role has succesfully been changed to " + role.getName() + " (" + role.getId() + ")").queue();
     }
 
     @Override

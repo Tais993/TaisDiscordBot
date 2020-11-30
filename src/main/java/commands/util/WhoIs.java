@@ -31,7 +31,7 @@ public class WhoIs implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
@@ -40,14 +40,14 @@ public class WhoIs implements ICommand {
             user = e.getFirstArgAsUser();
 
             if (user == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
                 return;
             }
 
             member = e.getGuild().getMemberById(user.getId());
 
             if (member == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("That isn't a member of this guild!", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("That isn't a member of this guild!", e.getPrefix())).queue();
                 return;
             }
         } else {
@@ -71,7 +71,7 @@ public class WhoIs implements ICommand {
         eb.setColor(member.getColor());
         eb.setTimestamp(Instant.now());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

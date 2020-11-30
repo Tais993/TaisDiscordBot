@@ -5,9 +5,11 @@ import commands.ICommand;
 import database.jokes.DatabaseJokes;
 import database.jokes.JokeDB;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class Joke implements ICommand {
     DatabaseJokes databaseJokes = new DatabaseJokes();
@@ -37,7 +39,7 @@ public class Joke implements ICommand {
         eb.appendDescription("*" + jokeDB.getPunchline() + "*");
         eb.setFooter("Joke Id: " + jokeDB.getJokeId());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

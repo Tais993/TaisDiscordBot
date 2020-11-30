@@ -22,7 +22,7 @@ public class Queue implements ICommand {
 
         EmbedBuilder eb = manager.getQueue(event.getGuild(), getEmbed());
 
-        event.getMessageChannel().sendMessage(eb.build()).queue();
+        event.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

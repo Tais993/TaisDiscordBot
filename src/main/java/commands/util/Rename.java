@@ -25,14 +25,14 @@ public class Rename implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
         long idTijs = 257500867568205824L;
 
         if (!e.hasArgs() || !(e.getArgs().length > 2)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 2 arguments.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: requires at least 2 arguments.", e.getPrefix())).queue();
             return;
         }
 
@@ -43,7 +43,7 @@ public class Rename implements ICommand {
         } else if (e.getGuild().getMemberById(args[1]) != null) {
             memberGiven = e.getGuild().getMemberById(args[1]);
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: ID given isn't valid.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: ID given isn't valid.", e.getPrefix())).queue();
             return;
         }
 
@@ -52,7 +52,7 @@ public class Rename implements ICommand {
         } else if (e.getMember().hasPermission(Permission.NICKNAME_MANAGE) || e.getMember().getIdLong() == idTijs) {
             runRenameCommand(args);
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Manage nicknames permission required to run this command..", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: Manage nicknames permission required to run this command..", e.getPrefix())).queue();
         }
     }
 
@@ -65,14 +65,14 @@ public class Rename implements ICommand {
             if (!(nickname.length() > 32)) {
                 memberGiven.modifyNickname(nickname).complete();
             } else {
-                e.getMessageChannel().sendMessage(getFullHelp("Error: nickname must be below 32 chars!", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Error: nickname must be below 32 chars!", e.getPrefix())).queue();
             }
         } else if (!permissions.botHasPermission(Permission.NICKNAME_MANAGE) && !permissions.botCanInteract(memberGiven)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: member is a higher role as the bot, and bot does not have manage nickname permission", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: member is a higher role as the bot, and bot does not have manage nickname permission", e.getPrefix())).queue();
         } else if (!permissions.botHasPermission(Permission.NICKNAME_MANAGE)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: bot does not have manage nickname permission.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: bot does not have manage nickname permission.", e.getPrefix())).queue();
         } else if (!permissions.botCanInteract(memberGiven)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: member is a higher role or the same as the bot.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: member is a higher role or the same as the bot.", e.getPrefix())).queue();
         }
     }
 

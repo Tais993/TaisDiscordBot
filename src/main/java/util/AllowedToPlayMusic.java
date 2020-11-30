@@ -15,7 +15,7 @@ public class AllowedToPlayMusic {
         AudioManager audioManager;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("You can only run this command in a Discord server/guild!").queue();
+            e.getChannel().sendMessage("You can only run this command in a Discord server/guild!").queue();
             return false;
         }
 
@@ -31,7 +31,7 @@ public class AllowedToPlayMusic {
         GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()){
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Join a voice channel before running this command.").build()).queue();
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Join a voice channel before running this command.").build()).queue();
             return false;
         }
 
@@ -39,12 +39,12 @@ public class AllowedToPlayMusic {
         Member selfMember = e.getGuild().getSelfMember();
 
         if (audioManager.isConnected() && !audioManager.getConnectedChannel().equals(voiceChannel)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Join the same channel as the bot.").build()).queue();
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Join the same channel as the bot.").build()).queue();
             return false;
         }
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();
             return false;
         }
 

@@ -24,14 +24,14 @@ public class RemoveJoke implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument (the joke ID)", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument (the joke ID)", e.getPrefix())).queue();
             return;
         }
 
         String[] args = e.getArgs();
 
         if (!args[0].matches("[0-9]+")) {
-            e.getMessageChannel().sendMessage("Give a valid ID!").queue();
+            e.getChannel().sendMessage("Give a valid ID!").queue();
             return;
         }
 
@@ -46,10 +46,10 @@ public class RemoveJoke implements ICommand {
             eb.appendDescription("*" + jokeDB.getPunchline() + "*");
             eb.setFooter("Joke Id: " + jokeDB.getJokeId());
 
-            e.getMessageChannel().sendMessage(eb.build()).queue();
+            e.getChannel().sendMessage(eb.build()).queue();
 
         } else {
-            e.getMessageChannel().sendMessage(jokeDB.getJokeId() +  " has been removed.").queue();
+            e.getChannel().sendMessage(jokeDB.getJokeId() +  " has been removed.").queue();
         }
     }
 

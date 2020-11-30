@@ -28,7 +28,7 @@ public class BotStats implements ICommand {
         eb.addField("Github:", "[Click here to get it!](https://github.com/Tais993/taisdiscordbot \"Tais Discord Bot on Github\")", true);
         eb.setThumbnail(e.getJDA().getSelfUser().getAvatarUrl());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

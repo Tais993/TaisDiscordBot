@@ -34,7 +34,7 @@ public class Level implements ICommand {
             userGiven = e.getFirstArgAsUser();
 
             if (userGiven == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
                 return;
             }
 
@@ -55,7 +55,7 @@ public class Level implements ICommand {
         eb.appendDescription("XP: " + userDB.getXp() + " out of " + userDB.getXpForLevelUp());
         eb.setFooter(userDB.getReps() + " total reps");
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

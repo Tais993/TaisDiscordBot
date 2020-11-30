@@ -23,12 +23,12 @@ public class AddHug implements ICommand {
         e = event;
 
         if (!e.hasArgs()){
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires a URL for a gif", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: requires a URL for a gif", e.getPrefix())).queue();
             return;
         }
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
@@ -36,7 +36,7 @@ public class AddHug implements ICommand {
 
         databaseHugs.addGifToDB(gifUrlToAdd);
 
-        e.getMessageChannel().sendMessage("Gif has been added").queue();
+        e.getChannel().sendMessage("Gif has been added").queue();
     }
 
     @Override

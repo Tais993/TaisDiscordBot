@@ -6,8 +6,11 @@ import database.guild.GuildHandler;
 import database.user.DatabaseUser;
 import database.user.UserDB;
 import database.user.UserHandler;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.RestAction;
 
 import static commands.BotPrefix.sendBotPrefixGuild;
 
@@ -22,7 +25,6 @@ public class CommandHandler extends ListenerAdapter {
     GuildHandler guildHandler = new GuildHandler();
     DatabaseGuild databaseGuild = new DatabaseGuild();
     DatabaseUser databaseUser = new DatabaseUser();
-    BotPrefix botPrefix = new BotPrefix();
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {

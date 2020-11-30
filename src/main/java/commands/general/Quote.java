@@ -36,12 +36,12 @@ public class Quote implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires 2 or more arguments", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires 2 or more arguments", e.getPrefix())).queue();
             return;
         }
 
@@ -55,33 +55,25 @@ public class Quote implements ICommand {
     }
 
     public void quoteCommandPrivate() {
-        if (args.length >= 2) {
-            switch (args[0]) {
-                case "message" -> e.getMessageChannel().sendMessage(getFullHelp("Quoting a message only works in a guild.", e.getPrefix())).queue();
-                case "text" -> createPersonalEmbed();
-                default -> e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
-            }
-        } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 3 arguments.", e.getPrefix())).queue();
+        switch (args[0]) {
+            case "message" -> e.getChannel().sendMessage(getFullHelp("Quoting a message only works in a guild.", e.getPrefix())).queue();
+            case "text" -> createPersonalEmbed();
+            default -> e.getChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
         }
     }
 
     public void quoteCommandGuild() {
-        if (args.length >= 2) {
-            switch (args[0]) {
-                case "message" -> {
-                    if (mentionsTextChannel()) {
-                        textChannel = e.getMessage().getMentionedChannels().get(0);
-                    } else {
-                        textChannel = e.getTextChannel();
-                    }
-                    getMessage(args[1]);
+        switch (args[0]) {
+            case "message" -> {
+                if (mentionsTextChannel()) {
+                    textChannel = e.getMessage().getMentionedChannels().get(0);
+                } else {
+                    textChannel = e.getTextChannel();
                 }
-                case "text" -> createPersonalEmbed();
-                default -> e.getMessageChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
+                getMessage(args[1]);
             }
-        } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 3 arguments.", e.getPrefix())).queue();
+            case "text" -> createPersonalEmbed();
+            default -> e.getChannel().sendMessage(getFullHelp("Error: second input should  either be `text` or `message`.", e.getPrefix())).queue();
         }
     }
 
@@ -100,7 +92,7 @@ public class Quote implements ICommand {
             eb.appendDescription("\n[Link](" + message.getJumpUrl() + ")");
         }
         
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     public void createPersonalEmbed() {
@@ -116,7 +108,7 @@ public class Quote implements ICommand {
         }
 
         eb.setDescription(getMessageToQuote());
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     public void getMessage(String id) {
@@ -124,7 +116,7 @@ public class Quote implements ICommand {
             if (failure instanceof ErrorResponseException) {
                 ErrorResponseException ex = (ErrorResponseException) failure;
                 if (ex.getErrorResponse() == ErrorResponse.UNKNOWN_MESSAGE) {
-                    e.getMessageChannel().sendMessage("Message doesn't exist!").queue();
+                    e.getChannel().sendMessage("Message doesn't exist!").queue();
                 }
             }
             failure.printStackTrace();

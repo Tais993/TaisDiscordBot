@@ -28,14 +28,14 @@ public class SetBlacklisted implements ICommand {
         e = event;
 
         if (!e.hasArgs() || e.getArgs().length < 2) {
-            e.getMessageChannel().sendMessage("Requires at least 2 arguments!").queue();
+            e.getChannel().sendMessage("Requires at least 2 arguments!").queue();
             return;
         }
 
         user = e.getFirstArgAsUser();
 
         if (user == null) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid user ID!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires a valid user ID!", e.getPrefix())).queue();
             return;
         }
 
@@ -44,7 +44,7 @@ public class SetBlacklisted implements ICommand {
         UserDB userDB = databaseUser.getUserFromDBToUserDB(userId);
 
         if (userDB.isBotModerator()) {
-            e.getMessageChannel().sendMessage(getFullHelp("This command doesn't work on bot moderators!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("This command doesn't work on bot moderators!", e.getPrefix())).queue();
             return;
         }
 

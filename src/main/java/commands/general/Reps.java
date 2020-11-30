@@ -37,7 +37,7 @@ public class Reps implements ICommand {
             user = e.getFirstArgAsUser();
 
             if (user == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
                 return;
             }
 
@@ -55,7 +55,7 @@ public class Reps implements ICommand {
 
         eb.setAuthor(user.getAsTag(), user.getEffectiveAvatarUrl(), user.getEffectiveAvatarUrl());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

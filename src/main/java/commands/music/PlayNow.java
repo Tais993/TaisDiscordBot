@@ -31,7 +31,7 @@ public class PlayNow implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -66,7 +66,7 @@ public class PlayNow implements ICommand {
         String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage("Unknown error: "+ videoUrl).queue();
+            e.getChannel().sendMessage("Unknown error: "+ videoUrl).queue();
             return false;
         }
 

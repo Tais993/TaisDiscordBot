@@ -25,12 +25,12 @@ public class Clear implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -39,13 +39,13 @@ public class Clear implements ICommand {
         if (permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_CHANNEL)) {
             int messagesToRemove = Integer.parseInt(e.getArgs()[0]);
 
-            List<Message> messages = e.getMessageChannel().getHistory().retrievePast(messagesToRemove).complete();
+            List<Message> messages = e.getChannel().getHistory().retrievePast(messagesToRemove).complete();
 
             e.getTextChannel().deleteMessages(messages).queue();
 
-            e.getMessageChannel().sendMessage("Message removed successfully!").queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
+            e.getChannel().sendMessage("Message removed successfully!").queue((message -> message.delete().queueAfter(5, TimeUnit.SECONDS)));
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires permission MANAGE_CHANNEL", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires permission MANAGE_CHANNEL", e.getPrefix())).queue();
         }
     }
 

@@ -29,7 +29,7 @@ public class Move implements ICommand {
         String[] args = e.getArgs();
 
         if (!e.hasArgs() || args.length <= 1) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 2 arguments", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 2 arguments", e.getPrefix())).queue();
         }
 
         if (!allowedToPlayMusic(e, commandAliases.get(0))) {

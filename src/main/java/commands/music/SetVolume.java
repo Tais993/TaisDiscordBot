@@ -29,7 +29,7 @@ public class SetVolume implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
+            e.getChannel().sendMessage("Volume has been set to " + manager.getVolume(e.getGuild())).queue();
             return;
         }
 
@@ -38,19 +38,19 @@ public class SetVolume implements ICommand {
         try {
             volume = Integer.parseInt(e.getArgs()[0]);
         } catch (NumberFormatException exception) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: give a valid number.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: give a valid number.", e.getPrefix())).queue();
             return;
         }
 
         if (!(volume >= 1 && volume <= 200)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: give a number between 1 and 200.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: give a number between 1 and 200.", e.getPrefix())).queue();
             return;
         }
 
         if (manager.setVolume(e.getGuild(), volume)) {
-            e.getMessageChannel().sendMessage("Volume has been set correctly to " + volume).queue();
+            e.getChannel().sendMessage("Volume has been set correctly to " + volume).queue();
         } else {
-            e.getMessageChannel().sendMessage("Error unknown.").queue();
+            e.getChannel().sendMessage("Error unknown.").queue();
         }
     }
 

@@ -23,19 +23,19 @@ public class AddJoke implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
+            e.getChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires 2 arguments", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires 2 arguments", e.getPrefix())).queue();
             return;
         }
 
         String fullMessage = event.getMessageWithoutCommand();
 
         if (!fullMessage.contains(";")) {
-            e.getMessageChannel().sendMessage(getFullHelp("Split the setup and punchline with a `;`", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Split the setup and punchline with a `;`", e.getPrefix())).queue();
             return;
         }
 

@@ -21,7 +21,7 @@ public class RemindMe implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        event.getMessageChannel().sendMessage("I'm sorry, the remind me command is on pause ;-;").queue();
+        event.getChannel().sendMessage("I'm sorry, the remind me command is on pause ;-;").queue();
 
 //        e = event;
 //        String[] args = e.getArgs();

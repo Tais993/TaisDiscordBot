@@ -27,14 +27,14 @@ public class SetBotModerator implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage("Requires at least 2 arguments!").queue();
+            e.getChannel().sendMessage("Requires at least 2 arguments!").queue();
             return;
         }
 
         user = e.getFirstArgAsUser();
 
         if (user == null) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid user ID!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires a valid user ID!", e.getPrefix())).queue();
             return;
         }
 

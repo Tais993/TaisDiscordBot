@@ -21,7 +21,7 @@ public class Help implements ICommand{
                 case "fun", "general", "util", "music", "botmoderation" -> commandEnum.getHelpCategory(args[0], e);
                 default -> {
                     if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())) {
-                        e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(args[0], e.getPrefix()).build()).queue();
+                        e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[0], e.getPrefix()).build()).queue();
                     }
                 }
             }

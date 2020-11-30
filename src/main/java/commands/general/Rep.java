@@ -31,27 +31,27 @@ public class Rep implements ICommand {
 
         if ((userdB.getLastTimeRepGiven() - System.currentTimeMillis()) <= 3600000) {
             if (userdB.getLastTimeRepGiven() != 0) {
-                e.getMessageChannel().sendMessage(getFullHelp("Already given a rep in the last hour!", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Already given a rep in the last hour!", e.getPrefix())).queue();
                 return;
             }
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
         user = e.getFirstArgAsUser();
 
         if (user == null) {
-            e.getMessageChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Give a valid user ID!", e.getPrefix())).queue();
             return;
         }
 
         userId = user.getId();
 
         if (userId.equals(e.getAuthor().getId())) {
-            e.getMessageChannel().sendMessage(getFullHelp("You can't give a rep to yourself!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("You can't give a rep to yourself!", e.getPrefix())).queue();
             return;
         }
 
@@ -61,7 +61,7 @@ public class Rep implements ICommand {
         databaseUser.addRep(userId);
         databaseUser.updateUserInDB(userDB);
 
-        e.getMessageChannel().sendMessage("A rep has been given to " + user.getName()).queue();
+        e.getChannel().sendMessage("A rep has been given to " + user.getName()).queue();
     }
 
     @Override

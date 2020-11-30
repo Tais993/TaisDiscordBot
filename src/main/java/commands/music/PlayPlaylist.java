@@ -27,7 +27,7 @@ public class PlayPlaylist implements ICommand {
         }
 
         if (!e.hasArgs() || e.getUserDB().getPlaylist(e.getArgs()[0]) == null) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires a valid playlist name!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires a valid playlist name!", e.getPrefix())).queue();
         }
 
         PlayerManager manager = PlayerManager.getInstance();

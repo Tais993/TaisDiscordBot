@@ -24,7 +24,7 @@ public class ChangeBotPrefixUser implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -36,7 +36,7 @@ public class ChangeBotPrefixUser implements ICommand {
 
         databaseUser.updateUserInDB(userDB);
 
-        e.getMessageChannel().sendMessage("Personal prefix changed to: " + prefix).queue();
+        e.getChannel().sendMessage("Personal prefix changed to: " + prefix).queue();
     }
 
     @Override

@@ -22,7 +22,7 @@ public class RickRoll implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage(getFullHelp("You can only run this comand in a Discord server/guild!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("You can only run this comand in a Discord server/guild!", e.getPrefix())).queue();
             return;
         }
 

@@ -28,7 +28,7 @@ public class Skunk implements ICommand {
             return;
         }
 
-        e.getMessageChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
+        e.getChannel().sendMessage("WELCOME TO THE SKUNK SECONDS!").queue();
 
         PlayerManager manager = PlayerManager.getInstance();
 

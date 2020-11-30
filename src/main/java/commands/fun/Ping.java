@@ -14,7 +14,7 @@ public class Ping implements ICommand {
     String fullCommandDescription = "Not much to say, just a command that gives your totally not fake ping.";
 
     public void command(CommandReceivedEvent event) {
-        event.getMessageChannel().sendMessage("Ping: " + event.getMember().getJDA().getGatewayPing() + "ms").queue();
+        event.getChannel().sendMessage("Ping: " + event.getMember().getJDA().getGatewayPing() + "ms").queue();
     }
 
     @Override

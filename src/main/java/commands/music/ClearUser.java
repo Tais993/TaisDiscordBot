@@ -28,7 +28,7 @@ public class ClearUser implements ICommand {
         if (!allowedToPlayMusic(e, "clearuser")) return;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -41,14 +41,14 @@ public class ClearUser implements ICommand {
         }
 
         if (isAllowed) {
-            e.getMessageChannel().sendMessage(getFullHelp("Member is still in channel!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Member is still in channel!", e.getPrefix())).queue();
             return;
         }
 
         PlayerManager manager = PlayerManager.getInstance();
         manager.clearQueueFromUser(e.getGuild(), e.getArgs()[0]);
 
-        e.getMessageChannel().sendMessage("Queue has been cleared from user").queue();
+        e.getChannel().sendMessage("Queue has been cleared from user").queue();
     }
 
     @Override

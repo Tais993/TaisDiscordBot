@@ -27,7 +27,7 @@ public class TempBan implements ICommand {
         String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("You cannot ban people in DM's.").queue();
+            e.getChannel().sendMessage("You cannot ban people in DM's.").queue();
             return;
         }
 
@@ -37,11 +37,11 @@ public class TempBan implements ICommand {
                 if (args.length > 2){
                     banUser(args);
                 } else {
-                    e.getMessageChannel().sendMessage(getFullHelp("Error: requires at least 2 arguments.", e.getPrefix())).queue();
+                    e.getChannel().sendMessage(getFullHelp("Error: requires at least 2 arguments.", e.getPrefix())).queue();
                 }
             }
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires a mentioned user.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: requires a mentioned user.", e.getPrefix())).queue();
         }
     }
 
@@ -49,23 +49,23 @@ public class TempBan implements ICommand {
         Permissions permissions = new Permissions(e.getGuild());
 
         if (!(permissions.botHasPermission(Permission.BAN_MEMBERS))) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Bot requires the ban members permission.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: Bot requires the ban members permission.", e.getPrefix())).queue();
             return false;
         } else if (!(permissions.userHasPermission(e.getAuthor(), Permission.BAN_MEMBERS))) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: User requires the ban members permission to run the command.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: User requires the ban members permission to run the command.", e.getPrefix())).queue();
             return false;
         } else if (!(permissions.botCanInteract(memberToBan))) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Bot is a lower or the same level as the user given.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: Bot is a lower or the same level as the user given.", e.getPrefix())).queue();
             return false;
         } else if (!permissions.userCanInteract(e.getAuthor(), memberToBan)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: User is a lower or the same level as the user given.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: User is a lower or the same level as the user given.", e.getPrefix())).queue();
             return false;
         }
         return true;
     }
 
     public void banUser(String[] args) {
-        e.getMessageChannel().sendMessage(memberToBan.getAsMention() + " has been banned for a total of " + args[3] + " days").queue();
+        e.getChannel().sendMessage(memberToBan.getAsMention() + " has been banned for a total of " + args[3] + " days").queue();
     }
 
     public boolean mentionsUser() {

@@ -29,19 +29,19 @@ public class Leave implements ICommand {
         }
 
         if (!audioManager.isConnected()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: I'm not connected to a voice channel.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: I'm not connected to a voice channel.", e.getPrefix())).queue();
             return;
         }
 
         VoiceChannel voiceChannel = audioManager.getConnectedChannel();
 
         if (!voiceChannel.getMembers().contains(event.getMember())) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: You've to be in the same voice channel as the bot to use this command.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: You've to be in the same voice channel as the bot to use this command.", e.getPrefix())).queue();
             return;
         }
 
         audioManager.closeAudioConnection();
-        e.getMessageChannel().sendMessage("Disconnected").queue();
+        e.getChannel().sendMessage("Disconnected").queue();
     }
 
     @Override

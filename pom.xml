@@ -26,7 +26,6 @@
     </repositories>
 
     <dependencies>
-
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>

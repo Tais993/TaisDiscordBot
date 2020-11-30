@@ -35,7 +35,7 @@ public class Avatar implements ICommand {
         eb.setTitle("Avatar of: " + user.getAsTag());
         eb.setImage(user.getAvatarUrl());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

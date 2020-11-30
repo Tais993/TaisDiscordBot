@@ -27,12 +27,12 @@ public class ChangeBotPrefixGuild implements ICommand {
         String prefix;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -44,7 +44,7 @@ public class ChangeBotPrefixGuild implements ICommand {
 
         databaseGuild.updateGuildInDB(guildDB);
 
-        e.getMessageChannel().sendMessage("Prefix changed to: " + prefix).queue();
+        e.getChannel().sendMessage("Prefix changed to: " + prefix).queue();
     }
 
     @Override

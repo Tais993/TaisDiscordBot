@@ -11,8 +11,6 @@ public class UserHandler {
         e = event;
         userId = e.getAuthor().getId();
 
-        if (e.getAuthor().isBot()) return;
-
         String level = databaseUser.addRandomXPToUserInDB(userId);
         if (!level.isEmpty()) {
             System.out.println(e.getMember().getEffectiveName() + " has reached level " + level);

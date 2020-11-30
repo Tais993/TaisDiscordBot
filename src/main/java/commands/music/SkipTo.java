@@ -26,7 +26,7 @@ public class SkipTo implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -46,7 +46,7 @@ public class SkipTo implements ICommand {
         eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
         eb.appendDescription(videoDurationToYoutube(track.getPosition()) + " / " + videoDurationToYoutube(track.getDuration()) + "\n");
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
 
     }
 

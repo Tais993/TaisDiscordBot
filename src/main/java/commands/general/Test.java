@@ -18,8 +18,11 @@ public class Test implements ICommand {
 
     @Override
     public void command(CommandReceivedEvent event) {
-        System.out.println(System.currentTimeMillis());
         e = event;
+    }
+
+    public int decrement(int number) {
+        return --number;
     }
 
     @Override

@@ -25,12 +25,12 @@ public class Mock implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires at least 1 argument!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires at least 1 argument!", e.getPrefix())).queue();
             return;
         }
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getShortHelp("Don't mention people! Not nice >.<", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Don't mention people! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
@@ -38,7 +38,7 @@ public class Mock implements ICommand {
             e.getMessage().delete().complete();
         }
 
-        e.getMessageChannel().sendMessage(stringToMocked(e.getMessageWithoutCommand())).queue();
+        e.getChannel().sendMessage(stringToMocked(e.getMessageWithoutCommand())).queue();
     }
 
     private String stringToMocked(String toMock) {

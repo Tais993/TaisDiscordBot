@@ -19,7 +19,7 @@ public class NowPlaying implements ICommand {
     public void command(CommandReceivedEvent event) {
         PlayerManager manager = PlayerManager.getInstance();
         EmbedBuilder eb = manager.getNowPlaying(event.getGuild(), getEmbed());
-        event.getMessageChannel().sendMessage(eb.build()).queue();
+        event.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

@@ -47,42 +47,42 @@ public class ReactionRole implements ICommand {
         String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
         Permissions permissions = new Permissions(e.getGuild());
 
         if (!permissions.userHasPermission(e.getAuthor(), Permission.MANAGE_ROLES)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: requires manage roles permission.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: requires manage roles permission.", e.getPrefix())).queue();
         }
 
-       switch (args[1]) {
-           case "bot":
-               rolesToBeAdded = (args.length - 2) / 2;
-               if (!(rolesToBeAdded == e.getMessage().getEmotes().size())) return;
-               botCreateMessage(args);
-               break;
-           case "message":
-               rolesToBeAdded = (args.length - 3) / 2;
-               if (!(rolesToBeAdded == e.getMessage().getEmotes().size())) return;
-               useUserMessage(args);
-               break;
-       }
+        switch (args[1]) {
+            case "bot" -> {
+                rolesToBeAdded = (args.length - 2) / 2;
+                if (!(rolesToBeAdded == e.getMessage().getEmotes().size())) return;
+                botCreateMessage(args);
+            }
+            case "message" -> {
+                rolesToBeAdded = (args.length - 3) / 2;
+                if (!(rolesToBeAdded == e.getMessage().getEmotes().size())) return;
+                useUserMessage(args);
+            }
+        }
     }
 
     public void botCreateMessage(String[] args) {
         roleEmojiObject = new RoleEmojiObject[e.getMessage().getEmotes().size()];
 
         EmbedBuilder eb = new EmbedBuilder();
-        textChannelId = e.getMessageChannel().getId();
+        textChannelId = e.getChannel().getId();
 
         for (int i = 0; i < rolesToBeAdded; i++) {
             roleId = args[((i + 1) * 2) + 1];
             emojiId = e.getMessage().getEmotes().get(i).getId();
 
             if (e.getGuild().getEmoteById(emojiId) == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Error: emoji not available in this guild", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Error: emoji not available in this guild", e.getPrefix())).queue();
                 return;
             }
             Emote emote = e.getGuild().getEmoteById(emojiId);
@@ -95,7 +95,7 @@ public class ReactionRole implements ICommand {
         eb.setColor(getCurrentColor());
         eb.setTitle("Roles: ");
 
-        e.getMessageChannel().sendMessage(eb.build()).queue(m -> {
+        e.getChannel().sendMessage(eb.build()).queue(m -> {
             messageId = m.getId();
             ReactionRoleDB reactionRoleDB = new ReactionRoleDB(messageId, textChannelId, roleEmojiObject);
             databaseReactionRoles.addReactionRoleToDB(reactionRoleDB);
@@ -109,14 +109,14 @@ public class ReactionRole implements ICommand {
     public void useUserMessage(String[] args) {
         roleEmojiObject = new RoleEmojiObject[e.getMessage().getEmotes().size()];
 
-        textChannelId = e.getMessageChannel().getId();
+        textChannelId = e.getChannel().getId();
 
         for (int i = 0; i < rolesToBeAdded; i++) {
             roleId = args[((i + 1) * 2) + 2];
             emojiId = e.getMessage().getEmotes().get(i).getId();
 
             if (e.getGuild().getEmoteById(emojiId) == null) {
-                e.getMessageChannel().sendMessage(getFullHelp("Error: emoji not available in this guild", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("Error: emoji not available in this guild", e.getPrefix())).queue();
                 return;
             }
 
@@ -128,7 +128,7 @@ public class ReactionRole implements ICommand {
         ReactionRoleDB reactionRoleDB = new ReactionRoleDB(messageId, textChannelId, roleEmojiObject);
         databaseReactionRoles.addReactionRoleToDB(reactionRoleDB);
 
-        e.getMessageChannel().retrieveMessageById(messageId).queue((message -> {
+        e.getChannel().retrieveMessageById(messageId).queue((message -> {
             for (RoleEmojiObject emojiObject : roleEmojiObject) {
                 Emote emote = e.getGuild().getEmoteById(emojiObject.getEmojiId());
                 message.addReaction(emote).queue();

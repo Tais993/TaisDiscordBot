@@ -33,7 +33,7 @@ public class Remove implements ICommand {
 
         EmbedBuilder eb = manager.removeFromQueue(e.getGuild(), Integer.parseInt(args[0]));
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

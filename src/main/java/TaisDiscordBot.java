@@ -21,7 +21,7 @@ import java.io.InputStreamReader;
 
 import static music.youtube.SearchYouTube.setYtApiKey;
 
-public class Main extends ListenerAdapter {
+public class TaisDiscordBot extends ListenerAdapter {
     public static void main(String[] args) throws Exception {
         CommandEnum commandEnum = new CommandEnum();
         commandEnum.getListsReady();

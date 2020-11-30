@@ -30,7 +30,7 @@ public class Shuffle implements ICommand {
         PlayerManager manager = PlayerManager.getInstance();
         manager.shuffleQueue(e.getGuild());
 
-        e.getMessageChannel().sendMessage("Queue has been shuffeled").queue();
+        e.getChannel().sendMessage("Queue has been shuffeled").queue();
     }
 
     @Override

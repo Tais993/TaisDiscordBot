@@ -80,16 +80,12 @@ public class DatabaseUser {
     public void updateUserInDB(UserDB userDB) {
         String userId = userDB.getUserID();
 
-        long beforeThread = System.currentTimeMillis();
-
         Thread thread = new Thread(() -> {
             DBObject query = new BasicDBObject("userID", userId);
             user.findAndModify(query, userToDBObject(userDB));
         });
 
         thread.start();
-
-        System.out.println(System.currentTimeMillis() - beforeThread);
 
         UserDB cachedUserDB = cachedUsers.get(userDB.getUserID());
 

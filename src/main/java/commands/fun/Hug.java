@@ -35,23 +35,23 @@ public class Hug implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage(getShortHelp("Run this command in a Discord guild/server", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Run this command in a Discord guild/server", e.getPrefix())).queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires a argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires a argument", e.getPrefix())).queue();
             return;
         }
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage(getShortHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Don't mention everyone! Not nice >.<", e.getPrefix())).queue();
             return;
         }
 
         User toHug = e.getFirstArgAsUser();
         if (toHug == null) {
-            e.getMessageChannel().sendMessage("Either mention a user or give a valid user ID!").queue();
+            e.getChannel().sendMessage("Either mention a user or give a valid user ID!").queue();
             return;
         }
 
@@ -65,7 +65,7 @@ public class Hug implements ICommand {
 
         authorMentioned = e.getAuthor().getAsMention();
 
-        e.getMessageChannel().sendMessage(authorMentioned + " hugs " + userToHugMentioned + " :heart:").addFile(file).queue();
+        e.getChannel().sendMessage(authorMentioned + " hugs " + userToHugMentioned + " :heart:").addFile(file).queue();
 
     }
 

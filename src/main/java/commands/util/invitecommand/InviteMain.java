@@ -27,7 +27,7 @@ public class InviteMain implements ICommand {
         String[] args = e.getArgs();
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
@@ -37,10 +37,10 @@ public class InviteMain implements ICommand {
             } else if (args[1].equals("uses")) {
                 inviteUses.inviteUses(event, args[2]);
             } else {
-                e.getMessageChannel().sendMessage(getFullHelp("invite", e.getPrefix())).queue();
+                e.getChannel().sendMessage(getFullHelp("invite", e.getPrefix())).queue();
             }
         } else {
-            e.getMessageChannel().sendMessage(getFullHelp("invite", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("invite", e.getPrefix())).queue();
         }
     }
 

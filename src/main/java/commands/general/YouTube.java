@@ -25,12 +25,12 @@ public class YouTube implements ICommand {
         e = event;
 
         if (e.mentionsEveryone()) {
-            e.getMessageChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
+            e.getChannel().sendMessage("Don't mention everyone! Not nice >.<").queue();
             return;
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires something to search, I can't search nothing.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires something to search, I can't search nothing.", e.getPrefix())).queue();
             return;
         }
 
@@ -39,16 +39,16 @@ public class YouTube implements ICommand {
         String videoUrl = getVideoUrl(input);
 
         if (videoUrl.startsWith("Error:")) {
-            e.getMessageChannel().sendMessage(getFullHelp(videoUrl, e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp(videoUrl, e.getPrefix())).queue();
             return;
         }
 
         url = videoUrl;
 
         if (url.isEmpty()) {
-            e.getMessageChannel().sendMessage("Nothing has been found by " + input).queue();
+            e.getChannel().sendMessage("Nothing has been found by " + input).queue();
         } else {
-            e.getMessageChannel().sendMessage(url).queue();
+            e.getChannel().sendMessage(url).queue();
         }
     }
 

@@ -26,7 +26,7 @@ public class Dm implements ICommand {
         user = e.getFirstArgAsUser();
 
         if (user == null) {
-            e.getMessageChannel().sendMessage("Invalid user ID!").queue();
+            e.getChannel().sendMessage("Invalid user ID!").queue();
             return;
         }
 
@@ -36,7 +36,7 @@ public class Dm implements ICommand {
 
         user.openPrivateChannel().complete().sendMessage(messageToSay).queue();
 
-        e.getMessageChannel().sendMessage("Send: \"" + messageToSay + "\" to " + user.getAsTag()).queue();
+        e.getChannel().sendMessage("Send: \"" + messageToSay + "\" to " + user.getAsTag()).queue();
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Playlist implements ICommand {
         e = event;
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getShortHelp("Requires at least 1 arguments!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("Requires at least 1 arguments!", e.getPrefix())).queue();
             return;
         }
 
@@ -63,7 +63,7 @@ public class Playlist implements ICommand {
                     customError("edit", "playlist <edit> <playlist name> <remove> <song index>", "Requires a valid index!");
                 }
                 userDB.removeSong(args[1], Integer.parseInt(args[3]));
-                e.getMessageChannel().sendMessage("Removed 1 song from " + args[1]).queue();
+                e.getChannel().sendMessage("Removed 1 song from " + args[1]).queue();
             }
             case "add" -> {
                 if (args.length < 4) {
@@ -71,14 +71,14 @@ public class Playlist implements ICommand {
                 }
                 PlayerManager playerManager = PlayerManager.getInstance();
                 playerManager.loadAndAddToPlaylist(args[1], args[3], e.getUserDB(), e.getGuild());
-                e.getMessageChannel().sendMessage("Added 1 song in " + args[1]).queue();
+                e.getChannel().sendMessage("Added 1 song in " + args[1]).queue();
             }
             case "rename" -> {
                 if (args.length < 4) {
                     customError("edit", "playlist <edit> <playlist name> <rename> <new playlist name>", "Requires a new name!");
                 }
                 userDB.renamePlaylist(args[1], args[3]);
-                e.getMessageChannel().sendMessage("Renamed " + args[1] + " to " + args[3]).queue();
+                e.getChannel().sendMessage("Renamed " + args[1] + " to " + args[3]).queue();
             }
         }
 
@@ -100,15 +100,15 @@ public class Playlist implements ICommand {
                     eb.appendDescription("[" + songs.get(i).getTitle() + "](" + songs.get(i).getSongUrl() + ")\n");
                 }
 
-                e.getMessageChannel().sendMessage(eb.build()).queue();
+                e.getChannel().sendMessage(eb.build()).queue();
 
             } else {
-                e.getMessageChannel().sendMessage("Requires a valid playlist name!").queue();
+                e.getChannel().sendMessage("Requires a valid playlist name!").queue();
             }
         } else {
             eb.setTitle(e.getAsTag() + "'s playlists");
             userDB.getPlaylists().forEach((key, songs) -> eb.appendDescription("\n" + key + " - " + songs.size() + " songs."));
-            e.getMessageChannel().sendMessage(eb.build()).queue();
+            e.getChannel().sendMessage(eb.build()).queue();
         }
     }
 
@@ -139,7 +139,7 @@ public class Playlist implements ICommand {
         if (error != null) {
             eb.setDescription("**" + error + "**");
         }
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     public void getFullHelpCommand() {
@@ -155,7 +155,7 @@ public class Playlist implements ICommand {
         eb.addField("`" + e.getPrefix() + "playlist help`",  "Get this message.", false);
         eb.setColor(getCurrentColor());
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

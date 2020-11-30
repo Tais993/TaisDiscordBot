@@ -24,15 +24,16 @@ public class EightBall implements ICommand {
         if (e.getMessage().getContentRaw().contains("?")) {
             int chance = Math.round(r.nextFloat()*10);
 
-            switch (chance) {
-                case 1, 2 -> e.getMessageChannel().sendMessage("For sure!").queue();
-                case 3, 4 -> e.getMessageChannel().sendMessage("Yes.").queue();
-                case 5, 6 -> e.getMessageChannel().sendMessage("Maybe").queue();
-                case 7, 8 -> e.getMessageChannel().sendMessage("No.").queue();
-                case 9, 10 -> e.getMessageChannel().sendMessage("Never...").queue();
-            }
+            e.getChannel().sendMessage(switch (chance) {
+                case 1, 2 -> "For sure!";
+                case 3, 4 -> "Yes.";
+                case 5, 6 -> "Maybe";
+                case 7, 8 -> "No.";
+                case 9, 10 -> "Never...";
+                default -> throw new IllegalStateException("Unexpected value: " + chance);
+            }).queue();
         } else {
-            e.getMessageChannel().sendMessage(getShortHelp("You're supposed to ask a question, so it should contain a question mark!", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getShortHelp("You're supposed to ask a question, so it should contain a question mark!", e.getPrefix())).queue();
         }
     }
 

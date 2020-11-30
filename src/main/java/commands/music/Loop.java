@@ -33,7 +33,7 @@ public class Loop implements ICommand {
         }
 
         if (!e.hasArgs()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Requires at least 1 argument", e.getPrefix())).queue();
             return;
         }
 
@@ -44,14 +44,14 @@ public class Loop implements ICommand {
                 manager.loopSongToggle(e.getGuild());
                 GuildMusicManager musicManager = manager.getGuildMusicManager(e.getGuild());
                 AudioTrack playingTrack = musicManager.player.getPlayingTrack();
-                e.getMessageChannel().sendMessage("Succesfully looping: " + playingTrack.getInfo().uri).queue();
+                e.getChannel().sendMessage("Succesfully looping: " + playingTrack.getInfo().uri).queue();
             }
             case "all", "queue" -> {
                 manager.loopQueueToggle(e.getGuild());
-                e.getMessageChannel().sendMessage("Succesfully looping the queue").queue();
+                e.getChannel().sendMessage("Succesfully looping the queue").queue();
             }
             case "off" -> manager.loopOff(e.getGuild());
-            default -> e.getMessageChannel().sendMessage(getFullHelp("Error: either give 1 or all as input", e.getPrefix())).queue();
+            default -> e.getChannel().sendMessage(getFullHelp("Error: either give 1 or all as input", e.getPrefix())).queue();
         }
     }
 

@@ -22,7 +22,7 @@ public class InviteTime {
         } else if (isNumber(args)) {
             checkSeconds(args);
         } else {
-            e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem("invite", e.getPrefix()).setDescription("Give a valid time").build()).queue();
+            e.getChannel().sendMessage(commandEnum.getFullHelpItem("invite", e.getPrefix()).setDescription("Give a valid time").build()).queue();
         }
     }
 
@@ -59,10 +59,10 @@ public class InviteTime {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 86400) {
                 invite = e.getTextChannel().createInvite().complete().getUrl();
-                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
                 invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(timeGiven).complete().getUrl();
-                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " seconds ! \n" + invite).queue();
+                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " seconds ! \n" + invite).queue();
             }
         }
     }
@@ -74,10 +74,10 @@ public class InviteTime {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 1440) {
                 invite = e.getTextChannel().createInvite().complete().getUrl();
-                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
                 invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(minutesToSeconds(timeGiven)).complete().getUrl();
-                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " minutes ! \n" + invite).queue();
+                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " minutes ! \n" + invite).queue();
             }
         }
     }
@@ -89,10 +89,10 @@ public class InviteTime {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 24) {
                 invite = e.getTextChannel().createInvite().complete().getUrl();
-                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
                 invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(hoursToSeconds(timeGiven)).complete().getUrl();
-                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " hours ! \n" + invite).queue();
+                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " hours ! \n" + invite).queue();
             }
         }
     }
@@ -104,10 +104,10 @@ public class InviteTime {
             int timeGiven = Integer.parseInt(removeTimeNote(args));
             if (timeGiven > 1) {
                 invite = e.getTextChannel().createInvite().complete().getUrl();
-                e.getMessageChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
+                e.getChannel().sendMessage("A permanent invite has been created! \n" + invite).queue();
             } else {
                 invite = e.getTextChannel().createInvite().setTemporary(true).setMaxAge(daysToSeconds(timeGiven)).complete().getUrl();
-                e.getMessageChannel().sendMessage("A temporary invite has been created for " + timeGiven + " days ! \n" + invite).queue();
+                e.getChannel().sendMessage("A temporary invite has been created for " + timeGiven + " days ! \n" + invite).queue();
             }
         }
     }

@@ -28,12 +28,12 @@ public class Join implements ICommand {
         audioManager = e.getGuild().getAudioManager();
 
         if (audioManager.isConnected()) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: already connected to a channel", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: already connected to a channel", e.getPrefix())).queue();
             return;
         }
 
         if (joinChannel(e)) {
-            e.getMessageChannel().sendMessage("Joining your voice channel").queue();
+            e.getChannel().sendMessage("Joining your voice channel").queue();
         }
     }
 
@@ -45,7 +45,7 @@ public class Join implements ICommand {
         GuildVoiceState memberVoiceState = e.getMember().getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()){
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Join a voice channel before running this command.", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: Join a voice channel before running this command.", e.getPrefix())).queue();
             return false;
         }
 
@@ -53,7 +53,7 @@ public class Join implements ICommand {
         Member selfMember = e.getGuild().getSelfMember();
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {
-            e.getMessageChannel().sendMessage(getFullHelp("Error: Missing VOICE_CONNECT permission", e.getPrefix())).queue();
+            e.getChannel().sendMessage(getFullHelp("Error: Missing VOICE_CONNECT permission", e.getPrefix())).queue();
             return false;
         }
 

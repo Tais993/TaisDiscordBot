@@ -26,7 +26,7 @@ public class Leaderboard implements ICommand {
 
         eb.setTitle("Leaderboard");
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

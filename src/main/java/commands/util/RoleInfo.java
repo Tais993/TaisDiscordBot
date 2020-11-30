@@ -27,7 +27,7 @@ public class RoleInfo implements ICommand {
         e = event;
 
         if (!e.isFromGuild()) {
-            e.getMessageChannel().sendMessage("This command only works in Discord servers/guild").queue();
+            e.getChannel().sendMessage("This command only works in Discord servers/guild").queue();
             return;
         }
 
@@ -52,7 +52,7 @@ public class RoleInfo implements ICommand {
             }
         }));
 
-        e.getMessageChannel().sendMessage(eb.build()).queue();
+        e.getChannel().sendMessage(eb.build()).queue();
     }
 
     @Override

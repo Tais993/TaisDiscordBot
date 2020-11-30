@@ -22,7 +22,6 @@ public class CommandHandler extends ListenerAdapter {
     GuildHandler guildHandler = new GuildHandler();
     DatabaseGuild databaseGuild = new DatabaseGuild();
     DatabaseUser databaseUser = new DatabaseUser();
-    BotPrefix botPrefix = new BotPrefix();
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {

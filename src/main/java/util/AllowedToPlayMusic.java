@@ -36,12 +36,13 @@ public class AllowedToPlayMusic {
         }
 
         VoiceChannel voiceChannel = memberVoiceState.getChannel();
-        Member selfMember = e.getGuild().getSelfMember();
 
-        if (audioManager.isConnected() && !audioManager.getConnectedChannel().equals(voiceChannel)) {
+        if (audioManager.isConnected() && audioManager.getConnectedChannel().getId().equals(voiceChannel.getId())) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Join the same channel as the bot.").build()).queue();
             return false;
         }
+
+        Member selfMember = e.getGuild().getSelfMember();
 
         if (!selfMember.hasPermission(voiceChannel, Permission.VOICE_CONNECT)) {
             e.getMessageChannel().sendMessage(commandEnum.getFullHelpItem(commandName, e.getPrefix()).setDescription("Error: Missing VOICE_CONNECT permission").build()).queue();

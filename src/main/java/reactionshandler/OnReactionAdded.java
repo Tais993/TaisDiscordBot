@@ -17,7 +17,7 @@ public class OnReactionAdded extends ListenerAdapter {
     @Override
     public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event) {
         e = event;
-
+        
         String messageID = event.getMessageId();
 
         if (e.getUser().isBot()) return;

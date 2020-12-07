@@ -5,10 +5,7 @@ import commands.CommandEnum;
 import commands.CommandHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.LoggerFactory;
 import reactionshandler.OnReactionAdded;
@@ -18,10 +15,13 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Timer;
 
 import static music.youtube.SearchYouTube.setYtApiKey;
 
-public class TaisDiscordBot extends ListenerAdapter {
+public class TaisDiscordBot {
+    static JDA jda;
+
     public static void main(String[] args) throws Exception {
         CommandEnum commandEnum = new CommandEnum();
         commandEnum.getListsReady();
@@ -31,7 +31,7 @@ public class TaisDiscordBot extends ListenerAdapter {
         String token = br.readLine();
         br.close();
 
-        JDA jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).setActivity(Activity.of(Activity.ActivityType.STREAMING, "lttstore.com", "lttstore.com")).build().awaitReady();
+        jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).setActivity(Activity.of(Activity.ActivityType.STREAMING, "lttstore.com", "lttstore.com")).build().awaitReady();
 
         CommandEnum.bot = jda.getSelfUser();
 
@@ -44,6 +44,9 @@ public class TaisDiscordBot extends ListenerAdapter {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
         rootLogger.setLevel(Level.ERROR);
+
+        Timer timer = new Timer();
+        timer.schedule(new PingTijs(), 7100000  , 7200000);
     }
 }
 

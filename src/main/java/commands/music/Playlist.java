@@ -69,8 +69,6 @@ public class Playlist implements ICommand {
                 if (args.length < 4) {
                     customError("edit", "playlist <edit> <playlist name> <add> <song url>", "Requires a URL!");
                 }
-                PlayerManager playerManager = PlayerManager.getInstance();
-                playerManager.loadAndAddToPlaylist(args[1], args[3], e.getUserDB(), e.getGuild());
                 e.getChannel().sendMessage("Added 1 song in " + args[1]).queue();
             }
             case "rename" -> {

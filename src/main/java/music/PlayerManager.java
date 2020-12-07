@@ -59,7 +59,7 @@ public class PlayerManager {
                     eb.appendDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")\n");
                     eb.setColor(getCurrentColor());
 
-                    channel.sendMessage(eb.build()).queue();
+                    channel.sendMessage(eb.build()).queue(message -> message.addReaction("TOTAL UNICODE").queue());
                 }
 
                 if (addFirst) {
@@ -71,7 +71,7 @@ public class PlayerManager {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                playlist.getTracks().forEach((audioTrack -> loadAndPlay(channel, audioTrack.getInfo().uri, false, userId, userName , false)));
+                playlist.getTracks().forEach((track -> play(musicManager, track, userId, userName)));
             }
 
             @Override
@@ -82,31 +82,6 @@ public class PlayerManager {
             @Override
             public void loadFailed(FriendlyException e) {
                 channel.sendMessage("Could not play: " + e.getMessage()).queue();
-            }
-        });
-    }
-
-    public void loadAndAddToPlaylist(String playlistName, String trackUrl, UserDB userDB, Guild guild) {
-        GuildMusicManager musicManager = getGuildMusicManager(guild);
-
-        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
-            @Override
-            public void trackLoaded(AudioTrack track) {
-                DatabaseUser databaseUser = new DatabaseUser();
-                userDB.addSong(playlistName, track);
-                databaseUser.updateUserInDB(userDB);
-            }
-
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist) {
-            }
-
-            @Override
-            public void noMatches() {
-            }
-
-            @Override
-            public void loadFailed(FriendlyException e) {
             }
         });
     }

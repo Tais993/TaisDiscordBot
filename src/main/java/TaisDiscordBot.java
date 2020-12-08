@@ -46,7 +46,7 @@ public class TaisDiscordBot {
         rootLogger.setLevel(Level.ERROR);
 
         Timer timer = new Timer();
-        timer.schedule(new PingTijs(), 7100000  , 7200000);
+        timer.schedule(new PingTijs(), 0  , 7200000);
     }
 }
 

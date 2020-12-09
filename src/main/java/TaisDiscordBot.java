@@ -54,12 +54,7 @@ public class TaisDiscordBot {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 //        scheduler.scheduleAtFixedRate(new PingTijs(), 100000, 100000, SECONDS);
-        scheduler.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                checkValidationWaiters();
-            }
-        }, 1, 1, SECONDS);
+        scheduler.scheduleAtFixedRate(EventWaiter::checkValidationWaiters, 1, 1, SECONDS);
     }
 }
 

@@ -6,10 +6,9 @@ import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Remove implements ICommand {
     CommandReceivedEvent e;

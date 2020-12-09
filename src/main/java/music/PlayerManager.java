@@ -7,18 +7,15 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import database.user.DatabaseUser;
-import database.user.UserDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import util.Colors;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static music.TrackScheduler.videoDurationToYoutube;
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;

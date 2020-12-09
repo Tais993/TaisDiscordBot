@@ -8,7 +8,7 @@ import commands.music.objects.AudioPlayerO;
 import commands.music.objects.AudioTrackO;
 import commands.music.objects.RadioO;
 import net.dv8tion.jda.api.EmbedBuilder;
-import util.Colors;
+import utilities.Colors;
 
 import java.util.Collections;
 import java.util.LinkedList;

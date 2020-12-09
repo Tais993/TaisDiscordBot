@@ -5,10 +5,9 @@ import commands.ICommand;
 import music.PlayerManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Previous implements ICommand {
     ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("previous"));

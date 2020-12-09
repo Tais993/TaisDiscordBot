@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static util.Time.getDateFromOffset;
+import static utilities.Time.getDateFromOffset;
 
 public class RoleInfo implements ICommand {
     CommandReceivedEvent e;
@@ -17,7 +17,7 @@ public class RoleInfo implements ICommand {
     Role role;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("roleinfo"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "roleinfo <@role>/<role id>";
     String shortCommandDescription = "Get information about a role.";
     String fullCommandDescription = "Get information about a role.";

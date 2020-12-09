@@ -3,14 +3,13 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
-import net.dv8tion.jda.api.entities.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static music.youtube.SearchYouTube.getVideoUrl;
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
-import static util.Utils.isUrl;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.Utils.isUrl;
 
 public class Play implements ICommand {
     CommandReceivedEvent e;

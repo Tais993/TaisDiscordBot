@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static commands.CommandEnum.bot;
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class DatabaseUser {
     public static MongoClient mongoClient;

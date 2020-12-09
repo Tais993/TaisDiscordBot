@@ -1,4 +1,4 @@
-package util.entities;
+package utilities.entities;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;

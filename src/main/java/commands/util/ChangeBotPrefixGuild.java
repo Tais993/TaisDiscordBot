@@ -15,7 +15,7 @@ public class ChangeBotPrefixGuild implements ICommand {
     GuildDB guildDB;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("changebotprefixguild", "setbotprefixserver", "changebotprefixserver", "botprefixserver"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "changebotprefixguild <botprefix>";
     String shortCommandDescription = "Set the prefix of the bot in this guild.";
     String fullCommandDescription = "Set the prefix of the bot in this guild.";

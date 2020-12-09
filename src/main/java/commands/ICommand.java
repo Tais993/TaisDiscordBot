@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 import static commands.CommandEnum.bot;
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public interface ICommand {
     CommandReceivedEvent e = null;

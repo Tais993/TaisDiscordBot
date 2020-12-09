@@ -9,10 +9,9 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class Quote implements ICommand {
     CommandReceivedEvent e;

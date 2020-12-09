@@ -10,14 +10,20 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.slf4j.LoggerFactory;
 import reactionshandler.OnReactionAdded;
 import reactionshandler.OnReactionRemove;
+import utilities.EventWaiter;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static music.youtube.SearchYouTube.setYtApiKey;
+import static utilities.EventWaiter.checkValidationWaiters;
 
 public class TaisDiscordBot {
     static JDA jda;
@@ -35,6 +41,7 @@ public class TaisDiscordBot {
 
         CommandEnum.bot = jda.getSelfUser();
 
+        jda.addEventListener(new EventWaiter());
         jda.addEventListener(new CommandHandler());
         jda.addEventListener(new OnReactionAdded());
         jda.addEventListener(new OnReactionRemove());
@@ -45,8 +52,14 @@ public class TaisDiscordBot {
         Logger rootLogger = loggerContext.getLogger("org.mongodb.driver");
         rootLogger.setLevel(Level.ERROR);
 
-        Timer timer = new Timer();
-        timer.schedule(new PingTijs(), 7100000  , 7200000);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        scheduler.scheduleAtFixedRate(new PingTijs(), 100000, 100000, SECONDS);
+        scheduler.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                checkValidationWaiters();
+            }
+        }, 1, 1, SECONDS);
     }
 }
 

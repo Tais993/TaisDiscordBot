@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class SetAmongUsRole implements ICommand {
@@ -18,7 +17,7 @@ public class SetAmongUsRole implements ICommand {
     Role role;
 
     ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("setamongusrole"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "setamongusrole <role as mention>/<role ID>";
     String shortCommandDescription = "Sets the among us role ID to the correct role.";
     String fullCommandDescription = "Sets the among us role ID to the correct role.\n" +

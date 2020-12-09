@@ -1,4 +1,4 @@
-package util;
+package utilities;
 
 import commands.CommandEnum;
 import commands.CommandReceivedEvent;

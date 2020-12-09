@@ -13,7 +13,7 @@ public class InviteMain implements ICommand {
     InviteUses inviteUses = new InviteUses();
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("invite"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "invite time <time>s/m/h/d";
     String shortCommandDescription = "Create server invites";
     String fullCommandDescription = "Create server invites for a period of time or uses the link has\n" +

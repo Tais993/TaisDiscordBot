@@ -7,11 +7,10 @@ import music.PlayerManager;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static music.youtube.SearchYouTube.getVideoUrl;
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class PlayNow implements ICommand {
     CommandReceivedEvent e;

@@ -8,7 +8,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class ClearUser implements ICommand {
     CommandReceivedEvent e;

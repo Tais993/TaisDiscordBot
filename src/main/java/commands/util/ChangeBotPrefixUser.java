@@ -14,7 +14,7 @@ public class ChangeBotPrefixUser implements ICommand {
     UserDB userDB;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("changebotprefixuser", "setbotprefixuser", "changebotprefixuser", "botprefixuser"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "changebotprefixuser <botprefix>";
     String shortCommandDescription = "Set the prefix of the bot for you.";
     String fullCommandDescription = "Set the prefix of the bot for you.";

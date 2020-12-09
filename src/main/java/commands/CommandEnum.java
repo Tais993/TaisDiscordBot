@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.entities.SelfUser;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class CommandEnum {
     enum AllMyCommands {
@@ -242,7 +242,7 @@ public class CommandEnum {
     public void getListsReady() {
         categories.add("fun");
         categories.add("general");
-        categories.add("util");
+        categories.add("utilities");
         categories.add("music");
         categories.add("botmoderation");
     }

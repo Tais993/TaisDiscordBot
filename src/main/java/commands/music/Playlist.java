@@ -5,13 +5,12 @@ import commands.ICommand;
 import database.user.DatabaseUser;
 import database.user.Song;
 import database.user.UserDB;
-import music.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class Playlist implements ICommand {
     DatabaseUser databaseUser = new DatabaseUser();

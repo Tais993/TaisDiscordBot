@@ -5,10 +5,9 @@ import commands.ICommand;
 import music.PlayerManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Move implements ICommand {
     CommandReceivedEvent e;

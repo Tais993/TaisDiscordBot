@@ -7,7 +7,7 @@ import music.PlayerManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class Skunk implements ICommand {
     CommandReceivedEvent e;

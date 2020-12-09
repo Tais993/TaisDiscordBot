@@ -4,7 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
-import util.Permissions;
+import utilities.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class Clear implements ICommand {
     CommandReceivedEvent e;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("clear"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "clear (number messages)";
     String shortCommandDescription = "Clear the chat for a specified amount of messages.";
     String fullCommandDescription = "Clear the chat for a specified amount of messages.";

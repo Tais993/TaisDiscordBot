@@ -4,7 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import util.Permissions;
+import utilities.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public class Rename implements ICommand {
     Member memberGiven;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("rename"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "rename <@user>/<userID> <nickname>";
     String shortCommandDescription = "Rename user to the nickname given";
     String fullCommandDescription = "Rename users to the nickname given, requires manage usernames permission.\n" +

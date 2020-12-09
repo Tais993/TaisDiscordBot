@@ -3,8 +3,9 @@ package commands;
 import database.guild.GuildDB;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import utilities.EventWaiter;
 
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class BotPrefix {
 
@@ -17,5 +18,13 @@ public class BotPrefix {
         eb.setColor(getCurrentColor());
 
         e.getChannel().sendMessage(eb.build()).queue();
+
+        EventWaiter.waitForEvent(MessageReceivedEvent.class, event -> {
+            System.out.println(e.getAuthor().getId() + event.getAuthor().getId());
+            return e.getAuthor().getId().equals(event.getAuthor().getId());
+            }, event -> {
+            event.getChannel().sendMessage(event.getMessage().getContentRaw()).queue();
+        },
+                10000);
     }
 }

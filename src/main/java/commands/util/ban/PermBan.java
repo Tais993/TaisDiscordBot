@@ -10,7 +10,7 @@ public class PermBan implements ICommand {
     CommandReceivedEvent e;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("permban"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "`!permban <userId>?`";
     String shortCommandDescription = "Ask 8ball a question";
     String fullCommandDescription = "Ask 8ball a question, and get a totally real answer.\n" +

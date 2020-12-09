@@ -6,13 +6,13 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import util.entities.UserInfo;
+import utilities.entities.UserInfo;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static util.Time.getDateFromOffset;
+import static utilities.Time.getDateFromOffset;
 
 public class WhoIs implements ICommand {
     CommandReceivedEvent e;
@@ -21,7 +21,7 @@ public class WhoIs implements ICommand {
     Member member;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("whois", "userinfo"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "whois <@user>/<userID>";
     String shortCommandDescription = "Get information about a user.";
     String fullCommandDescription = "Get information about a user.";

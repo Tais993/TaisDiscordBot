@@ -4,7 +4,7 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import util.Permissions;
+import utilities.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class TempBan implements ICommand {
     Member memberToBan;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("tempban"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "`!tempban <@user> <time in days>`";
     String shortCommandDescription = "Temporarily ban a user.";
     String fullCommandDescription = "Temporarily ban a user.\n" +

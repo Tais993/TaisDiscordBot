@@ -3,16 +3,14 @@ package commands.music;
 import commands.CommandReceivedEvent;
 import commands.ICommand;
 import music.PlayerManager;
-import music.youtube.SearchYouTube;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static music.youtube.SearchYouTube.getVideoUrl;
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class PlayTop implements ICommand {
     CommandReceivedEvent e;

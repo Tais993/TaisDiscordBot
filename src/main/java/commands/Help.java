@@ -7,7 +7,7 @@ public class Help implements ICommand{
     CommandReceivedEvent e;
 
     ArrayList<String> commandAliases = new ArrayList<>(Collections.singletonList("help"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "help <item/category>";
     String shortCommandDescription = "Get some help";
     String fullCommandDescription = "Get help for a item or category, but you already know that. Right?";
@@ -18,7 +18,7 @@ public class Help implements ICommand{
         if (e.hasArgs) {
             String[] args = e.getArgs();
             switch (args[0]) {
-                case "fun", "general", "util", "music", "botmoderation" -> commandEnum.getHelpCategory(args[0], e);
+                case "fun", "general", "utilities", "music", "botmoderation" -> commandEnum.getHelpCategory(args[0], e);
                 default -> {
                     if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())) {
                         e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[0], e.getPrefix()).build()).queue();

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static music.TrackScheduler.videoDurationToYoutube;
-import static util.AllowedToPlayMusic.allowedToPlayMusic;
+import static utilities.AllowedToPlayMusic.allowedToPlayMusic;
 
 public class SkipTo implements ICommand {
     CommandReceivedEvent e;

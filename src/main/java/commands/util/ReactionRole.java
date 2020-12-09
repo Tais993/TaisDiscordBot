@@ -9,12 +9,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Role;
-import util.Permissions;
+import utilities.Permissions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static util.Colors.getCurrentColor;
+import static utilities.Colors.getCurrentColor;
 
 public class ReactionRole implements ICommand {
     CommandReceivedEvent e;
@@ -33,7 +33,7 @@ public class ReactionRole implements ICommand {
     int rolesToBeAdded;
 
     ArrayList<String> commandAliases = new ArrayList<>(Arrays.asList("reactionrole"));
-    String category = "util";
+    String category = "utilities";
     String exampleCommand = "reactionrole message <messageId> <emoji> <roleId>";
     String shortCommandDescription = "Set reaction roles on a message, or let the bot create a basic message.";
     String fullCommandDescription = "Set reaction roles on a message, or let the bot create a basic message.\n" +

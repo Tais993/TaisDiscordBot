@@ -132,6 +132,8 @@ public class CommandMap {
 
     static HashMap<String, ICommand> commandAliases = new HashMap<>();
 
+    private final static Stream<ICommand> generalCommands = commands.values().stream().filter(iCommand -> iCommand.getCategory().equalsIgnoreCase("general"));
+
     public boolean isCategory(String categoryGiven) {
         return categories.stream().anyMatch(category -> category.equalsIgnoreCase(categoryGiven));
     }
@@ -141,10 +143,21 @@ public class CommandMap {
     }
 
     public void prepareAliases() {
-        commands.forEach(((command, iCommand) -> {
-            iCommand.getCommandAliases().stream().skip(0).forEach((s -> {
+        commands.values().forEach(iCommand -> {
+            iCommand.getCommandAliases().stream().skip(0).forEach(s -> {
                 commandAliases.put(s, iCommand);
-            }));
-        }));
+            });
+        });
+    }
+
+    public boolean runCommand(CommandReceivedEvent e) {
+        ICommand command = (commands.get(e.getCommand()) == null) ? commandAliases.get(e.getCommand()) : commands.get(e.getCommand());
+
+        if (command != null) {
+            Thread thread = new Thread(() -> command.command(e));
+            thread.start();
+            return true;
+        }
+        return false;
     }
 }

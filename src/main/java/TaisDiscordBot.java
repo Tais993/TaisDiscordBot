@@ -16,14 +16,11 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static music.youtube.SearchYouTube.setYtApiKey;
-import static utilities.EventWaiter.checkValidationWaiters;
 
 public class TaisDiscordBot {
     static JDA jda;

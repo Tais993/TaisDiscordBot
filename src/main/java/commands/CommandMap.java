@@ -2,6 +2,7 @@ package commands;
 
 import commands.amongus.SetAmongUsRole;
 import commands.amongus.StartGame;
+import commands.bot.Shutdown;
 import commands.bot.*;
 import commands.fun.*;
 import commands.general.*;

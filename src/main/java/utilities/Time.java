@@ -1,6 +1,7 @@
 package utilities;
 
 import java.time.OffsetDateTime;
+import java.util.concurrent.TimeUnit;
 
 public class Time {
     public static String getDateFromOffset(OffsetDateTime offsetDateTime) {
@@ -42,5 +43,13 @@ public class Time {
 
             default -> throw new IllegalStateException("Unexpected value: " + monthDay);
         };
+    }
+
+    public static long timeInMilliseconds(long time, TimeUnit timeUnit) {
+        return TimeUnit.MILLISECONDS.convert(time, timeUnit);
+    }
+
+    public static long timeToTime(TimeUnit from, long time, TimeUnit to) {
+        return to.convert(time, from);
     }
 }

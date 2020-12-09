@@ -5,7 +5,6 @@ import commands.ICommand;
 import database.hugs.DatabaseHugs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class AddHug implements ICommand {

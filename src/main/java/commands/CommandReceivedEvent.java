@@ -1,7 +1,6 @@
 package commands;
 
 import database.guild.GuildDB;
-import database.user.DatabaseUser;
 import database.user.UserDB;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;

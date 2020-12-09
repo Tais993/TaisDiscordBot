@@ -4,7 +4,6 @@ import commands.CommandReceivedEvent;
 import commands.ICommand;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class Test implements ICommand {

@@ -55,7 +55,7 @@ public class CommandHandler extends ListenerAdapter {
                 thread.join();
             } catch (InterruptedException ignored) {}
             e.setDBItems(userDB, guildDB);
-            if (commandEnum.checkCommand(e)) {
+            if (CommandMap.runCommand(e)) {
                 return;
             }
         }

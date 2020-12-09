@@ -7,15 +7,21 @@ import commands.bot.*;
 import commands.fun.*;
 import commands.general.*;
 import commands.music.*;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static commands.CommandEnum.bot;
+import static utilities.Colors.getCurrentColor;
+
 public class CommandMap {
-    static HashMap<String, ICommand> commands = new HashMap<>(Map.ofEntries(
+    private static final HashMap<String, ICommand> commands = new HashMap<>(Map.ofEntries(
             Map.entry("setamongusrole", new SetAmongUsRole()),
             Map.entry("startgame", new StartGame()),
             Map.entry("botstats", new BotStats()),
@@ -69,65 +75,9 @@ public class CommandMap {
             Map.entry("shuffle", new Shuffle()),
             Map.entry("skip", new Skip()),
             Map.entry("skipto", new SkipTo()),
-            Map.entry("skunk", new Skunk())
+            Map.entry("skunk", new Skunk()),
+            Map.entry("help", new Help())
     ));
-
-//    private HashMap<String, ICommand> test = new HashMap<String, ICommand>(Map.of(
-//            "setamongusrole", new SetAmongUsRole(),
-//            "startgame", new StartGame(),
-//            "botstats", new BotStats(),
-//            "dm", new Dm(),
-//            "removejoke", new RemoveJoke(),
-//            "say", new Say(),
-//            "setblacklisted", new SetBlacklisted(),
-//            "setbotmoderator", new SetBotModerator(),
-//            "shutdown", new Shutdown(),
-//            "addjoke", new AddJoke(),
-//            "calculator", new Calculator(),
-//            "hug", new Hug(),
-//            "joke", new Joke(),
-//            "mock", new Mock(),
-//            "ping", new Ping(),
-//            "addhug", new AddHug(),
-//            "avatar", new Avatar(),
-//            "leaderboard", new Leaderboard(),
-//            "level", new Level(),
-//            "quote", new Quote(),
-//            "remindme", new RemindMe(),
-//            "rep", new Rep(),
-//            "reps", new Reps(),
-//            "test", new Test(),
-//            "youtube", new YouTube(),
-//            "backward", new Backward(),
-//            "clearqueue", new ClearQueue(),
-//            "clearuser", new ClearUser(),
-//            "forward", new Forward(),
-//            "join", new Join(),
-//            "leave", new Leave(),
-//            "loop", new Loop(),
-//            "lyrics", new Lyrics(),
-//            "move", new Move(),
-//            "nowplaying", new NowPlaying(),
-//            "pause", new Pause(),
-//            "play", new Play(),
-//            "playlist", new Playlist(),
-//            "playnow", new PlayNow(),
-//            "playplaylist", new PlayPlaylist(),
-//            "playtop", new PlayTop(),
-//            "previous", new Previous(),
-//            "queue", new Queue(),
-//            "radio538", new Radio538(),
-//            "remove", new Remove(),
-//            "replay", new Replay(),
-//            "resume", new Resume(),
-//            "rickroll", new RickRoll(),
-//            "seek", new Seek(),
-//            "setvolume", new SetVolume(),
-//            "shuffle", new Shuffle(),
-//            "skip", new Skip(),
-//            "skipto", new SkipTo(),
-//            "skunk", new Skunk()
-//            ));
 
     static ArrayList<String> categories = new ArrayList<>(List.of("General", "Fun", "Bot", "Music", "Util"));
 
@@ -135,24 +85,24 @@ public class CommandMap {
 
     private final static Stream<ICommand> generalCommands = commands.values().stream().filter(iCommand -> iCommand.getCategory().equalsIgnoreCase("general"));
 
-    public boolean isCategory(String categoryGiven) {
+    public static boolean isCategory(String categoryGiven) {
         return categories.stream().anyMatch(category -> category.equalsIgnoreCase(categoryGiven));
     }
 
-    public boolean isCommand(String commandGiven) {
+    public static boolean isCommand(String commandGiven) {
         return commands.entrySet().stream().anyMatch(entry -> entry.getValue().getCommandAliases().stream().anyMatch(command -> command.equalsIgnoreCase(commandGiven)));
     }
 
-    public void prepareAliases() {
-        commands.values().forEach(iCommand -> {
-            iCommand.getCommandAliases().stream().skip(0).forEach(s -> {
-                commandAliases.put(s, iCommand);
-            });
-        });
+    public static ICommand getCommand(String commandGiven) {
+        return (commands.get(commandGiven) != null) ? commands.get(commandGiven) : commandAliases.get(commandGiven);
     }
 
-    public boolean runCommand(CommandReceivedEvent e) {
-        ICommand command = (commands.get(e.getCommand()) == null) ? commandAliases.get(e.getCommand()) : commands.get(e.getCommand());
+    public void prepareAliases() {
+        commands.values().forEach(iCommand -> iCommand.getCommandAliases().stream().skip(0).forEach(s -> commandAliases.put(s, iCommand)));
+    }
+
+    public static boolean runCommand(CommandReceivedEvent e) {
+        ICommand command = getCommand(e.getCommand());
 
         if (command != null) {
             Thread thread = new Thread(() -> command.command(e));
@@ -160,5 +110,90 @@ public class CommandMap {
             return true;
         }
         return false;
+    }
+
+    public static void getHelpAllByCategory(CommandReceivedEvent e) {
+        PrivateChannel privateChannel = e.getAuthor().openPrivateChannel().complete();
+
+        categories.forEach(category -> {
+            if (!(category.equalsIgnoreCase("botmoderation") && !e.isBotModerator())) {
+
+                EmbedBuilder eb = new EmbedBuilder();
+                eb.setColor(getCurrentColor());
+                eb.setTitle("Help " + category);
+
+                eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+                eb.setTimestamp(Instant.now());
+
+                commands.forEach(((s, iCommand) -> {
+                    if (iCommand.getCategory().equals(category)) {
+                        if (eb.getFields().size() == 24) {
+                            privateChannel.sendMessage(eb.build()).queue();
+                            eb.clearFields();
+                        }
+                        eb.addField(iCommand.getCommandAliases().get(0), iCommand.getShortCommandDescription(), true);
+                    }
+                }));
+
+                privateChannel.sendMessage(eb.build()).queue();
+            }
+        });
+    }
+
+    public static EmbedBuilder getFullHelpItem(String item, String prefix) {
+        ICommand c = commands.getOrDefault(item, new Help());
+
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+        eb.setTimestamp(Instant.now());
+
+        eb.setTitle("Help " + c.getCommandAliases().stream().findFirst());
+
+        c.getCommandAliases().forEach(commandAlias -> eb.appendDescription(prefix + commandAlias + "\n"));
+
+        eb.addField("`" + prefix + c.getExampleCommand() + "`", c.getFullCommandDescription(), true);
+
+        eb.setColor(getCurrentColor());
+        return eb;
+    }
+
+    public static EmbedBuilder getShortHelpItem(String item, String prefix) {
+        ICommand c = commands.getOrDefault(item, new Help());
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+        eb.setTimestamp(Instant.now());
+
+        eb.setTitle("Error " + c.getCommandAliases().stream().findFirst());
+        eb.addField("`" + prefix + c.getExampleCommand() + "`", c.getShortCommandDescription(), true);
+
+        eb.setColor(getCurrentColor());
+        return eb;
+    }
+
+    public static void getHelpCategory(String category, CommandReceivedEvent e) {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(getCurrentColor());
+
+        eb.setTitle("Help " + category);
+        eb.setAuthor("Tais", "https://tijsbeek.nl", bot.getAvatarUrl());
+        eb.setTimestamp(Instant.now());
+
+        commands.forEach((s, c) -> {
+            if (c.getCategory().equals(category)) {
+                if (eb.getFields().size() == 24) {
+                    e.getChannel().sendMessage(eb.build()).queue();
+                    eb.clearFields();
+                }
+                eb.addField(c.getCommandAliases().get(0), c.getShortCommandDescription(), true);
+            }
+        });
+
+        e.getChannel().sendMessage(eb.build()).queue();
+    }
+
+    public static int getTotalCommands() {
+        return commands.size();
     }
 }

@@ -18,15 +18,15 @@ public class Help implements ICommand{
         if (e.hasArgs) {
             String[] args = e.getArgs();
             switch (args[0]) {
-                case "fun", "general", "utilities", "music", "botmoderation" -> commandEnum.getHelpCategory(args[0], e);
+                case "fun", "general", "utilities", "music", "botmoderation" -> CommandMap.getHelpCategory(args[0], e);
                 default -> {
-                    if (commandEnum.checkOrValidCommand(args[0], e.isBotModerator())) {
-                        e.getChannel().sendMessage(commandEnum.getFullHelpItem(args[0], e.getPrefix()).build()).queue();
+                    if (CommandMap.isCommand(args[0])) {
+                        e.getChannel().sendMessage(CommandMap.getFullHelpItem(args[0], e.getPrefix()).build()).queue();
                     }
                 }
             }
         } else {
-            commandEnum.getHelpAllByCategory(e);
+            CommandMap.getHelpAllByCategory(e);
         }
     }
 

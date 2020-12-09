@@ -11,7 +11,6 @@ import static utilities.Colors.getCurrentColor;
 
 public interface ICommand {
     CommandReceivedEvent e = null;
-    CommandEnum commandEnum = new CommandEnum();
     ArrayList<String> commandAliases = new ArrayList<>();
     String category = "";
     String exampleCommand = "";
@@ -32,16 +31,16 @@ public interface ICommand {
 
     default MessageEmbed getFullHelp(String error, String prefix) {
         if (error.isEmpty()) {
-            return commandEnum.getFullHelpItem(getCommandAliases().get(0), prefix).build();
+            return CommandMap.getFullHelpItem(getCommandAliases().get(0), prefix).build();
         }
-        return commandEnum.getFullHelpItem(getCommandAliases().get(0), prefix).setDescription(error).build();
+        return CommandMap.getFullHelpItem(getCommandAliases().get(0), prefix).setDescription(error).build();
     }
 
     default MessageEmbed getShortHelp(String error, String prefix) {
         if (error.isEmpty()) {
-            return commandEnum.getShortHelpItem(getCommandAliases().get(0), prefix).build();
+            return CommandMap.getShortHelpItem(getCommandAliases().get(0), prefix).build();
         }
-        return commandEnum.getShortHelpItem(getCommandAliases().get(0), prefix).setDescription("**" + error + "**").build();
+        return CommandMap.getShortHelpItem(getCommandAliases().get(0), prefix).setDescription("**" + error + "**").build();
     }
 
     String getCategory();
